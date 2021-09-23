@@ -31,21 +31,23 @@ int main(void)
     int i = 0;
     int angle = 0;
     int dx, dy;
-    int x, y;
-    x = y = 0;
+    int speed = 0;
+    signed int x, y;
+    x = y = 80;
     while (i >= 0)
     {
         vid_vsync();
         oam_copy(oam_mem, obj_buffer, 128);
 
         key_poll();
-        angle += key_tri_horz() * 0x0200;
-        dx = dy = 0;
-
+        angle -= key_tri_horz() * 0x0200;
+        speed = key_tri_vert();
+        dx = speed * lu_sin(angle);
+        dy = speed * lu_cos(angle);
         x += dx;
         y += dy;
 
-        obj_set_pos(&obj_buffer[0], x, y);
+        obj_set_pos(&obj_buffer[0], x >> 12, y >> 12);
         obj_aff_identity(&obj_aff_buffer[0]);
         obj_aff_rotate(&obj_aff_buffer[0], angle);
     }
