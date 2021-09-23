@@ -55,10 +55,10 @@ int main(void)
         dy = lu_cos(angle);
         sx = (dx + 31 * sx) >> 5;
         sy = (dy + 31 * sy) >> 5;
-        dx = (dx + sx) >> 1;
-        dy = (dy + sy) >> 1;
-        x += (speed * dx) >> 12;
-        y += (speed * dy) >> 12;
+//        dx = (dx + sx) >> 1;
+//        dy = (dy + sy) >> 1;
+        x += (speed * sx) >> 12;
+        y += (speed * sy) >> 12;
 
         //
         if (key_is_up(KEY_UP) && speed < 0)
