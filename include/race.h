@@ -1,12 +1,12 @@
 #ifndef TEST_RACE_H
 #define TEST_RACE_H
 
-#include "racecar.h"
+#include "types.h"
 
-typedef struct {
+struct Race {
     Racecar *car;
     OBJ_ATTR obj_buffer[128];
-} Race;
+};
 
 void initialize();
 void input();
