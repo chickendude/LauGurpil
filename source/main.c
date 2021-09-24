@@ -1,8 +1,6 @@
-#include <tonc.h>
 #include "race.h"
-// sprites
-#include "cars.h"
-
+#include "state.h"
+#include "title.h"
 
 //---------------------------------------------------------------------------------
 // Program entry point
@@ -10,12 +8,15 @@
 int main(void)
 {
 //---------------------------------------------------------------------------------
-    initialize();
+    State cur_state = title_state;
+
+    cur_state.initialize();
+//    initialize();
 
     int i = 0;
     while (i >= 0)
     {
-        input();
+        cur_state.input();
     }
 
     return 0;

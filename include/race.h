@@ -1,6 +1,7 @@
 #ifndef TEST_RACE_H
 #define TEST_RACE_H
 
+#include <tonc.h>
 #include "types.h"
 
 struct Race {
