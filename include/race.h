@@ -9,7 +9,7 @@ struct Race {
     OBJ_ATTR obj_buffer[128];
 };
 
-void initialize();
-void input();
+extern State race_state;
+
 
 #endif //TEST_RACE_H

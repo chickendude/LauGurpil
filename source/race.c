@@ -3,6 +3,7 @@
 
 #include "race.h"
 #include "racecar.h"
+#include "state.h"
 // Sprites
 #include "cars.h"
 
@@ -11,6 +12,20 @@ Race race;
 // Private function declarations
 // -----------------------------------------------------------------------------
 
+void initialize();
+
+void input(StateStack *state_stack);
+
+void update();
+
+// -----------------------------------------------------------------------------
+// Public variable definitions
+// -----------------------------------------------------------------------------
+State race_state = {
+        &initialize,
+        &update,
+        &input
+};
 
 // -----------------------------------------------------------------------------
 // Public function definitions
@@ -33,7 +48,7 @@ void initialize()
     obj_aff_identity((OBJ_AFFINE *) &race.obj_buffer[0]);
 }
 
-void input()
+void input(StateStack *state_stack)
 {
     vid_vsync();
     oam_copy(oam_mem, race.obj_buffer, 128);
@@ -43,6 +58,10 @@ void input()
     move_car(race.car);
 }
 
+void update()
+{
+
+}
 // -----------------------------------------------------------------------------
 // Private functions definitions
 // -----------------------------------------------------------------------------

@@ -8,15 +8,20 @@
 int main(void)
 {
 //---------------------------------------------------------------------------------
-    State cur_state = title_state;
+    StateStack state_stack;
+    state_stack.index = 0;
+    state_stack.states[0] = &title_state;
 
-    cur_state.initialize();
-//    initialize();
+    State *cur_state = state_stack.states[state_stack.index];
+
+    cur_state->initialize();
 
     int i = 0;
     while (i >= 0)
     {
-        cur_state.input();
+        key_poll();
+        State *cur_state = state_stack.states[state_stack.index];
+        cur_state->input(&state_stack);
     }
 
     return 0;

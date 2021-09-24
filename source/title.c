@@ -1,5 +1,6 @@
 #include <tonc.h>
 #include "title.h"
+#include "race.h"
 #include "state.h"
 // Data
 #include "titlescreen.h"
@@ -11,7 +12,7 @@ static void initialize();
 
 static void update();
 
-static void input();
+static void input(StateStack *state_stack);
 
 
 // -----------------------------------------------------------------------------
@@ -40,9 +41,13 @@ static void update()
 
 }
 
-static void input()
+static void input(StateStack *state_stack)
 {
-    if (key_hit(KEY_START)) return;
+    if (key_hit(KEY_START)) {
+        state_stack->index++;
+        state_stack->states[state_stack->index] = &race_state;
+        state_stack->states[state_stack->index]->initialize();
+    }
 }
 
 // -----------------------------------------------------------------------------
