@@ -15,4 +15,9 @@ struct StateStack
     int index;
     State *states[10];
 };
+
+void push_state(StateStack *state_stack, State *state);
+
+void pop_state(StateStack *state_stack);
+
 #endif //TEST_STATE_H

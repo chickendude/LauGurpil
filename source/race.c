@@ -53,9 +53,11 @@ void input(StateStack *state_stack)
     vid_vsync();
     oam_copy(oam_mem, race.obj_buffer, 128);
 
-    key_poll();
-
     move_car(race.car);
+
+    if (key_hit(KEY_B)) {
+        pop_state(state_stack);
+    }
 }
 
 void update()

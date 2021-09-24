@@ -10,4 +10,4 @@ include_directories($ENV{DEVKITPRO}/libtonc/include/)
 include_directories($ENV{DEVKITARM}/arm-none-eabi/include)
 include_directories(include gfx)
 
-add_executable(test source/main.c source/racecar.c include/racecar.h include/race.h source/race.c include/types.h include/title.h include/state.h source/title.c)
+add_executable(test source/main.c source/racecar.c include/racecar.h include/race.h source/race.c include/types.h include/title.h include/state.h source/title.c source/state.c)

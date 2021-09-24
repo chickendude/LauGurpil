@@ -4,7 +4,8 @@
 #include <tonc.h>
 #include "types.h"
 
-struct Race {
+struct Race
+{
     Racecar *car;
     OBJ_ATTR obj_buffer[128];
 };

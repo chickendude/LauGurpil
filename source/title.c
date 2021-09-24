@@ -43,10 +43,9 @@ static void update()
 
 static void input(StateStack *state_stack)
 {
-    if (key_hit(KEY_START)) {
-        state_stack->index++;
-        state_stack->states[state_stack->index] = &race_state;
-        state_stack->states[state_stack->index]->initialize();
+    if (key_hit(KEY_START))
+    {
+        push_state(state_stack, &race_state);
     }
 }
 
