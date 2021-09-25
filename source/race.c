@@ -4,6 +4,7 @@
 #include "race.h"
 #include "racecar.h"
 #include "state.h"
+#include "track.h"
 // Sprites
 #include "cars.h"
 
@@ -32,9 +33,7 @@ State race_state = {
 // -----------------------------------------------------------------------------
 void initialize()
 {
-    load_car(&race);
-
-    REG_DISPCNT = DCNT_MODE0 | DCNT_OBJ | DCNT_OBJ_1D;
+    REG_DISPCNT = DCNT_MODE0 | DCNT_BG0 | DCNT_OBJ | DCNT_OBJ_1D;
     oam_init(race.obj_buffer, 128);
 
     memcpy32(tile_mem[4], carsTiles, carsTilesLen / 4);
@@ -46,6 +45,9 @@ void initialize()
                  ATTR2_PALBANK(0) | ATTR2_ID(0));
 
     obj_aff_identity((OBJ_AFFINE *) &race.obj_buffer[0]);
+
+    load_car(&race);
+    load_track();
 }
 
 void input(StateStack *state_stack)
@@ -55,7 +57,8 @@ void input(StateStack *state_stack)
 
     move_car(race.car);
 
-    if (key_hit(KEY_B)) {
+    if (key_hit(KEY_B))
+    {
         pop_state(state_stack);
     }
 }
