@@ -48,6 +48,7 @@ void initialize()
 
     load_car(&race);
     load_track(&track_1);
+    race.track = &track_1;
 }
 
 void input(StateStack *state_stack)

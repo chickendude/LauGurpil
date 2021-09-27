@@ -7,6 +7,7 @@
 struct Race
 {
     Racecar *car;
+    const Track *track;
     OBJ_ATTR obj_buffer[128];
 };
 
