@@ -6,11 +6,14 @@
 struct Track
 {
     int start_x, start_y;
+    int start_angle;
     int width, height;
     const unsigned char *tilemap;
 };
 
-void load_track(const Track *track);
+void load_track(const Track *track, Camera *camera);
+
+void update_tilemap(Race *race);
 
 extern const Track track_1;
 

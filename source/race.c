@@ -47,14 +47,19 @@ void initialize()
     obj_aff_identity((OBJ_AFFINE *) &race.obj_buffer[0]);
 
     load_car(&race);
-    load_track(&track_1);
+    load_track(&track_1, &race.camera);
     race.track = &track_1;
+    // * 16 (aka << 4) then shift left 12 because of the 12 point fixed point
+    race.car->x = track_1.start_x << 16;
+    race.car->y = track_1.start_y << 16;
+    race.car->angle = track_1.start_angle;
 }
 
 void input(StateStack *state_stack)
 {
     move_car(race.car);
     update_camera(&race);
+    update_tilemap(&race);
 
     // Set player so that they are aligned with the camera
     obj_set_pos(race.car->oam,

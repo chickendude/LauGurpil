@@ -4,7 +4,7 @@
 #include "types.h"
 
 struct Camera {
-    int x, y;
+    signed int x, y;
 };
 
 void update_camera(Race *race);
