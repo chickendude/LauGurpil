@@ -66,7 +66,6 @@ void move_car(Racecar *car)
         if (car->speed < 0) car->speed = 0;
     }
 
-    obj_set_pos(car->oam, (car->x >> 12) - 8, (car->y >> 12) - 8);
     obj_aff_rotate((OBJ_AFFINE *) car->oam, car->angle);
 }
 // -----------------------------------------------------------------------------

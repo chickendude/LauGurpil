@@ -1,7 +1,7 @@
 #include <tonc.h>
-#include <malloc.h>
 
 #include "race.h"
+#include "camera.h"
 #include "racecar.h"
 #include "state.h"
 #include "track.h"
@@ -54,6 +54,12 @@ void initialize()
 void input(StateStack *state_stack)
 {
     move_car(race.car);
+    update_camera(&race);
+
+    // Set player so that they are aligned with the camera
+    obj_set_pos(race.car->oam,
+                (race.car->x >> 12) - 8 - race.camera.x,
+                (race.car->y >> 12) - 8 - race.camera.y);
 
     if (key_hit(KEY_B))
     {
@@ -63,6 +69,8 @@ void input(StateStack *state_stack)
 
 void update()
 {
+    REG_BG0HOFS = race.camera.x;
+    REG_BG0VOFS = race.camera.y;
     oam_copy(oam_mem, race.obj_buffer, 128);
 }
 // -----------------------------------------------------------------------------
