@@ -47,7 +47,7 @@ void initialize()
     obj_aff_identity((OBJ_AFFINE *) &race.obj_buffer[0]);
 
     load_car(&race);
-    load_track();
+    load_track(&track_1);
 }
 
 void input(StateStack *state_stack)

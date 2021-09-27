@@ -1,10 +1,16 @@
 #include <tonc.h>
 #include "track.h"
+#include "constants.h"
 // sprite data
 #include "track_tiles.h"
 // tilemap data
 #include "tracks.h"
 
+const Track track_1 = {
+        0, 0,
+        track1Width, track1Height,
+        track1_tilemap
+};
 // -----------------------------------------------------------------------------
 // Private function declarations
 // -----------------------------------------------------------------------------
@@ -14,7 +20,7 @@
 // Public function definitions
 // -----------------------------------------------------------------------------
 
-void load_track()
+void load_track(const Track *track)
 {
     // CBB = charblock base, where the tile sprites are stored. there are 4 CBB
     // SBB = screenblock base, where the tilemap is stored. there are 32 SBBs
@@ -24,11 +30,11 @@ void load_track()
 
     int x, y;
     int i, j;
-    for (i = 0; i < SCREEN_HEIGHT_T / 2; i++)
+    for (i = 0; i < BG_HEIGHT_16; i++)
     {
-        for (j = 0; j < SCREEN_WIDTH_T/ 2; j++)
+        for (j = 0; j < BG_WIDTH_16; j++)
         {
-            int tile_id = track1_tilemap[i * track1Width + j] * 4;
+            int tile_id = track->tilemap[i * track->width + j] * 4;
             tile_id |= SE_PALBANK(2);
             x = j * 2;
             y = i * 32 * 2;
