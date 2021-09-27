@@ -52,9 +52,6 @@ void initialize()
 
 void input(StateStack *state_stack)
 {
-    vid_vsync();
-    oam_copy(oam_mem, race.obj_buffer, 128);
-
     move_car(race.car);
 
     if (key_hit(KEY_B))
@@ -65,7 +62,7 @@ void input(StateStack *state_stack)
 
 void update()
 {
-
+    oam_copy(oam_mem, race.obj_buffer, 128);
 }
 // -----------------------------------------------------------------------------
 // Private functions definitions

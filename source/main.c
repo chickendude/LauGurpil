@@ -19,8 +19,12 @@ int main(void)
     int i = 0;
     while (i >= 0)
     {
+        cur_state = state_stack.states[state_stack.index];
+
+        vid_vsync();
+        cur_state->update();
+
         key_poll();
-        State *cur_state = state_stack.states[state_stack.index];
         cur_state->input(&state_stack);
     }
 
