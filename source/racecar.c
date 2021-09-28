@@ -40,30 +40,38 @@ void load_car(Race *race)
 void move_car(Racecar *car)
 {
     car->angle -= key_tri_horz() * 0x0100; // Car turning power
-    car->speed += key_tri_vert() * 0x0050; // Acceleration power
-    if (car->speed > 0x2000) car->speed = 0x2000; // Max speed
-    if (car->speed < -0x2000) car->speed = -0x2000;
+
+    // Check for acceleration/brakes, favoring brakes over acceleration
+    // (if both are pressed at the same time, it will brake)
+    if (key_is_down(KEY_B)) car->speed -= 0x0050;
+    else if (key_is_down(KEY_A)) car->speed += 0x0050;
+
+    // Slow down the acceleration once the car reaches a certain speed
+    if (car->speed > 0x2000) car->speed -= 0x0045;
+    // Cap off max speed going forward/backward
+    if (car->speed > 0x4000) car->speed = 0x4000; // Max speed
+    if (car->speed < -0x1000) car->speed = -0x1000;
 
     // Calculate velocity
     int dx = lu_sin(car->angle);
     int dy = lu_cos(car->angle);
     car->slide_x = (dx + 31 * car->slide_x) >> 5;
     car->slide_y = (dy + 31 * car->slide_y) >> 5;
-    car->x += (car->speed * car->slide_x) >> 12;
-    car->y += (car->speed * car->slide_y) >> 12;
+    car->x += (-car->speed * car->slide_x) >> 12;
+    car->y += (-car->speed * car->slide_y) >> 12;
 
     // Decelerate if we are not accelerating forward
-    if (key_is_up(KEY_UP) && car->speed < 0)
-    {
-        car->speed += 0x0025;
-        // Stop car if it goes past 0
-        if (car->speed > 0) car->speed = 0;
-    } // Decelerate if we are not accelerating backwards
-    else if (key_is_up(KEY_DOWN) && car->speed > 0)
+    if (key_is_up(KEY_A) && car->speed > 0)
     {
         car->speed -= 0x0025;
         // Stop car if it goes past 0
         if (car->speed < 0) car->speed = 0;
+    } // Decelerate if we are not accelerating backwards
+    else if (key_is_up(KEY_B) && car->speed < 0)
+    {
+        car->speed += 0x0025;
+        // Stop car if it goes past 0
+        if (car->speed > 0) car->speed = 0;
     }
 
     obj_aff_rotate((OBJ_AFFINE *) car->oam, car->angle);
