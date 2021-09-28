@@ -34,6 +34,6 @@ struct Racecar {
 };
 
 void load_car(Race *race);
-void move_car(Racecar *car);
+void move_car(Race *race);
 
 #endif //TEST_RACECAR_H

@@ -57,7 +57,7 @@ void initialize()
 
 void input(StateStack *state_stack)
 {
-    move_car(race.car);
+    move_car(&race);
     update_camera(&race);
 
     // Set player so that they are aligned with the camera

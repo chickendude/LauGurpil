@@ -3,11 +3,13 @@
 
 #include "race.h"
 #include "racecar.h"
+#include "track.h"
 
 // -----------------------------------------------------------------------------
 // Private function declarations
 // -----------------------------------------------------------------------------
 
+void check_terrain(Racecar *car, const Track *track);
 
 // -----------------------------------------------------------------------------
 // Public function definitions
@@ -37,8 +39,9 @@ void load_car(Race *race)
     obj_aff_rotate((OBJ_AFFINE *) &race->obj_buffer[0], car->angle);
 }
 
-void move_car(Racecar *car)
+void move_car(Race *race)
 {
+    Racecar *car = race->car;
     car->angle -= key_tri_horz() * 0x0100; // Car turning power
 
     // Check for acceleration/brakes, favoring brakes over acceleration
@@ -51,6 +54,9 @@ void move_car(Racecar *car)
     // Cap off max speed going forward/backward
     if (car->speed > 0x4000) car->speed = 0x4000; // Max speed
     if (car->speed < -0x1000) car->speed = -0x1000;
+
+    // Check for slowdown/speed up areas
+    check_terrain(car, race->track);
 
     // Calculate velocity
     int dx = lu_sin(car->angle);
@@ -79,3 +85,39 @@ void move_car(Racecar *car)
 // -----------------------------------------------------------------------------
 // Private functions definitions
 // -----------------------------------------------------------------------------
+
+void check_terrain(Racecar *car, const Track *track)
+{
+    const unsigned char *map = track->tilemap;
+    // Convert car coordinates into pixels from the .12 fixed point values
+    int car_x = car->x >> 12;
+    int car_y = car->y >> 12;
+
+    // Convert the x/y coordinates into map coordinates. If the car isn't tile-
+    // aligned (meaning it spans more than one tile) we need to check the tile
+    // next to it as well.
+    int map_x1 = car_x >> 4;
+    int map_x2 = (car_x + 15) >> 4;
+    int map_y1 = (car_y >> 4) * track->width;
+    int map_y2 = ((car_y + 15) >> 4) * track->width;
+
+    int tile_1 = map[map_y1 + map_x1];
+    int tile_2 = map[map_y1 + map_x2];
+    int tile_3 = map[map_y2 + map_x1];
+    int tile_4 = map[map_y2 + map_x2];
+
+    // Check if we are off the map and set a tile to 0 so that it causes the
+    // car to slow down
+    if (map_x1 < 0 || map_x2 > track->width || map_y1 < 0 ||
+        map_y2 > track->height * track->width)
+    {
+        tile_1 = 0;
+    }
+
+    // Check if any of the tiles = 0 and make sure car speed is fast enough to
+    // need slowing down
+    if (!(tile_1 && tile_2 && tile_3 && tile_4) && car->speed > 0x0600)
+    {
+        car->speed -= 0x0090;
+    }
+}
