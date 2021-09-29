@@ -33,7 +33,7 @@ State race_state = {
 // -----------------------------------------------------------------------------
 void initialize()
 {
-    REG_DISPCNT = DCNT_MODE0 | DCNT_BG0 | DCNT_OBJ | DCNT_OBJ_1D;
+    REG_DISPCNT = DCNT_MODE0 | DCNT_BG0 | DCNT_BG1 | DCNT_OBJ | DCNT_OBJ_1D;
     oam_init(race.obj_buffer, 128);
 
     memcpy32(tile_mem[4], carsTiles, carsTilesLen / 4);
@@ -75,7 +75,9 @@ void update()
 {
     update_tilemap(&race);
     REG_BG0HOFS = race.camera.x;
+    REG_BG1HOFS = race.camera.x;
     REG_BG0VOFS = race.camera.y;
+    REG_BG1VOFS = race.camera.y;
     oam_copy(oam_mem, race.obj_buffer, 128);
 }
 // -----------------------------------------------------------------------------
