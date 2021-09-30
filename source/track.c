@@ -58,6 +58,7 @@ void load_track(const Track *track, Camera *camera)
 void update_tilemap(Race *race)
 {
     Camera cam = race->camera;
+    Camera prev_cam = race->prev_camera;
     int bg_tiles_offset = race->track->width * race->track->height;
     int map_left = cam.x >> 4;
     int map_right = map_left + 15;
@@ -68,18 +69,23 @@ void update_tilemap(Race *race)
     for (int y = 0; y < BG_HEIGHT_16; y++)
     {
         int map_y = map_top + y;
-        draw_tile(map_left, map_y, bg_tiles_offset, race->track);
-        draw_tile(map_right, map_y, bg_tiles_offset, race->track);
+        if (cam.x < prev_cam.x)
+            draw_tile(map_left, map_y, bg_tiles_offset, race->track);
+        else
+            draw_tile(map_right, map_y, bg_tiles_offset, race->track);
     }
 
     // Handle top and bottom edges
     for (int x = 0; x < BG_WIDTH_16; x++)
     {
         int map_x = map_left + x;
-        draw_tile(map_x, map_top, bg_tiles_offset, race->track);
-        draw_tile(map_x, map_bottom, bg_tiles_offset, race->track);
+        if (cam.y < prev_cam.y)
+            draw_tile(map_x, map_top, bg_tiles_offset, race->track);
+        else
+            draw_tile(map_x, map_bottom, bg_tiles_offset, race->track);
     }
 
+    race->prev_camera = cam;
 }
 
 // -----------------------------------------------------------------------------

@@ -9,6 +9,7 @@ struct Race
 {
     Racecar *car;
     Camera camera;
+    Camera prev_camera;
     const Track *track;
     OBJ_ATTR obj_buffer[128];
 };
