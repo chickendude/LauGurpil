@@ -11,6 +11,10 @@
 
 void check_terrain(Racecar *car, const Track *track);
 
+void move_and_check_collisions(Racecar *car, const Track *track);
+
+void slow_down(Racecar *car);
+
 // -----------------------------------------------------------------------------
 // Public function definitions
 // -----------------------------------------------------------------------------
@@ -58,13 +62,14 @@ void move_car(Race *race)
     // Check for slowdown/speed up areas
     check_terrain(car, race->track);
 
-    // Calculate velocity
-    int dx = lu_sin(car->angle);
-    int dy = lu_cos(car->angle);
-    car->slide_x = (dx + 31 * car->slide_x) >> 5;
-    car->slide_y = (dy + 31 * car->slide_y) >> 5;
-    car->x += (-car->speed * car->slide_x) >> 12;
-    car->y += (-car->speed * car->slide_y) >> 12;
+    move_and_check_collisions(car, race->track);
+//    // Calculate velocity
+//    int dx = lu_sin(car->angle);
+//    int dy = lu_cos(car->angle);
+//    car->slide_x = (dx + 31 * car->slide_x) >> 5;
+//    car->slide_y = (dy + 31 * car->slide_y) >> 5;
+//    car->x += (-car->speed * car->slide_x) >> 12;
+//    car->y += (-car->speed * car->slide_y) >> 12;
 
     // Decelerate if we are not accelerating forward
     if (key_is_up(KEY_A) && car->speed > 0)
@@ -117,6 +122,98 @@ void check_terrain(Racecar *car, const Track *track)
     // Check if any of the tiles = 0 and make sure car speed is fast enough to
     // need slowing down
     if (!(tile_1 && tile_2 && tile_3 && tile_4) && car->speed > 0x0600)
+    {
+        car->speed -= 0x0090;
+    }
+}
+
+void move_and_check_collisions(Racecar *car, const Track *track)
+{
+    // TODO: Don't wrap if off edges of map (currently it will check map tiles
+    //  that are off the edge of the map, should set out-of-bounds tiles to 0)
+    const unsigned char *map = track->tilemap;
+
+    // Calculate velocity
+    int dx = lu_sin(car->angle);
+    int dy = lu_cos(car->angle);
+    car->slide_x = (dx + 31 * car->slide_x) >> 5;
+    car->slide_y = (dy + 31 * car->slide_y) >> 5;
+
+    // Convert car coordinates into pixels from the .12 fixed point values
+    int x = (car->speed * car->slide_x) >> 12;
+    int horiz_car_x = (car->x - x) >> 12;
+    int horiz_car_y = car->y >> 12;
+
+    // Left
+    if (car->x >= 0 && ((car->slide_x > 0 && car->speed > 0) ||
+                        (car->slide_x < 0 && car->speed < 0)))
+    {
+        int map_x = horiz_car_x >> 4;
+        int map_y = horiz_car_y >> 4;
+        int tile_1 = map[map_y * track->width + map_x];
+        int tile_2 = map[((horiz_car_y + 15) >> 4) * track->width + map_x];
+        if (tile_1 == 64 || tile_2 == 64)
+        {
+            car->x = (map_x + 1) << 16;
+            car->slide_x = 0;
+            slow_down(car);
+        }
+    }
+        // Right
+    else if (car->slide_x < 0 && car->speed > 0 ||
+             car->slide_x > 0 && car->speed < 0)
+    {
+        int map_x = (horiz_car_x + 15) >> 4;
+        int map_y = horiz_car_y >> 4;
+        int tile_1 = map[map_y * track->width + map_x];
+        int tile_2 = map[((horiz_car_y + 15) >> 4) * track->width + map_x];
+        if (tile_1 == 64 || tile_2 == 64)
+        {
+            car->slide_x = 0;
+            slow_down(car);
+        }
+    }
+
+    int y = (car->speed * car->slide_y) >> 12;
+    int vert_car_x = car->x >> 12;
+    int vert_car_y = (car->y - y) >> 12;
+    // Up
+    if (car->slide_y > 0 && car->speed > 0 ||
+        car->slide_y < 0 && car->speed < 0)
+    {
+        int map_x = vert_car_x >> 4;
+        int map_y = vert_car_y >> 4;
+        int tile_1 = map[map_y * track->width + map_x];
+        int tile_2 = map[map_y * track->width + ((vert_car_x + 15) >> 4)];
+        if (tile_1 == 64 || tile_2 == 64)
+        {
+            car->slide_y = 0;
+            slow_down(car);
+        }
+    }
+        // Down
+    else if (car->slide_y < 0 & car->speed > 0 ||
+             car->slide_y > 0 && car->speed < 0)
+    {
+        int map_x = vert_car_x >> 4;
+        int map_y = (vert_car_y + 16) >> 4;
+        int tile_1 = map[map_y * track->width + map_x];
+        int tile_2 = map[map_y * track->width +
+                         ((vert_car_x + 15) >> 4)];
+        if (tile_1 == 64 || tile_2 == 64)
+        {
+            car->slide_y = 0;
+            slow_down(car);
+        }
+    }
+
+    car->x += (-car->speed * car->slide_x) >> 12;
+    car->y += (-car->speed * car->slide_y) >> 12;
+}
+
+void slow_down(Racecar *car)
+{
+    if (car->speed > 0x0600)
     {
         car->speed -= 0x0090;
     }
