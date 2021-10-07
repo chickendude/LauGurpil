@@ -31,15 +31,13 @@ void load_car(Race *race)
     }
 
     // Load car defaults
-    car->angle = 0x8000;
-    car->slide_x = lu_sin(car->angle);
-    car->slide_y = lu_cos(car->angle);
     car->speed = 0;
     car->x = car->y = 0;
     car->oam = &race->obj_buffer[0];
+    car->oam->attr2 ^= ATTR2_PRIO(1);
 
     // Set position and rotation
-    obj_set_pos(&race->obj_buffer[0], car->x - 16, car->y - 16);
+    obj_set_pos(&race->obj_buffer[0], car->x - 32, car->y - 32);
     obj_aff_rotate((OBJ_AFFINE *) &race->obj_buffer[0], car->angle);
 }
 
@@ -62,14 +60,8 @@ void move_car(Race *race)
     // Check for slowdown/speed up areas
     check_terrain(car, race->track);
 
-    move_and_check_collisions(car, race->track);
-//    // Calculate velocity
-//    int dx = lu_sin(car->angle);
-//    int dy = lu_cos(car->angle);
-//    car->slide_x = (dx + 31 * car->slide_x) >> 5;
-//    car->slide_y = (dy + 31 * car->slide_y) >> 5;
-//    car->x += (-car->speed * car->slide_x) >> 12;
-//    car->y += (-car->speed * car->slide_y) >> 12;
+    if (race->countdown == 0)
+        move_and_check_collisions(car, race->track);
 
     // Decelerate if we are not accelerating forward
     if (key_is_up(KEY_A) && car->speed > 0)
@@ -160,8 +152,8 @@ void move_and_check_collisions(Racecar *car, const Track *track)
         }
     }
         // Right
-    else if (car->slide_x < 0 && car->speed > 0 ||
-             car->slide_x > 0 && car->speed < 0)
+    else if ((car->slide_x < 0 && car->speed > 0) ||
+             (car->slide_x > 0 && car->speed < 0))
     {
         int map_x = (horiz_car_x + 15) >> 4;
         int map_y = horiz_car_y >> 4;
@@ -178,8 +170,8 @@ void move_and_check_collisions(Racecar *car, const Track *track)
     int vert_car_x = car->x >> 12;
     int vert_car_y = (car->y - y) >> 12;
     // Up
-    if (car->slide_y > 0 && car->speed > 0 ||
-        car->slide_y < 0 && car->speed < 0)
+    if ((car->slide_y > 0 && car->speed > 0) ||
+        (car->slide_y < 0 && car->speed < 0))
     {
         int map_x = vert_car_x >> 4;
         int map_y = vert_car_y >> 4;
@@ -192,8 +184,8 @@ void move_and_check_collisions(Racecar *car, const Track *track)
         }
     }
         // Down
-    else if (car->slide_y < 0 & car->speed > 0 ||
-             car->slide_y > 0 && car->speed < 0)
+    else if ((car->slide_y < 0 && car->speed > 0) ||
+             (car->slide_y > 0 && car->speed < 0))
     {
         int map_x = vert_car_x >> 4;
         int map_y = (vert_car_y + 16) >> 4;

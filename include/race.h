@@ -11,6 +11,7 @@ struct Race
     Camera camera;
     Camera prev_camera;
     const Track *track;
+    int countdown;
     OBJ_ATTR obj_buffer[128];
 };
 

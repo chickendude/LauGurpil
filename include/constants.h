@@ -18,4 +18,8 @@
  */
 #define BG_HEIGHT_16 11
 
+#define NUM_CARS 7
+
+#define SPRITE(n) ((n) * 4)
+
 #endif //LAUGURPIL_CONSTANTS_H
