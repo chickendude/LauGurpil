@@ -1,6 +1,7 @@
 #ifndef LAUGURPIL_TIMER_H
 #define LAUGURPIL_TIMER_H
 
+#include <tonc.h>
 #include "types.h"
 
 struct Timer
@@ -11,9 +12,10 @@ struct Timer
      */
     int frames;
     int seconds, minutes;
+    OBJ_ATTR *oam;
 };
 
-void reset_timer(Timer *timer);
+void load_timer(Timer *timer, OBJ_ATTR *oam, int x, int y);
 
 void update_timer(Timer *timer);
 
