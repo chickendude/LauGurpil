@@ -23,6 +23,8 @@ void update();
 
 void show_countdown(int *countdown);
 
+void show_timer(int *countdown);
+
 // -----------------------------------------------------------------------------
 // Public variable definitions
 // -----------------------------------------------------------------------------
@@ -58,6 +60,8 @@ void initialize()
 
     load_car(&race);
     load_track(&track_1, &race.camera);
+    reset_timer(&race.timer);
+
     race.track = &track_1;
     // * 16 (aka << 4) then shift left 12 because of the 12 point fixed point
     race.car->x = track_1.start_x << 16;
@@ -73,7 +77,27 @@ void input(StateStack *state_stack)
     if (race.countdown > 0)
     {
         show_countdown(&race.countdown);
+    } else
+    {
+        update_timer(&race.timer);
+        for (int i = 1; i < 6; i++)
+        {
+            race.obj_buffer[i].attr0 = ATTR0_4BPP | ATTR0_SQUARE;
+            race.obj_buffer[i].attr1 = ATTR1_SIZE_8x8;
+            race.obj_buffer[i].attr2 = ATTR2_PALBANK(4) | 80; // "0"
+        }
+        obj_set_pos(&race.obj_buffer[1], 10, 10); // m
+        race.obj_buffer[1].attr2 = ATTR2_PALBANK(4) | 80 + race.timer.minutes / 10;
+        obj_set_pos(&race.obj_buffer[2], 18, 10); // m
+        race.obj_buffer[2].attr2 = ATTR2_PALBANK(4) | 80 + race.timer.minutes % 10;
+        obj_set_pos(&race.obj_buffer[3], 26, 10); // :
+        race.obj_buffer[3].attr2 = ATTR2_PALBANK(4) | 90;
+        obj_set_pos(&race.obj_buffer[4], 34, 10); // s
+        race.obj_buffer[4].attr2 = ATTR2_PALBANK(4) | 80 + (race.timer.seconds / 10);
+        obj_set_pos(&race.obj_buffer[5], 42, 10); // s
+        race.obj_buffer[5].attr2 = ATTR2_PALBANK(4) | 80 + race.timer.seconds % 10;
     }
+
     move_car(&race);
     update_camera(&race);
 

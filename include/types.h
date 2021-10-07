@@ -6,6 +6,7 @@ typedef struct Race Race;
 typedef struct Racecar Racecar;
 typedef struct State State;
 typedef struct StateStack StateStack;
+typedef struct Timer Timer;
 typedef struct Track Track;
 
 #endif //TEST_TYPES_H

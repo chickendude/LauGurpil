@@ -4,12 +4,14 @@
 #include <tonc.h>
 #include "types.h"
 #include "camera.h"
+#include "timer.h"
 
 struct Race
 {
     Racecar *car;
     Camera camera;
     Camera prev_camera;
+    Timer timer;
     const Track *track;
     int countdown;
     OBJ_ATTR obj_buffer[128];
