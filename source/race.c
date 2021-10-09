@@ -70,6 +70,7 @@ void initialize()
 
     race.track = &track_1;
     race.laps = 0;
+    race.laps_total = 3;
     // * 16 (aka << 4) then shift left 12 because of the 12 point fixed point
     race.car->x = track_1.start_x << 16;
     race.car->y = track_1.start_y << 16;
@@ -92,6 +93,9 @@ void input(StateStack *state_stack)
     move_car(&race);
     update_camera(&race);
     update_laps();
+    if (race.laps > race.laps_total) {
+        pop_state(state_stack);
+    }
 
     // Set player so that they are aligned with the camera
     obj_set_pos(race.car->oam,
