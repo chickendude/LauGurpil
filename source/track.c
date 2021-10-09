@@ -2,6 +2,7 @@
 #include "track.h"
 #include "constants.h"
 #include "race.h"
+#include "racecar.h"
 // sprite data
 #include "ground_tiles.h"
 #include "track_tiles.h"
@@ -13,6 +14,8 @@ const Track track_1 = {
         18, 1,
         0x4000,
         track1Width, track1Height,
+        17, -30,
+        17, 3,
         track1_tilemap
 };
 // -----------------------------------------------------------------------------
@@ -22,6 +25,7 @@ const Track track_1 = {
 void draw_tile(int x, int y, int tile_offset, const Track *track);
 
 bool is_tile_in_map(int x, int y, const Track *track);
+
 
 // -----------------------------------------------------------------------------
 // Public function definitions
@@ -127,4 +131,31 @@ void draw_tile(int x, int y, int tile_offset, const Track *track)
 bool is_tile_in_map(int x, int y, const Track *track)
 {
     return !(x < 0 || y < 0 || x >= track->width || y >= track->height);
+}
+
+int is_car_in_finish_line(Racecar *car, const Track *track)
+{
+    int x1 = car->x >> 16;
+    int x2 = (car->x + (15 << 12)) >> 16;
+    int y1 = car->y >> 16;
+    int y2 = (car->y + (15 << 12)) >> 16;
+
+    // TODO: Add facing right as well
+    // Facing left
+    if (track->start_angle == 0x4000)
+    {
+        // in finish line
+        if (x1 == track->finish_x1)
+        {
+            if ((y1 >= track->finish_y1 && y1 <= track->finish_y2) ||
+                (y2 >= track->finish_y1 && y2 <= track->finish_y2))
+                return 0;
+        }
+        // past finish line
+        if (x1 < track->finish_x1) return 1;
+        // behind finish line
+        return -1;
+    }
+    // TODO: Remove this when other directions have been added
+    return -1;
 }

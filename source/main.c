@@ -3,10 +3,9 @@
 #include "title.h"
 
 // RACE -------------
-// TODO: Add timer
-// TODO: Add lap counter
-// TODO: Add checkpoints
 // TODO: Return to menu when completed
+// TODO: Record lap times
+// TODO: Show race stats
 // PRE RACE -----------
 // TODO: Car selection
 // TODO: Car stats (max speed, acceleration, turning)

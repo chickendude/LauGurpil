@@ -18,6 +18,9 @@ struct Racecar {
     // .12 fixed point
     int speed;
 
+    // 0 = in finish line, -1 = behind, 1 = in front
+    int finish_status;
+
     // #### Stats ####
 
     /**

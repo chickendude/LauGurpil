@@ -23,7 +23,7 @@ void update();
 
 void show_countdown(int *countdown);
 
-void show_timer(int *countdown);
+void update_laps();
 
 // -----------------------------------------------------------------------------
 // Public variable definitions
@@ -46,7 +46,7 @@ void initialize()
     memcpy32(tile_mem[4], carsTiles, carsTilesLen / 4);
     memcpy32(pal_obj_mem, carsPal, carsPalLen / 4);
 
-    // Load lap numbers and seconds sprites
+    // Load laps numbers and seconds sprites
     memcpy32(tile_mem[4] + carsTilesLen / 32, lap_numbersTiles,
              lap_numbersTilesLen / 4);
     memcpy32(&pal_obj_mem[4 * 16], lap_numbersPal, lap_numbersPalLen / 4);
@@ -62,7 +62,14 @@ void initialize()
     load_track(&track_1, &race.camera);
     load_timer(&race.timer, &race.obj_buffer[2], 12, 8);
 
+    // Set laps #
+    obj_set_attr(&race.obj_buffer[7],
+                 ATTR0_SQUARE | ATTR0_4BPP | 10,
+                 ATTR1_SIZE_16x16 | 200,
+                 ATTR2_PALBANK(2) | 28);
+
     race.track = &track_1;
+    race.laps = 0;
     // * 16 (aka << 4) then shift left 12 because of the 12 point fixed point
     race.car->x = track_1.start_x << 16;
     race.car->y = track_1.start_y << 16;
@@ -84,6 +91,7 @@ void input(StateStack *state_stack)
 
     move_car(&race);
     update_camera(&race);
+    update_laps();
 
     // Set player so that they are aligned with the camera
     obj_set_pos(race.car->oam,
@@ -123,4 +131,25 @@ void show_countdown(int *countdown)
     {
         obj_set_pos(&race.obj_buffer[1], -16, -16);
     }
+}
+
+void update_laps() {
+    // Check car's position in relation to finish line (if it is on, before, or
+    // after the finish line)
+    int finish_status = is_car_in_finish_line(race.car, race.track);
+    if (race.car->finish_status == -1 && finish_status == 0)
+    {
+        if (race.laps_remaining == 0)
+        {
+            race.laps++;
+            race.obj_buffer[7].attr2 += 4;
+        } else
+        {
+            race.laps_remaining--;
+        }
+    } else if (race.car->finish_status == 0 && finish_status == -1)
+    {
+        race.laps_remaining++;
+    }
+    race.car->finish_status = finish_status;
 }

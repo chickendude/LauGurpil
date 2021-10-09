@@ -33,6 +33,7 @@ void load_car(Race *race)
     // Load car defaults
     car->speed = 0;
     car->x = car->y = 0;
+    car->finish_status = -1;
     car->oam = &race->obj_buffer[0];
     car->oam->attr2 ^= ATTR2_PRIO(1);
 

@@ -12,8 +12,11 @@ struct Race
     Camera camera;
     Camera prev_camera;
     Timer timer;
-    const Track *track;
+    int laps;
+    int laps_total;
+    int laps_remaining;
     int countdown;
+    const Track *track;
     OBJ_ATTR obj_buffer[128];
 };
 
