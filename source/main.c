@@ -2,10 +2,6 @@
 #include "state.h"
 #include "title.h"
 
-// RACE -------------
-// TODO: Return to menu when completed
-// TODO: Record lap times
-// TODO: Show race stats
 // PRE RACE -----------
 // TODO: Car selection
 // TODO: Car stats (max speed, acceleration, turning)

@@ -16,7 +16,7 @@ void print_text(SCR_ENTRY *sbb, int x, int y, unsigned char *text)
     unsigned char converted;
     while ((ch = *(text++)) != 0)
     {
-        if (ch > 'A') converted = ch - '0' - 4;
+        if (ch >= 'A') converted = ch - '0' - 4;
         else if (ch >= '0' && ch <= ';') converted = ch - '0' + 1;
         else if (ch == '.') converted = 39;
         else if (ch == '!') converted = 40;

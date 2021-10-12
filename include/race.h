@@ -2,9 +2,10 @@
 #define TEST_RACE_H
 
 #include <tonc.h>
-#include "types.h"
 #include "camera.h"
+#include "constants.h"
 #include "timer.h"
+#include "types.h"
 
 struct Race
 {
@@ -15,6 +16,7 @@ struct Race
     int laps;
     int laps_total;
     int laps_remaining;
+    int lap_times[MAX_LAPS];
     int countdown;
     const Track *track;
     OBJ_ATTR obj_buffer[128];

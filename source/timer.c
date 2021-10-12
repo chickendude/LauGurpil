@@ -11,7 +11,7 @@
 void load_timer(Timer *timer, OBJ_ATTR *oam, int x, int y)
 {
     timer->oam = oam;
-    timer->frames = 0;
+    timer->millis = 0;
     timer->seconds = 0;
     timer->minutes = 0;
     // There are five sprites in the timer: "mm:ss"
@@ -26,10 +26,11 @@ void load_timer(Timer *timer, OBJ_ATTR *oam, int x, int y)
 
 void update_timer(Timer *timer)
 {
+    timer->millis++;
     timer->frames++;
-    if (timer->frames == 60)
+    if (timer->millis == 60)
     {
-        timer->frames = 0;
+        timer->millis = 0;
         timer->seconds++;
         if (timer->seconds == 60)
         {

@@ -53,9 +53,19 @@ static void initialize(void *parameter)
     {
         se_mem[30][i] = 0;
     }
-    print_text(se_mem[30], 10, 1, results_txt);
-    print_time(se_mem[30], 10, 3, race->timer.minutes, race->timer.seconds,
-               race->timer.frames);
+    print_text(se_mem[30], 11, 1, results_txt);
+    print_text(se_mem[30], 10, 5, "LAP TIMES:\0");
+    print_time(se_mem[30], 11, 3, race->timer.minutes, race->timer.seconds,
+               race->timer.millis);
+    for (int i = 0; i < race->laps_total; i++)
+    {
+        int frames = race->lap_times[i];
+        if (i > 0) frames -= race->lap_times[i - 1];
+        int minutes = frames / (60 * 60);
+        int seconds = (frames - minutes * 3600) / 60;
+        int millis = frames % 60;
+        print_time(se_mem[30], 11, 7 + i, minutes, seconds, millis);
+    }
 }
 
 static void update()

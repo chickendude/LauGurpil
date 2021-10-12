@@ -7,11 +7,12 @@
 struct Timer
 {
     /**
-     * There are ~60 FPS, so when frames == 60 we increment seconds and reset
-     * frames to 0.
+     * There are ~60 FPS, so when millis == 60 we increment seconds and reset
+     * millis to 0.
      */
-    int frames;
+    int millis;
     int seconds, minutes;
+    int frames;
     OBJ_ATTR *oam;
 };
 

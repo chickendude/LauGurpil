@@ -76,6 +76,7 @@ static void initialize(void *parameter)
     race.track = &track_1;
     race.laps = 0;
     race.laps_total = 3;
+    race.laps_remaining = 0;
     race.countdown = 60 * 3;
     // * 16 (aka << 4) then shift left 12 because of the 12 point fixed point
     race.car->x = track_1.start_x << 16;
@@ -167,13 +168,14 @@ void show_countdown(int *countdown)
 
 void update_laps()
 {
-    // Check car's position in relation to finish line (if it is on, before, or
-    // after the finish line)
+    // Check car's position ("finish_(line_)status") in relation to finish line
+    // (if it is on, before, or after the finish line)
     int finish_status = is_car_in_finish_line(race.car, race.track);
     if (race.car->finish_status == -1 && finish_status == 0)
     {
         if (race.laps_remaining == 0)
         {
+            race.lap_times[race.laps - 1] = race.timer.frames;
             race.laps++;
             race.obj_buffer[7].attr2 += 4;
         } else
