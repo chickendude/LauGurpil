@@ -43,7 +43,8 @@ State race_state = {
 // -----------------------------------------------------------------------------
 static void initialize(void *parameter)
 {
-    // TODO: Use malloc to allocate race data
+    if (parameter != NULL) return;
+    race_stats_shown = false;
 
     REG_DISPCNT = DCNT_MODE0 | DCNT_BG0 | DCNT_BG1 | DCNT_OBJ | DCNT_OBJ_1D;
     oam_init(race.obj_buffer, 128);
@@ -88,8 +89,8 @@ static void initialize(void *parameter)
 
 void input(StateStack *state_stack)
 {
-    if (race_stats_shown) {
-        // TODO: race is probably deleted from stack so not available anymore
+    if (race_stats_shown)
+    {
         pop_state(state_stack, &race);
     }
 
@@ -109,11 +110,10 @@ void input(StateStack *state_stack)
     // We use > because laps start at 1, so if we want 3 laps, race.laps needs
     // to be 4 (start of first lap = 1, second = 2, third = 3, and once third
     // lap completes it will be 4)
-    if (race.laps > race.laps_total || key_hit(KEY_START)) {
-        // TODO: Create a new screen to show stats before going back to title
-        //  screen
+    if (race.laps > race.laps_total || key_hit(KEY_START))
+    {
         push_state(state_stack, &race_stats_state, &race);
-//        pop_state(state_stack);
+        race_stats_shown = true;
     }
 
     // Set player so that they are aligned with the camera
@@ -156,7 +156,8 @@ void show_countdown(int *countdown)
     }
 }
 
-void update_laps() {
+void update_laps()
+{
     // Check car's position in relation to finish line (if it is on, before, or
     // after the finish line)
     int finish_status = is_car_in_finish_line(race.car, race.track);

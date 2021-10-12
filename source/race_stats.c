@@ -54,7 +54,8 @@ static void initialize(void *parameter)
         se_mem[30][i] = 0;
     }
     print_text(se_mem[30], 10, 1, results_txt);
-    print_time(se_mem[30], 12, 3, 15938);
+    print_time(se_mem[30], 10, 3, race->timer.minutes, race->timer.seconds,
+               race->timer.frames);
 }
 
 static void update()
