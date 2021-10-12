@@ -5,7 +5,7 @@
 
 struct State
 {
-    void (*initialize)();
+    void (*initialize)(void *);
     void (*update)();
     void (*input)(StateStack *);
 };
@@ -16,8 +16,8 @@ struct StateStack
     State *states[10];
 };
 
-void push_state(StateStack *state_stack, State *state);
+void push_state(StateStack *state_stack, State *state, void *parameter);
 
-void pop_state(StateStack *state_stack);
+void pop_state(StateStack *state_stack, void *parameter);
 
 #endif //TEST_STATE_H

@@ -21,7 +21,7 @@ int main(void)
 
     State *cur_state = state_stack.states[state_stack.index];
 
-    cur_state->initialize();
+    cur_state->initialize(NULL);
 
     int i = 0;
     while (i >= 0)

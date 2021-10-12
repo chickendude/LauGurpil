@@ -1,24 +1,27 @@
 #include <tonc.h>
-#include "title.h"
 #include "race.h"
-#include "state.h"
-// Data
-#include "titlescreen.h"
+#include "race_stats.h"
+#include "text.h"
+// tiles
+#include "lap_numbers.h"
+
+static Race *race;
+
+char *results_txt = "RESULTS:0;9876!\0";
 
 // -----------------------------------------------------------------------------
 // Private function declarations
 // -----------------------------------------------------------------------------
-static void initialize();
-
-static void update();
+static void initialize(void *parameter);
 
 static void input(StateStack *state_stack);
 
+static void update();
 
 // -----------------------------------------------------------------------------
 // Public variable definitions
 // -----------------------------------------------------------------------------
-State title_state = {
+State race_stats_state = {
         &initialize,
         &update,
         &input
@@ -30,23 +33,39 @@ State title_state = {
 
 static void initialize(void *parameter)
 {
-    REG_DISPCNT = DCNT_MODE4 | DCNT_BG2;
+    // Save race parameter
+    race = (Race *) parameter;
 
-    memcpy32(vid_mem, titlescreenBitmap, titlescreenBitmapLen / 4);
-    memcpy32(pal_bg_mem, titlescreenPal, titlescreenPalLen / 4);
+    // Copy number tiles into tile memory
+    memcpy32(tile_mem, lap_numbersTiles + 51 * 8,
+             (lap_numbersTilesLen) / 4);
+    memcpy32(pal_bg_mem, lap_numbersPal, lap_numbersPalLen / 4);
+
+    // enable BG0/Mode 0 (bgs 0-3) and load tiles into character block 0 and
+    // put the map into screenblock 30
+    REG_DISPCNT = DCNT_MODE0 | DCNT_BG0;
+    REG_BG0CNT = BG_CBB(0) | BG_SBB(30) | BG_PRIO(1) | BG_REG_32x32 | BG_4BPP;
+    REG_BG0HOFS = 0;
+    REG_BG0VOFS = 0;
+
+    // clear map out
+    for (int i = 0; i < 1024; i++)
+    {
+        se_mem[30][i] = 0;
+    }
+    print_text(se_mem[30], 10, 10, results_txt);
 }
 
 static void update()
-{
-
-}
+{};
 
 static void input(StateStack *state_stack)
 {
-    if (key_hit(KEY_START))
+    if (key_hit(KEY_A | KEY_START))
     {
-        push_state(state_stack, &race_state, NULL);
+        pop_state(state_stack, &race);
     }
+
 }
 
 // -----------------------------------------------------------------------------

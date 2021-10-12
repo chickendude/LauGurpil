@@ -1,6 +1,7 @@
 #include <tonc.h>
 
 #include "race.h"
+#include "race_stats.h"
 #include "camera.h"
 #include "constants.h"
 #include "racecar.h"
@@ -11,11 +12,14 @@
 #include "lap_numbers.h"
 
 static Race race;
+
+static bool race_stats_shown = false;
+
 // -----------------------------------------------------------------------------
 // Private function declarations
 // -----------------------------------------------------------------------------
 
-void initialize();
+static void initialize(void *);
 
 void input(StateStack *state_stack);
 
@@ -37,8 +41,10 @@ State race_state = {
 // -----------------------------------------------------------------------------
 // Public function definitions
 // -----------------------------------------------------------------------------
-void initialize()
+static void initialize(void *parameter)
 {
+    // TODO: Use malloc to allocate race data
+
     REG_DISPCNT = DCNT_MODE0 | DCNT_BG0 | DCNT_BG1 | DCNT_OBJ | DCNT_OBJ_1D;
     oam_init(race.obj_buffer, 128);
 
@@ -46,7 +52,7 @@ void initialize()
     memcpy32(tile_mem[4], carsTiles, carsTilesLen / 4);
     memcpy32(pal_obj_mem, carsPal, carsPalLen / 4);
 
-    // Load laps numbers and seconds sprites
+    // Load laps numbers, seconds, and letter sprites
     memcpy32(tile_mem[4] + carsTilesLen / 32, lap_numbersTiles,
              lap_numbersTilesLen / 4);
     memcpy32(&pal_obj_mem[4 * 16], lap_numbersPal, lap_numbersPalLen / 4);
@@ -82,6 +88,11 @@ void initialize()
 
 void input(StateStack *state_stack)
 {
+    if (race_stats_shown) {
+        // TODO: race is probably deleted from stack so not available anymore
+        pop_state(state_stack, &race);
+    }
+
     if (race.countdown > 0)
     {
         show_countdown(&race.countdown);
@@ -93,8 +104,16 @@ void input(StateStack *state_stack)
     move_car(&race);
     update_camera(&race);
     update_laps();
-    if (race.laps > race.laps_total) {
-        pop_state(state_stack);
+
+    // Check if final lap has been completed.
+    // We use > because laps start at 1, so if we want 3 laps, race.laps needs
+    // to be 4 (start of first lap = 1, second = 2, third = 3, and once third
+    // lap completes it will be 4)
+    if (race.laps > race.laps_total || key_hit(KEY_START)) {
+        // TODO: Create a new screen to show stats before going back to title
+        //  screen
+        push_state(state_stack, &race_stats_state, &race);
+//        pop_state(state_stack);
     }
 
     // Set player so that they are aligned with the camera
@@ -104,7 +123,7 @@ void input(StateStack *state_stack)
 
     if (key_hit(KEY_SELECT))
     {
-        pop_state(state_stack);
+        pop_state(state_stack, &race);
     }
 }
 
