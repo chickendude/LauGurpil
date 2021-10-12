@@ -8,7 +8,7 @@
 //	+ 96 tiles Metatiled by 2x2 not compressed
 //	Total size: 512 + 3072 = 3584
 //
-//	Time-stamp: 2021-10-11, 20:43:56
+//	Time-stamp: 2021-10-11, 21:09:26
 //	Exported by Cearn's GBA Image Transmogrifier, v0.8.16
 //	( http://www.coranac.com/projects/#grit )
 //

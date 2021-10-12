@@ -7,7 +7,7 @@
 
 static Race *race;
 
-char *results_txt = "RESULTS:0;9876!\0";
+unsigned char results_txt[] = "RESULTS:\0";
 
 // -----------------------------------------------------------------------------
 // Private function declarations
@@ -53,7 +53,8 @@ static void initialize(void *parameter)
     {
         se_mem[30][i] = 0;
     }
-    print_text(se_mem[30], 10, 10, results_txt);
+    print_text(se_mem[30], 10, 1, results_txt);
+    print_time(se_mem[30], 12, 3, 15938);
 }
 
 static void update()
