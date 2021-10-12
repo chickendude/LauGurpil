@@ -41,7 +41,9 @@ State race_state = {
 // -----------------------------------------------------------------------------
 static void initialize(void *parameter)
 {
-    REG_DISPCNT = DCNT_MODE0 | DCNT_BG0 | DCNT_BG1 | DCNT_OBJ | DCNT_OBJ_1D;
+    // Turn off display while we load/prepare everything
+    REG_DISPCNT = 0;
+
     oam_init(race.obj_buffer, 128);
 
     // Load Car sprites
@@ -53,16 +55,17 @@ static void initialize(void *parameter)
              lap_numbersTilesLen / 4);
     memcpy32(&pal_obj_mem[4 * 16], lap_numbersPal, lap_numbersPalLen / 4);
 
-    obj_set_attr(race.obj_buffer,
-                 ATTR0_SQUARE | ATTR0_4BPP | ATTR0_AFF | ATTR0_AFF_DBL_BIT,
-                 ATTR1_SIZE_16x16 | ATTR1_AFF_ID(0),
-                 ATTR2_PALBANK(0) | ATTR2_ID(0));
-
-    obj_aff_identity((OBJ_AFFINE *) &race.obj_buffer[0]);
-
     load_car(&race);
     load_track(&track_1, &race.camera);
     load_timer(&race.timer, &race.obj_buffer[2], 12, 8);
+
+    // Car sprite/affine info
+    obj_set_attr(race.obj_buffer,
+                 ATTR0_SQUARE | ATTR0_4BPP | ATTR0_AFF | ATTR0_AFF_DBL_BIT,
+                 ATTR1_SIZE_16x16 | ATTR1_AFF_ID(0),
+                 ATTR2_PRIO(1) | ATTR2_PALBANK(0) | ATTR2_ID(0));
+
+    obj_aff_identity((OBJ_AFFINE *) &race.obj_buffer[0]);
 
     // Set laps #
     obj_set_attr(&race.obj_buffer[7],
@@ -73,13 +76,25 @@ static void initialize(void *parameter)
     race.track = &track_1;
     race.laps = 0;
     race.laps_total = 3;
+    race.countdown = 60 * 3;
     // * 16 (aka << 4) then shift left 12 because of the 12 point fixed point
     race.car->x = track_1.start_x << 16;
     race.car->y = track_1.start_y << 16;
     race.car->angle = track_1.start_angle;
     race.car->slide_x = lu_sin(race.car->angle);
     race.car->slide_y = lu_cos(race.car->angle);
-    race.countdown = 60 * 3;
+    obj_set_pos(race.car->oam,
+                (race.car->x >> 12) - 8 - race.camera.x,
+                (race.car->y >> 12) - 8 - race.camera.y);
+
+    vid_vsync();
+    REG_DISPCNT = DCNT_MODE0 | DCNT_BG0 | DCNT_BG1 | DCNT_OBJ | DCNT_OBJ_1D;
+
+    REG_BG0HOFS = race.camera.x;
+    REG_BG1HOFS = race.camera.x;
+    REG_BG0VOFS = race.camera.y;
+    REG_BG1VOFS = race.camera.y;
+    oam_copy(oam_mem, race.obj_buffer, 128);
 }
 
 void input(StateStack *state_stack)
