@@ -13,8 +13,6 @@
 
 static Race race;
 
-static bool race_stats_shown = false;
-
 // -----------------------------------------------------------------------------
 // Private function declarations
 // -----------------------------------------------------------------------------
@@ -43,9 +41,6 @@ State race_state = {
 // -----------------------------------------------------------------------------
 static void initialize(void *parameter)
 {
-    if (parameter != NULL) return;
-    race_stats_shown = false;
-
     REG_DISPCNT = DCNT_MODE0 | DCNT_BG0 | DCNT_BG1 | DCNT_OBJ | DCNT_OBJ_1D;
     oam_init(race.obj_buffer, 128);
 
@@ -89,11 +84,6 @@ static void initialize(void *parameter)
 
 void input(StateStack *state_stack)
 {
-    if (race_stats_shown)
-    {
-        pop_state(state_stack, &race);
-    }
-
     if (race.countdown > 0)
     {
         show_countdown(&race.countdown);
@@ -112,8 +102,11 @@ void input(StateStack *state_stack)
     // lap completes it will be 4)
     if (race.laps > race.laps_total || key_hit(KEY_START))
     {
+        // Remove this state from stack so that when the stats screen returns
+        // it goes straight to the previous screen
+        pop_state(state_stack, NULL);
+        // Load the race stats screen
         push_state(state_stack, &race_stats_state, &race);
-        race_stats_shown = true;
     }
 
     // Set player so that they are aligned with the camera
@@ -136,6 +129,7 @@ void update()
     REG_BG1VOFS = race.camera.y;
     oam_copy(oam_mem, race.obj_buffer, 128);
 }
+
 // -----------------------------------------------------------------------------
 // Private functions definitions
 // -----------------------------------------------------------------------------
