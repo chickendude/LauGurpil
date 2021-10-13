@@ -74,7 +74,7 @@ static void initialize(void *parameter)
     obj_set_attr(&race.obj_buffer[7],
                  ATTR0_SQUARE | ATTR0_4BPP | 10,
                  ATTR1_SIZE_16x16 | 200,
-                 ATTR2_PALBANK(2) | 28);
+                 ATTR2_PALBANK(2) | 32);
 
     race.track = &track_1;
     race.laps = 0;
@@ -176,11 +176,17 @@ void update_laps()
     int finish_status = is_car_in_finish_line(race.car, race.track);
     if (race.car->finish_status == -1 && finish_status == 0)
     {
+        // If the user hasn't gone backwards through the course
         if (race.laps_remaining == 0)
         {
-            race.lap_times[race.laps - 1] = race.timer.frames;
+            // If it's not the first "lap" (crossing the finish line from the
+            // starting point), then we don't want to save the lap time.
+            if (race.laps > 0)
+            {
+                race.lap_times[race.laps - 1] = race.timer.frames;
+                race.obj_buffer[7].attr2 += 4;
+            }
             race.laps++;
-            race.obj_buffer[7].attr2 += 4;
         } else
         {
             race.laps_remaining--;
