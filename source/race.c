@@ -17,12 +17,14 @@ static Race race;
 // Private function declarations
 // -----------------------------------------------------------------------------
 
+// State definitions
 static void initialize(void *);
 
-void input(StateStack *state_stack);
+static void input(StateStack *state_stack);
 
-void update();
+static void update();
 
+// Helper functions
 void show_countdown(int *countdown);
 
 void update_laps();
@@ -60,10 +62,11 @@ static void initialize(void *parameter)
     load_timer(&race.timer, &race.obj_buffer[2], 12, 8);
 
     // Car sprite/affine info
+    int car_id = *((int *) parameter);
     obj_set_attr(race.obj_buffer,
                  ATTR0_SQUARE | ATTR0_4BPP | ATTR0_AFF | ATTR0_AFF_DBL_BIT,
                  ATTR1_SIZE_16x16 | ATTR1_AFF_ID(0),
-                 ATTR2_PRIO(1) | ATTR2_PALBANK(0) | ATTR2_ID(0));
+                 ATTR2_PRIO(1) | ATTR2_PALBANK(car_id) | ATTR2_ID(car_id * 4));
 
     obj_aff_identity((OBJ_AFFINE *) &race.obj_buffer[0]);
 

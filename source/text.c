@@ -10,7 +10,7 @@
 // Public function definitions
 // -----------------------------------------------------------------------------
 
-void print_text(SCR_ENTRY *sbb, int x, int y, unsigned char *text)
+void print_text(SCR_ENTRY *sbb, int x, int y, char *text)
 {
     unsigned char ch;
     unsigned char converted;
@@ -37,7 +37,7 @@ void print_time(SCR_ENTRY *sbb, int x, int y, int minutes, int seconds, int fram
     time[4] += seconds % 10;
     time[6] += frames / 10;
     time[7] += frames % 10;
-    print_text(sbb, x, y, time);
+    print_text(sbb, x, y, (char*)time);
 }
 
 // -----------------------------------------------------------------------------

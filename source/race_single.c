@@ -1,24 +1,25 @@
 #include <tonc.h>
-#include "title.h"
 #include "race_single.h"
+#include "race.h"
+#include "racecar_select.h"
 #include "state.h"
-// Data
-#include "titlescreen.h"
+
+int selected_car;
 
 // -----------------------------------------------------------------------------
 // Private function declarations
 // -----------------------------------------------------------------------------
-static void initialize();
 
-static void update();
+static void initialize(void *parameter);
 
 static void input(StateStack *state_stack);
 
+static void update();
 
 // -----------------------------------------------------------------------------
 // Public variable definitions
 // -----------------------------------------------------------------------------
-State title_state = {
+State race_single_state = {
         &initialize,
         &update,
         &input
@@ -27,25 +28,29 @@ State title_state = {
 // -----------------------------------------------------------------------------
 // Public function definitions
 // -----------------------------------------------------------------------------
-
-static void initialize(void *parameter)
+void initialize(void *parameter)
 {
-    REG_DISPCNT = DCNT_MODE4 | DCNT_BG2;
+    // Disable display until we're ready
+    REG_DISPCNT = 0;
 
-    memcpy32(vid_mem, titlescreenBitmap, titlescreenBitmapLen / 4);
-    memcpy32(pal_bg_mem, titlescreenPal, titlescreenPalLen / 4);
+    if (parameter != NULL) {
+        selected_car = *((int*)parameter);
+    } else {
+        selected_car = -1;
+    }
 }
 
-static void update()
+void update()
 {
 
 }
 
-static void input(StateStack *state_stack)
+void input(StateStack *state_stack)
 {
-    if (key_hit(KEY_START))
-    {
-        push_state(state_stack, &race_single_state, NULL);
+    if (selected_car < 0) {
+        push_state(state_stack, &racecar_select_state, NULL);
+    } else {
+        push_state(state_stack, &race_state, &selected_car);
     }
 }
 

@@ -7,8 +7,6 @@
 
 static Race *race;
 
-unsigned char results_txt[] = "RESULTS:\0";
-
 // -----------------------------------------------------------------------------
 // Private function declarations
 // -----------------------------------------------------------------------------
@@ -53,7 +51,7 @@ static void initialize(void *parameter)
     {
         se_mem[30][i] = 0;
     }
-    print_text(se_mem[30], 11, 1, results_txt);
+    print_text(se_mem[30], 11, 1, "RESULTS:\0");
     print_text(se_mem[30], 10, 5, "LAP TIMES:\0");
     print_time(se_mem[30], 11, 3, race->timer.minutes, race->timer.seconds,
                race->timer.millis);
