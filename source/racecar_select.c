@@ -76,7 +76,7 @@ void input(StateStack *state_stack)
     } else if (key_hit(KEY_LEFT))
     {
         selected_car_index--;
-        if (selected_car_index < 0) selected_car_index = 7;
+        if (selected_car_index < 0) selected_car_index = 6;
     }
 
     attr1 = &obj_mem[selected_car_index].attr1;
