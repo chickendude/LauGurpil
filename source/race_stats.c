@@ -10,7 +10,7 @@ static Race *race;
 // -----------------------------------------------------------------------------
 // Private function declarations
 // -----------------------------------------------------------------------------
-static void initialize(void *parameter);
+static void initialize(StateType prev_state, void *parameter);
 
 static void input(StateStack *state_stack);
 
@@ -29,7 +29,7 @@ State race_stats_state = {
 // Public function definitions
 // -----------------------------------------------------------------------------
 
-static void initialize(void *parameter)
+static void initialize(StateType prev_state, void *parameter)
 {
     // Save race parameter
     race = (Race *) parameter;
@@ -73,7 +73,7 @@ static void input(StateStack *state_stack)
 {
     if (key_hit(KEY_A | KEY_START))
     {
-        pop_state(state_stack, &race);
+        pop_state(state_stack, RACE_STATS, &race);
     }
 
 }

@@ -3,8 +3,8 @@
 #include "title.h"
 
 // PRE RACE -----------
-// TODO: Car selection
 // TODO: Car stats (max speed, acceleration, turning)
+// TODO: Add locked state to cars to enable unlocking new vehicles
 //---------------------------------------------------------------------------------
 // Program entry point
 //---------------------------------------------------------------------------------
@@ -17,7 +17,7 @@ int main(void)
 
     State *cur_state = state_stack.states[state_stack.index];
 
-    cur_state->initialize(NULL);
+    cur_state->initialize(NONE, NULL);
 
     int i = 0;
     while (i >= 0)

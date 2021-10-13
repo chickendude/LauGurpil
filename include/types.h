@@ -4,6 +4,7 @@
 typedef struct Camera Camera;
 typedef struct Race Race;
 typedef struct Racecar Racecar;
+typedef struct ReturnParam ReturnParam;
 typedef struct State State;
 typedef struct StateStack StateStack;
 typedef struct Timer Timer;

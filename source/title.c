@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 // Private function declarations
 // -----------------------------------------------------------------------------
-static void initialize();
+static void initialize(StateType, void *);
 
 static void update();
 
@@ -28,7 +28,7 @@ State title_state = {
 // Public function definitions
 // -----------------------------------------------------------------------------
 
-static void initialize(void *parameter)
+static void initialize(StateType prev_state, void *parameter)
 {
     REG_DISPCNT = DCNT_MODE4 | DCNT_BG2;
 
@@ -45,7 +45,7 @@ static void input(StateStack *state_stack)
 {
     if (key_hit(KEY_START))
     {
-        push_state(state_stack, &race_single_state, NULL);
+        push_state(state_stack, &race_single_state, NONE, NULL);
     }
 }
 

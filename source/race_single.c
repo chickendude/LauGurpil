@@ -6,11 +6,13 @@
 
 int selected_car;
 
+StateType leaving_state;
+
 // -----------------------------------------------------------------------------
 // Private function declarations
 // -----------------------------------------------------------------------------
 
-static void initialize(void *parameter);
+static void initialize(StateType ls, void *parameter);
 
 static void input(StateStack *state_stack);
 
@@ -28,15 +30,16 @@ State race_single_state = {
 // -----------------------------------------------------------------------------
 // Public function definitions
 // -----------------------------------------------------------------------------
-void initialize(void *parameter)
+void initialize(StateType ls, void *parameter)
 {
     // Disable display until we're ready
     REG_DISPCNT = 0;
 
-    if (parameter != NULL) {
-        selected_car = *((int*)parameter);
-    } else {
-        selected_car = -1;
+    leaving_state = ls;
+
+    if (leaving_state == RACECAR_SELECT)
+    {
+        selected_car = *((int *) parameter);
     }
 }
 
@@ -47,10 +50,16 @@ void update()
 
 void input(StateStack *state_stack)
 {
-    if (selected_car < 0) {
-        push_state(state_stack, &racecar_select_state, NULL);
-    } else {
-        push_state(state_stack, &race_state, &selected_car);
+    switch (leaving_state)
+    {
+        case NONE:
+            push_state(state_stack, &racecar_select_state, RACE_SINGLE, NULL);
+            break;
+        case RACECAR_SELECT:
+            push_state(state_stack, &race_state, RACE_SINGLE, &selected_car);
+            break;
+        default:
+            pop_state(state_stack, RACE_SINGLE, NULL);
     }
 }
 

@@ -18,7 +18,7 @@ static Race race;
 // -----------------------------------------------------------------------------
 
 // State definitions
-static void initialize(void *);
+static void initialize(StateType, void *);
 
 static void input(StateStack *state_stack);
 
@@ -41,7 +41,7 @@ State race_state = {
 // -----------------------------------------------------------------------------
 // Public function definitions
 // -----------------------------------------------------------------------------
-static void initialize(void *parameter)
+static void initialize(StateType prev_state, void *parameter)
 {
     // Turn off display while we load/prepare everything
     REG_DISPCNT = 0;
@@ -55,7 +55,7 @@ static void initialize(void *parameter)
     // Load laps numbers, seconds, and letter sprites
     memcpy32(tile_mem[4] + carsTilesLen / 32, lap_numbersTiles,
              lap_numbersTilesLen / 4);
-    memcpy32(&pal_obj_mem[4 * 16], lap_numbersPal, lap_numbersPalLen / 4);
+    memcpy32(&pal_obj_mem[7 * 16], lap_numbersPal, lap_numbersPalLen / 4);
 
     load_car(&race);
     load_track(&track_1, &race.camera);
@@ -74,7 +74,7 @@ static void initialize(void *parameter)
     obj_set_attr(&race.obj_buffer[7],
                  ATTR0_SQUARE | ATTR0_4BPP | 10,
                  ATTR1_SIZE_16x16 | 200,
-                 ATTR2_PALBANK(2) | 32);
+                 ATTR2_PALBANK(7) | 32);
 
     race.track = &track_1;
     race.laps = 0;
@@ -123,9 +123,9 @@ void input(StateStack *state_stack)
     {
         // Remove this state from stack so that when the stats screen returns
         // it goes straight to the previous screen
-        pop_state(state_stack, NULL);
+        pop_state(state_stack, RACE, NULL);
         // Load the race stats screen
-        push_state(state_stack, &race_stats_state, &race);
+        push_state(state_stack, &race_stats_state, RACE, &race);
     }
 
     // Set player so that they are aligned with the camera
@@ -135,7 +135,7 @@ void input(StateStack *state_stack)
 
     if (key_hit(KEY_SELECT))
     {
-        pop_state(state_stack, &race);
+        pop_state(state_stack, RACE, &race);
     }
 }
 
@@ -160,7 +160,7 @@ void show_countdown(int *countdown)
     obj_set_attr(&race.obj_buffer[1],
                  ATTR0_4BPP | ATTR0_SQUARE | ATTR0_Y(SCREEN_HEIGHT / 2 - 8),
                  ATTR1_SIZE_16x16 | ATTR1_X(SCREEN_WIDTH / 2 - 8),
-                 ATTR2_PALBANK(4) | ATTR2_PRIO(0) | sprite_id);
+                 ATTR2_PALBANK(7) | ATTR2_PRIO(0) | sprite_id);
 
     // Hide sprite if countdown is complete
     if (*countdown == 0)
