@@ -69,7 +69,11 @@ void move_car(Race *race)
     else if (key_is_down(KEY_A)) car->speed += car->acceleration_power;
 
     // Slow down the acceleration once the car reaches a certain speed
-    if (car->speed > car->max_speed >> 1) car->speed -= (car->acceleration_power - 5);
+    if (car->speed > car->max_speed >> 1)
+    {
+        car->speed -= (car->acceleration_power - (car->acceleration_power >> 3));
+    }
+
     // Cap off max speed going forward/backward
     if (car->speed > car->max_speed) car->speed = car->max_speed; // Max speed
     if (car->speed < -0x1000) car->speed = -0x1000;
@@ -130,7 +134,8 @@ void check_terrain(Racecar *car, const Track *track)
 
     // Check if any of the tiles = 0 and make sure car speed is fast enough to
     // need slowing down
-    if (!(tile_1 && tile_2 && tile_3 && tile_4) && car->speed > car->max_speed >> 2)
+    if (!(tile_1 && tile_2 && tile_3 && tile_4) &&
+        car->speed > car->max_speed >> 2)
     {
         car->speed -= 0x0090;
     }
