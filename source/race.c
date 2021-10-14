@@ -57,12 +57,12 @@ static void initialize(StateType prev_state, void *parameter)
              lap_numbersTilesLen / 4);
     memcpy32(&pal_obj_mem[7 * 16], lap_numbersPal, lap_numbersPalLen / 4);
 
-    load_car(&race);
+    int car_id = *((int *) parameter);
+    load_car(&race, car_id);
     load_track(&track_1, &race.camera);
     load_timer(&race.timer, &race.obj_buffer[2], 12, 8);
 
     // Car sprite/affine info
-    int car_id = *((int *) parameter);
     obj_set_attr(race.obj_buffer,
                  ATTR0_SQUARE | ATTR0_4BPP | ATTR0_AFF | ATTR0_AFF_DBL_BIT,
                  ATTR1_SIZE_16x16 | ATTR1_AFF_ID(0),

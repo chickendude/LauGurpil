@@ -36,7 +36,14 @@ struct Racecar {
     OBJ_ATTR *oam;
 };
 
-void load_car(Race *race);
+struct RacecarData {
+    int max_speed;
+    int turning_power, acceleration_power;
+};
+
+void load_car(Race *race, int car_id);
 void move_car(Race *race);
 
+extern const RacecarData *cars[7];
+extern const RacecarData car1, car2, car3, car4, car5, car6, car7;
 #endif //TEST_RACECAR_H

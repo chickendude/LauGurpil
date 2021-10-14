@@ -11,6 +11,7 @@
 void load_timer(Timer *timer, OBJ_ATTR *oam, int x, int y)
 {
     timer->oam = oam;
+    timer->frames = 0;
     timer->millis = 0;
     timer->seconds = 0;
     timer->minutes = 0;

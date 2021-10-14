@@ -6,7 +6,7 @@
 
 int selected_car;
 
-StateType leaving_state;
+StateType prev_state;
 
 // -----------------------------------------------------------------------------
 // Private function declarations
@@ -35,9 +35,9 @@ void initialize(StateType ls, void *parameter)
     // Disable display until we're ready
     REG_DISPCNT = 0;
 
-    leaving_state = ls;
+    prev_state = ls;
 
-    if (leaving_state == RACECAR_SELECT)
+    if (prev_state == RACECAR_SELECT)
     {
         selected_car = *((int *) parameter);
     }
@@ -50,7 +50,7 @@ void update()
 
 void input(StateStack *state_stack)
 {
-    switch (leaving_state)
+    switch (prev_state)
     {
         case NONE:
             push_state(state_stack, &racecar_select_state, RACE_SINGLE, NULL);

@@ -5,6 +5,16 @@
 #include "racecar.h"
 #include "track.h"
 
+const RacecarData car1 = {0x4000, 0x0100, 0x0045};
+const RacecarData car2 = {0x4500, 0x00E0, 0x0040};
+const RacecarData car3 = {0x3E00, 0x0110, 0x0050};
+const RacecarData car4 = {0x4100, 0x0110, 0x0040};
+const RacecarData car5 = {0x3700, 0x0130, 0x0065};
+const RacecarData car6 = {0x3C00, 0x0100, 0x0065};
+const RacecarData car7 = {0x5000, 0x00D0, 0x0065};
+
+const RacecarData *cars[7] = {&car1, &car2, &car3, &car4, &car5, &car6, &car7};
+
 // -----------------------------------------------------------------------------
 // Private function declarations
 // -----------------------------------------------------------------------------
@@ -19,7 +29,7 @@ void slow_down(Racecar *car);
 // Public function definitions
 // -----------------------------------------------------------------------------
 
-void load_car(Race *race)
+void load_car(Race *race, int car_id)
 {
     Racecar *car = race->car;
 
@@ -29,6 +39,12 @@ void load_car(Race *race)
         car = malloc(sizeof(Racecar));
         race->car = car;
     }
+
+    // Load chosen car's data
+    const RacecarData *data = cars[car_id];
+    car->max_speed = data->max_speed;
+    car->turning_power = data->turning_power;
+    car->acceleration_power = data->acceleration_power;
 
     // Load car defaults
     car->speed = 0;
@@ -45,17 +61,17 @@ void load_car(Race *race)
 void move_car(Race *race)
 {
     Racecar *car = race->car;
-    car->angle -= key_tri_horz() * 0x0100; // Car turning power
+    car->angle -= key_tri_horz() * car->turning_power; // Car turning power
 
     // Check for acceleration/brakes, favoring brakes over acceleration
     // (if both are pressed at the same time, it will brake)
     if (key_is_down(KEY_B)) car->speed -= 0x0050;
-    else if (key_is_down(KEY_A)) car->speed += 0x0050;
+    else if (key_is_down(KEY_A)) car->speed += car->acceleration_power;
 
     // Slow down the acceleration once the car reaches a certain speed
-    if (car->speed > 0x2000) car->speed -= 0x0045;
+    if (car->speed > car->max_speed >> 1) car->speed -= (car->acceleration_power - 5);
     // Cap off max speed going forward/backward
-    if (car->speed > 0x4000) car->speed = 0x4000; // Max speed
+    if (car->speed > car->max_speed) car->speed = car->max_speed; // Max speed
     if (car->speed < -0x1000) car->speed = -0x1000;
 
     // Check for slowdown/speed up areas
@@ -114,7 +130,7 @@ void check_terrain(Racecar *car, const Track *track)
 
     // Check if any of the tiles = 0 and make sure car speed is fast enough to
     // need slowing down
-    if (!(tile_1 && tile_2 && tile_3 && tile_4) && car->speed > 0x0600)
+    if (!(tile_1 && tile_2 && tile_3 && tile_4) && car->speed > car->max_speed >> 2)
     {
         car->speed -= 0x0090;
     }
