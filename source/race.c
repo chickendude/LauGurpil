@@ -80,6 +80,11 @@ static void initialize(StateType prev_state, void *parameter)
     race.laps = 0;
     race.laps_total = 3;
     race.laps_remaining = 0;
+    for (int i = 0; i < race.laps_total; i++)
+    {
+        race.lap_times[i] = 0;
+    }
+
     race.countdown = 60 * 3;
     // * 16 (aka << 4) then shift left 12 because of the 12 point fixed point
     race.car->x = track_1.start_x << 16;
