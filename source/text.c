@@ -11,7 +11,8 @@
 // -----------------------------------------------------------------------------
 // Public function definitions
 // -----------------------------------------------------------------------------
-void prepare_text(int charblock_base, int screenblock_base) {
+void prepare_text(int charblock_base, int screenblock_base)
+{
     // Copy number tiles into tile memory and one row of the palette
     memcpy32(tile_mem[charblock_base], lap_numbersTiles + 51 * 8,
              (lap_numbersTilesLen) / 4);
@@ -23,7 +24,9 @@ void prepare_text(int charblock_base, int screenblock_base) {
     }
     // enable BG0/Mode 3 (bgs 0-3) and load tiles into character block 0 and
     // put the map into screenblock 30
-    REG_BG3CNT = BG_CBB(charblock_base) | BG_SBB(screenblock_base) | BG_PRIO(0) | BG_REG_32x32 | BG_4BPP;
+    REG_BG3CNT =
+            BG_CBB(charblock_base) | BG_SBB(screenblock_base) | BG_PRIO(0) |
+            BG_REG_32x32 | BG_4BPP;
 }
 
 void print_text(SCR_ENTRY *sbb, int x, int y, char *text)
@@ -45,6 +48,13 @@ void print_text(SCR_ENTRY *sbb, int x, int y, char *text)
 void print_speed(SCR_ENTRY *sbb, int x, int y, int speed)
 {
     unsigned char time[] = "    MPH\0";
+    if (speed < 0)
+    {
+        speed *= -1;
+        if (speed >> 7 >= 10) time[0] = 'M';
+        else time[1] = 'M';
+    }
+
     speed >>= 7;
     if (speed >= 100)
     {
