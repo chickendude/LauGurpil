@@ -26,7 +26,7 @@ struct Racecar {
     /**
      * Max speed the car can reach.
      *
-     * Store as .12 fixed point (
+     * Store as .12 fixed point
      */
     int max_speed;
 

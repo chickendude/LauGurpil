@@ -3,7 +3,7 @@
 #include "title.h"
 
 // PRE RACE -----------
-// TODO: Car stats (max speed, acceleration, turning)
+// TODO: Show car stats on selection screen
 // TODO: Add locked state to cars to enable unlocking new vehicles
 //---------------------------------------------------------------------------------
 // Program entry point

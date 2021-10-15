@@ -6,6 +6,7 @@
 #include "constants.h"
 #include "racecar.h"
 #include "state.h"
+#include "text.h"
 #include "track.h"
 // Sprites
 #include "cars.h"
@@ -55,12 +56,13 @@ static void initialize(StateType prev_state, void *parameter)
     // Load laps numbers, seconds, and letter sprites
     memcpy32(tile_mem[4] + carsTilesLen / 32, lap_numbersTiles,
              lap_numbersTilesLen / 4);
-    memcpy32(&pal_obj_mem[7 * 16], lap_numbersPal, lap_numbersPalLen / 4);
+    memcpy32(&pal_obj_mem[7 * 16], lap_numbersPal, 8);
 
     int car_id = *((int *) parameter);
     load_car(&race, car_id);
     load_track(&track_1, &race.camera);
-    load_timer(&race.timer, &race.obj_buffer[2], 12, 8);
+    load_timer(&race.timer);
+    print_time(se_mem[29], 1, 1, 0, 0, 0);
 
     // Car sprite/affine info
     obj_set_attr(race.obj_buffer,
@@ -96,8 +98,9 @@ static void initialize(StateType prev_state, void *parameter)
                 (race.car->x >> 12) - 8 - race.camera.x,
                 (race.car->y >> 12) - 8 - race.camera.y);
 
+    prepare_text(3, 29);
     vid_vsync();
-    REG_DISPCNT = DCNT_MODE0 | DCNT_BG0 | DCNT_BG1 | DCNT_OBJ | DCNT_OBJ_1D;
+    REG_DISPCNT = DCNT_MODE0 | DCNT_BG0 | DCNT_BG1 | DCNT_BG3 | DCNT_OBJ | DCNT_OBJ_1D;
 
     REG_BG0HOFS = race.camera.x;
     REG_BG1HOFS = race.camera.x;
@@ -147,6 +150,15 @@ void input(StateStack *state_stack)
 void update()
 {
     update_tilemap(&race);
+
+    // Show current MPH
+    print_speed(se_mem[29], 10, 1, race.car->speed);
+
+    // Update timer every other frame
+    if (race.timer.frames & 2) {
+        print_time(se_mem[29], 1, 1, race.timer.minutes, race.timer.seconds, race.timer.millis);
+    }
+
     REG_BG0HOFS = race.camera.x;
     REG_BG1HOFS = race.camera.x;
     REG_BG0VOFS = race.camera.y;

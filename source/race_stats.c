@@ -34,17 +34,10 @@ static void initialize(StateType prev_state, void *parameter)
     // Save race parameter
     race = (Race *) parameter;
 
-    // Copy number tiles into tile memory
-    memcpy32(tile_mem, lap_numbersTiles + 51 * 8,
-             (lap_numbersTilesLen) / 4);
-    memcpy32(pal_bg_mem, lap_numbersPal, lap_numbersPalLen / 4);
+    prepare_text(3, 30);
 
-    // enable BG0/Mode 0 (bgs 0-3) and load tiles into character block 0 and
-    // put the map into screenblock 30
-    REG_DISPCNT = DCNT_MODE0 | DCNT_BG0;
-    REG_BG0CNT = BG_CBB(0) | BG_SBB(30) | BG_PRIO(1) | BG_REG_32x32 | BG_4BPP;
-    REG_BG0HOFS = 0;
-    REG_BG0VOFS = 0;
+    // enable BG0/Mode 3 (bgs 0-3)
+    REG_DISPCNT = DCNT_MODE0 | DCNT_BG3;
 
     // clear map out
     for (int i = 0; i < 1024; i++)

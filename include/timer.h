@@ -13,10 +13,9 @@ struct Timer
     int millis;
     int seconds, minutes;
     int frames;
-    OBJ_ATTR *oam;
 };
 
-void load_timer(Timer *timer, OBJ_ATTR *oam, int x, int y);
+void load_timer(Timer *timer);
 
 void update_timer(Timer *timer);
 
