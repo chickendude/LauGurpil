@@ -5,13 +5,13 @@
 #include "racecar.h"
 #include "track.h"
 
-const RacecarData car1 = {0x4000, 0x0100, 0x0045};
-const RacecarData car2 = {0x4500, 0x00E0, 0x0040};
-const RacecarData car3 = {0x3E00, 0x0110, 0x0050};
-const RacecarData car4 = {0x4100, 0x0110, 0x0040};
-const RacecarData car5 = {0x3700, 0x0130, 0x0065};
-const RacecarData car6 = {0x3C00, 0x0100, 0x0065};
-const RacecarData car7 = {0x5000, 0x00D0, 0x0065};
+const RacecarData car1 = {7, 7, 7};
+const RacecarData car2 = {8, 6, 7};
+const RacecarData car3 = {5, 8, 8};
+const RacecarData car4 = {8, 8, 5};
+const RacecarData car5 = {2, 10, 9};
+const RacecarData car6 = {5, 7, 9};
+const RacecarData car7 = {10, 2, 9};
 
 const RacecarData *cars[7] = {&car1, &car2, &car3, &car4, &car5, &car6, &car7};
 
@@ -42,9 +42,9 @@ void load_car(Race *race, int car_id)
 
     // Load chosen car's data
     const RacecarData *data = cars[car_id];
-    car->max_speed = data->max_speed;
-    car->turning_power = data->turning_power;
-    car->acceleration_power = data->acceleration_power;
+    car->max_speed = 0x3A00 + data->max_speed * 0x0100;
+    car->turning_power = 0xC0 + data->turning_power * 0x05;
+    car->acceleration_power = 0x15 + data->acceleration_power * 0x05;
 
     // Load car defaults
     car->speed = 0;
