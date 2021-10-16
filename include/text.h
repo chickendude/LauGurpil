@@ -12,4 +12,6 @@ print_time(SCR_ENTRY *sbb, int x, int y, int minutes, int seconds, int frames);
 
 void print_speed(SCR_ENTRY *sbb, int x, int y, int speed);
 
+void print_number(SCR_ENTRY *sbb, int x, int y, int number);
+
 #endif //LAUGURPIL_TEXT_H

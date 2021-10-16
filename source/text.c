@@ -40,6 +40,9 @@ void print_text(SCR_ENTRY *sbb, int x, int y, char *text)
         else if (ch == '.') converted = 39;
         else if (ch == '!') converted = 40;
         else if (ch == ' ') converted = 41;
+        else if (ch == '<') converted = 42;
+        else if (ch == '=') converted = 43;
+        else if (ch == '>') converted = 44;
         else converted = 0;
         sbb[y * 32 + x++] = converted | SE_PALBANK(15);
     }
@@ -88,6 +91,38 @@ print_time(SCR_ENTRY *sbb, int x, int y, int minutes, int seconds, int frames)
     print_text(sbb, x, y, (char *) time);
 }
 
+void print_number(SCR_ENTRY *sbb, int x, int y, int number)
+{
+    unsigned char number_txt[] = "     \0";
+    int tenthous = number / 10000;
+    number -= tenthous * 10000;
+    int thous = number / 1000;
+    number -= thous * 1000;
+    int hundreds = number / 100;
+    number -= hundreds * 100;
+    int tens = number / 10;
+    int ones = number % 10;
+
+    int i = 0;
+    if (tenthous > 0) {
+        number_txt[i] = '0' + tenthous;
+        i++;
+    }
+    if (thous > 0) {
+        number_txt[i] = '0' + thous;
+        i++;
+    }
+    if (hundreds > 0) {
+        number_txt[i] = '0' + hundreds;
+        i++;
+    }
+    if (tens > 0) {
+        number_txt[i] = '0' + tens;
+        i++;
+    }
+    number_txt[i] = '0' + ones;
+    print_text(sbb, x, y, (char *) number_txt);
+}
 // -----------------------------------------------------------------------------
 // Private functions definitions
 // -----------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 cd gfx || exit
 clear
-#grit lap_numbers.png -gt -gB4 -Mw 2 -Mh 2
+grit lap_numbers.png -gt -gB4 -Mw 2 -Mh 2
 #grit titlescreen.png -gb -gB8
 #grit cars.png -gt -gB4 -Mw 2 -Mh 2
 #grit ground_tiles.png -gt -gB4 -Mw 2 -Mh 2
