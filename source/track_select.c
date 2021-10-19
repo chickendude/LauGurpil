@@ -104,18 +104,15 @@ static int grab_tile_id(int x, int y)
 
 static void build_track_sprites()
 {
-    TILE4 sprite[8][8];
+    TILE4 clear_tile = {{0x00000000, 0x00000000, 0x00000000, 0x00000000,
+                        0x00000000, 0x00000000, 0x00000000, 0x00000000}};
 
-    TILE4 clear_tile = {0x00000000, 0x00000000, 0x00000000, 0x00000000,
-                        0x00000000, 0x00000000, 0x00000000, 0x00000000};
-    // Clear out sprite and tile memory data in case a track is less than 64x64
-    // tiles
+    // Clear out tile memory data in case a track is less than 64x64 tiles
     for (int i = 0; i < 8; i++)
     {
         for (int j = 0; j < 8; j++)
         {
-            sprite[i][j] = clear_tile;
-            tile_mem[4][i * 4 + j] = clear_tile;
+            tile_mem[4][i * 8 + j] = clear_tile;
         }
     }
 
@@ -136,19 +133,11 @@ static void build_track_sprites()
             int t8 = grab_tile_id(x + 7, y);
             int pixel = (t8 << 28) + (t7 << 24) + (t6 << 20) + (t5 << 16) +
                         (t4 << 12) + (t3 << 8) + (t2 << 4) + t1;
-            sprite[y / 8][x / 8].data[y % 8] = pixel;
+            tile_mem[4][(y / 8) * 8 + (x / 8)].data[y % 8] = pixel;
         }
     }
 
-    // Copy the sprite we just built into tile memory
-    for (int i = 0; i < 8; i++)
-    {
-        for (int j = 0; j < 8; j++)
-        {
-            tile_mem[4][i * 8 + j] = sprite[i][j];
-        }
-    }
-
+    // Center the sprite horizontally based on the width of the track
     int x = SCREEN_WIDTH / 2 - track_1.width / 2;
     obj_mem[0].attr1 = ATTR1_SIZE_64x64 | x;
 }
