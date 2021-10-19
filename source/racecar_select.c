@@ -3,6 +3,7 @@
 #include "racecar.h"
 #include "state.h"
 #include "text.h"
+#include "track_select.h"
 // sprites
 #include "cars.h"
 
@@ -20,7 +21,7 @@ static void input(StateStack *state_stack);
 
 static void update();
 
-void update_stats();
+static void update_stats();
 
 // -----------------------------------------------------------------------------
 // Public variable definitions
@@ -95,10 +96,15 @@ void input(StateStack *state_stack)
 
     attr1 = &obj_mem[selected_car_index].attr1;
     *attr1 = (*attr1 & ~ATTR1_AFF_ID_MASK) | ATTR1_AFF_ID(1);
+    obj_aff_scale(&obj_aff_mem[1], 0xB0, 0xB0);
 
+    if (key_hit(KEY_B)) {
+        pop_state(state_stack, RACECAR_SELECT, &selected_car_index);
+    } else
     if (key_hit(KEY_A))
     {
-        pop_state(state_stack, RACECAR_SELECT, &selected_car_index);
+        push_state(state_stack, &track_select_state, RACECAR_SELECT,
+                   &selected_car_index);
     }
 }
 

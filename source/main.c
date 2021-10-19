@@ -3,9 +3,9 @@
 #include "title.h"
 
 // PRE RACE -----------
-// TODO: Show car stats on selection screen (maybe switch to point system:
-//  max_speed = 1-10, acceleration = 1-10, etc. where each point = 5mph
 // TODO: Add locked state to cars to enable unlocking new vehicles
+// TODO: Add track selection
+// TODO: Set up tournament state
 //---------------------------------------------------------------------------------
 // Program entry point
 //---------------------------------------------------------------------------------

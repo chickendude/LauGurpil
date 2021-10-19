@@ -58,6 +58,8 @@ static void initialize(StateType prev_state, void *parameter)
              lap_numbersTilesLen / 4);
     memcpy32(&pal_obj_mem[7 * 16], lap_numbersPal, 8);
 
+    prepare_text(3, 29);
+
     int car_id = *((int *) parameter);
     load_car(&race, car_id);
     load_track(&track_1, &race.camera);
@@ -98,7 +100,6 @@ static void initialize(StateType prev_state, void *parameter)
                 (race.car->x >> 12) - 8 - race.camera.x,
                 (race.car->y >> 12) - 8 - race.camera.y);
 
-    prepare_text(3, 29);
     vid_vsync();
     REG_DISPCNT = DCNT_MODE0 | DCNT_BG0 | DCNT_BG1 | DCNT_BG3 | DCNT_OBJ | DCNT_OBJ_1D;
 

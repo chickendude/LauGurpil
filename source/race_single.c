@@ -37,7 +37,7 @@ void initialize(StateType ls, void *parameter)
 
     prev_state = ls;
 
-    if (prev_state == RACECAR_SELECT)
+    if (prev_state == TRACK_SELECT)
     {
         selected_car = *((int *) parameter);
     }
@@ -55,7 +55,7 @@ void input(StateStack *state_stack)
         case NONE:
             push_state(state_stack, &racecar_select_state, RACE_SINGLE, NULL);
             break;
-        case RACECAR_SELECT:
+        case TRACK_SELECT:
             push_state(state_stack, &race_state, RACE_SINGLE, &selected_car);
             break;
         default:

@@ -10,7 +10,8 @@ typedef enum StateType
     RACE_SINGLE,
     RACE_STATS,
     RACE_TOURNAMENT,
-    RACECAR_SELECT
+    RACECAR_SELECT,
+    TRACK_SELECT
 } StateType;
 
 struct State
@@ -32,7 +33,7 @@ struct StateStack
 /**
  * Pushes a new state onto the state stack.
  *
- * You can optionally provide a parameter as a pointer which will be passed to
+ * You can optionally provide a racecar_id as a pointer which will be passed to
  * the new state.
  *
  * @param state_stack The stack to push the state onto.

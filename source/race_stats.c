@@ -31,7 +31,7 @@ State race_stats_state = {
 
 static void initialize(StateType prev_state, void *parameter)
 {
-    // Save race parameter
+    // Save race racecar_id
     race = (Race *) parameter;
 
     prepare_text(3, 30);

@@ -18,9 +18,9 @@ void prepare_text(int charblock_base, int screenblock_base)
              (lap_numbersTilesLen) / 4);
     memcpy32(&pal_bg_mem[15 * 16], lap_numbersPal, 8);
 
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 32*32; i++)
     {
-        se_mem[screenblock_base][i] |= SE_PALBANK(15);
+        se_mem[screenblock_base][i] = SE_PALBANK(15);
     }
     // enable BG0/Mode 3 (bgs 0-3) and load tiles into character block 0 and
     // put the map into screenblock 30
@@ -104,19 +104,23 @@ void print_number(SCR_ENTRY *sbb, int x, int y, int number)
     int ones = number % 10;
 
     int i = 0;
-    if (tenthous > 0) {
+    if (tenthous > 0)
+    {
         number_txt[i] = '0' + tenthous;
         i++;
     }
-    if (thous > 0) {
+    if (thous > 0)
+    {
         number_txt[i] = '0' + thous;
         i++;
     }
-    if (hundreds > 0) {
+    if (hundreds > 0)
+    {
         number_txt[i] = '0' + hundreds;
         i++;
     }
-    if (tens > 0) {
+    if (tens > 0)
+    {
         number_txt[i] = '0' + tens;
         i++;
     }
