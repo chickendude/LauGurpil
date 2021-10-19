@@ -49,7 +49,7 @@ void initialize(StateType _prev_state, void *parameter)
     pal_obj_mem[3] = CLR_WHITE;
 
     // Set background color
-    pal_bg_mem[0] = CLR_WHITE;
+    pal_bg_mem[0] = RGB15(20, 20, 20);
 
     prepare_text(3, 31);
 
