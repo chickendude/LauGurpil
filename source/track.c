@@ -9,8 +9,9 @@
 // tilemap data
 #include "tracks.h"
 
+const Track* tracks[2] = {&track_1, &track_2};
 
-const Track track_2 = {
+const Track track_1 = {
         18, 1,
         0x4000,
         track1Width, track1Height,
@@ -19,7 +20,7 @@ const Track track_2 = {
         track1_tilemap
 };
 
-const Track track_1 = {
+const Track track_2 = {
         7, 24,
         0x8000,
         track2Width, track2Height,

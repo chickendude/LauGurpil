@@ -4,7 +4,7 @@
 #include "racecar_select.h"
 #include "state.h"
 
-int selected_car;
+RaceData *race_data;
 
 StateType prev_state;
 
@@ -39,7 +39,7 @@ void initialize(StateType ls, void *parameter)
 
     if (prev_state == TRACK_SELECT)
     {
-        selected_car = *((int *) parameter);
+        race_data = (RaceData *) parameter;
     }
 }
 
@@ -56,7 +56,7 @@ void input(StateStack *state_stack)
             push_state(state_stack, &racecar_select_state, RACE_SINGLE, NULL);
             break;
         case TRACK_SELECT:
-            push_state(state_stack, &race_state, RACE_SINGLE, &selected_car);
+            push_state(state_stack, &race_state, RACE_SINGLE, race_data);
             break;
         default:
             pop_state(state_stack, RACE_SINGLE, NULL);

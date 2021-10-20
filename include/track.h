@@ -1,6 +1,7 @@
 #ifndef TEST_TRACK_H
 #define TEST_TRACK_H
 
+#include "constants.h"
 #include "types.h"
 
 struct Track
@@ -27,6 +28,8 @@ void update_tilemap(Race *race);
  * finish line, -1 = behind finish line
  */
 int is_car_in_finish_line(Racecar *car, const Track *track);
+
+extern const Track* tracks[NUM_TRACKS];
 
 extern const Track track_1, track_2;
 

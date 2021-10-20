@@ -1,10 +1,11 @@
 #include <tonc.h>
 #include "track_select.h"
+#include "race.h"
 #include "state.h"
 #include "text.h"
 #include "track.h"
 
-int racecar_id;
+static RaceData race_data;
 
 int selected_track_index;
 
@@ -36,7 +37,12 @@ State track_select_state = {
 // -----------------------------------------------------------------------------
 void initialize(StateType _prev_state, void *parameter)
 {
-    racecar_id = *(int *) parameter;
+    // Save car passed in from [racecar_select]
+    race_data.car_data = (RacecarData *) parameter;
+    race_data.track = tracks[0];
+
+    selected_track_index = 0;
+
     // Disable display until we're ready
     REG_DISPCNT = 0;
     oam_init(obj_mem, 128);
@@ -73,29 +79,35 @@ void input(StateStack *state_stack)
     if (key_hit(KEY_RIGHT))
     {
         selected_track_index++;
-        if (selected_track_index == 7) selected_track_index = 0;
+        if (selected_track_index == NUM_TRACKS) selected_track_index = 0;
+        race_data.track = tracks[selected_track_index];
+        build_track_sprites();
     } else if (key_hit(KEY_LEFT))
     {
         selected_track_index--;
-        if (selected_track_index < 0) selected_track_index = 6;
+        if (selected_track_index < 0) selected_track_index = NUM_TRACKS - 1;
+        race_data.track = tracks[selected_track_index];
+        build_track_sprites();
     }
 
     if (key_hit(KEY_B))
     {
-        pop_state(state_stack, TRACK_SELECT, &racecar_id);
+        pop_state(state_stack, TRACK_SELECT, race_data.car_data);
     } else if (key_hit(KEY_A))
     {
-        pop_state(state_stack, TRACK_SELECT, &racecar_id);
-        pop_state(state_stack, TRACK_SELECT, &racecar_id);
+        pop_state(state_stack, TRACK_SELECT, NULL);
+        pop_state(state_stack, TRACK_SELECT, &race_data);
     }
 }
 
 // -----------------------------------------------------------------------------
 // Private functions definitions
 // -----------------------------------------------------------------------------
-static int grab_tile_id(int x, int y)
+static int grab_tile_id(const int x, const int y)
 {
-    int id = track_1.tilemap[y * track_1.width + x];
+    const Track *track = race_data.track;
+
+    int id = track->tilemap[y * track->width + x];
     if (id == 0) return 0;
     if (id == 9 || id == 2 || id == 17 || (id >= 22 && id <= 24)) return 3;
     if (id == 64) return 2;
@@ -104,8 +116,10 @@ static int grab_tile_id(int x, int y)
 
 static void build_track_sprites()
 {
+    const Track *track = race_data.track;
+
     TILE4 clear_tile = {{0x00000000, 0x00000000, 0x00000000, 0x00000000,
-                        0x00000000, 0x00000000, 0x00000000, 0x00000000}};
+                                0x00000000, 0x00000000, 0x00000000, 0x00000000}};
 
     // Clear out tile memory data in case a track is less than 64x64 tiles
     for (int i = 0; i < 8; i++)
@@ -118,11 +132,10 @@ static void build_track_sprites()
 
     // Go through the tiles 8 at a time and pack them into a 4bpp sprite (one
     // pixel per tile)
-    for (int y = 0; y < track_1.height; y++)
+    for (int y = 0; y < track->height; y++)
     {
-        for (int x = 0; x < track_1.width; x += 8)
+        for (int x = 0; x < track->width; x += 8)
         {
-
             int t1 = grab_tile_id(x, y);
             int t2 = grab_tile_id(x + 1, y);
             int t3 = grab_tile_id(x + 2, y);
@@ -138,6 +151,6 @@ static void build_track_sprites()
     }
 
     // Center the sprite horizontally based on the width of the track
-    int x = SCREEN_WIDTH / 2 - track_1.width / 2;
+    int x = SCREEN_WIDTH / 2 - track->width / 2;
     obj_mem[0].attr1 = ATTR1_SIZE_64x64 | x;
 }

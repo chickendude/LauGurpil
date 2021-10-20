@@ -37,11 +37,12 @@ struct Racecar {
 };
 
 struct RacecarData {
+    int sprite_id;
     int max_speed;
     int turning_power, acceleration_power;
 };
 
-void load_car(Race *race, int car_id);
+void load_car(Race *race, RacecarData *car_data);
 void move_car(Race *race);
 
 extern const RacecarData *cars[7];

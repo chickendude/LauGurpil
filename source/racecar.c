@@ -1,19 +1,20 @@
 #include <malloc.h>
 #include <tonc.h>
 
-#include "race.h"
 #include "racecar.h"
+#include "constants.h"
+#include "race.h"
 #include "track.h"
 
-const RacecarData car1 = {7, 7, 7};
-const RacecarData car2 = {8, 6, 7};
-const RacecarData car3 = {5, 8, 8};
-const RacecarData car4 = {8, 8, 5};
-const RacecarData car5 = {2, 10, 9};
-const RacecarData car6 = {5, 7, 9};
-const RacecarData car7 = {10, 2, 9};
+const RacecarData car1 = {0, 7, 7, 7};
+const RacecarData car2 = {1, 8, 6, 7};
+const RacecarData car3 = {2, 5, 8, 8};
+const RacecarData car4 = {3, 8, 8, 5};
+const RacecarData car5 = {4, 2, 10, 9};
+const RacecarData car6 = {5, 5, 7, 9};
+const RacecarData car7 = {6, 10, 2, 9};
 
-const RacecarData *cars[7] = {&car1, &car2, &car3, &car4, &car5, &car6, &car7};
+const RacecarData *cars[NUM_CARS] = {&car1, &car2, &car3, &car4, &car5, &car6, &car7};
 
 // -----------------------------------------------------------------------------
 // Private function declarations
@@ -29,7 +30,7 @@ void slow_down(Racecar *car);
 // Public function definitions
 // -----------------------------------------------------------------------------
 
-void load_car(Race *race, int car_id)
+void load_car(Race *race, RacecarData *car_data)
 {
     Racecar *car = race->car;
 
@@ -41,10 +42,9 @@ void load_car(Race *race, int car_id)
     }
 
     // Load chosen car's data
-    const RacecarData *data = cars[car_id];
-    car->max_speed = 0x3A00 + data->max_speed * 0x0100;
-    car->turning_power = 0xC0 + data->turning_power * 0x05;
-    car->acceleration_power = 0x15 + data->acceleration_power * 0x05;
+    car->max_speed = 0x3A00 + car_data->max_speed * 0x0100;
+    car->turning_power = 0xC0 + car_data->turning_power * 0x05;
+    car->acceleration_power = 0x15 + car_data->acceleration_power * 0x05;
 
     // Load car defaults
     car->speed = 0;

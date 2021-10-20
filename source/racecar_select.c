@@ -1,5 +1,6 @@
 #include <tonc.h>
 #include "racecar_select.h"
+#include "constants.h"
 #include "racecar.h"
 #include "state.h"
 #include "text.h"
@@ -50,7 +51,7 @@ void initialize(StateType _ls, void *_)
 
     prepare_text(3, 29);
 
-    for (int i = 0; i < 7; i++)
+    for (int i = 0; i < NUM_CARS; i++)
     {
         obj_set_attr(&obj_mem[i],
                      ATTR0_4BPP | ATTR0_SQUARE | ATTR0_AFF | ATTR0_AFF_DBL_BIT |
@@ -85,12 +86,12 @@ void input(StateStack *state_stack)
     if (key_hit(KEY_RIGHT))
     {
         selected_car_index++;
-        if (selected_car_index == 7) selected_car_index = 0;
+        if (selected_car_index == NUM_CARS) selected_car_index = 0;
         update_stats();
     } else if (key_hit(KEY_LEFT))
     {
         selected_car_index--;
-        if (selected_car_index < 0) selected_car_index = 6;
+        if (selected_car_index < 0) selected_car_index = NUM_CARS - 1;
         update_stats();
     }
 
@@ -104,7 +105,7 @@ void input(StateStack *state_stack)
     if (key_hit(KEY_A))
     {
         push_state(state_stack, &track_select_state, RACECAR_SELECT,
-                   &selected_car_index);
+                   cars[selected_car_index]);
     }
 }
 

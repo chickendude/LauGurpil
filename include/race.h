@@ -22,6 +22,12 @@ struct Race
     OBJ_ATTR obj_buffer[128];
 };
 
+struct RaceData
+{
+    RacecarData *car_data;
+    const Track *track;
+};
+
 extern State race_state;
 
 
