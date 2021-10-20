@@ -28,6 +28,6 @@ void update_tilemap(Race *race);
  */
 int is_car_in_finish_line(Racecar *car, const Track *track);
 
-extern const Track track_1;
+extern const Track track_1, track_2;
 
 #endif //TEST_TRACK_H

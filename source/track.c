@@ -10,7 +10,7 @@
 #include "tracks.h"
 
 
-const Track track_1 = {
+const Track track_2 = {
         18, 1,
         0x4000,
         track1Width, track1Height,
@@ -18,6 +18,16 @@ const Track track_1 = {
         17, 3,
         track1_tilemap
 };
+
+const Track track_1 = {
+        7, 24,
+        0x8000,
+        track2Width, track2Height,
+        -30, 25,
+        15, 25,
+        track2_tilemap
+};
+
 // -----------------------------------------------------------------------------
 // Private function declarations
 // -----------------------------------------------------------------------------
@@ -153,6 +163,22 @@ int is_car_in_finish_line(Racecar *car, const Track *track)
         }
         // past finish line
         if (x1 < track->finish_x1) return 1;
+        // behind finish line
+        return -1;
+    }
+
+    // Facing down
+    if (track->start_angle == 0x8000)
+    {
+        // in finish line
+        if (y1 == track->finish_y1)
+        {
+            if ((x1 >= track->finish_x1 && x1 <= track->finish_x2) ||
+                (x2 >= track->finish_x1 && x2 <= track->finish_x2))
+                return 0;
+        }
+        // past finish line
+        if (y1 > track->finish_y1) return 1;
         // behind finish line
         return -1;
     }
