@@ -4,7 +4,6 @@
 
 // PRE RACE -----------
 // TODO: Add locked state to cars to enable unlocking new vehicles
-// TODO: Add track selection
 // TODO: Set up tournament state
 //---------------------------------------------------------------------------------
 // Program entry point

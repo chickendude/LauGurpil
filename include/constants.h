@@ -22,7 +22,7 @@
 
 #define NUM_CARS 7
 
-#define NUM_TRACKS 2
+#define NUM_TRACKS 4
 
 #define SPRITE(n) ((n) * 4)
 

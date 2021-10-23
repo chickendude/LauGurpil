@@ -108,9 +108,8 @@ static int grab_tile_id(const int x, const int y)
     const Track *track = race_data.track;
 
     int id = track->tilemap[y * track->width + x];
-    if (id == 0) return 0;
+    if (id == 0 || id == 64) return 0;
     if (id == 9 || id == 2 || id == 17 || (id >= 22 && id <= 24)) return 3;
-    if (id == 64) return 2;
     return 1;
 }
 
@@ -132,25 +131,28 @@ static void build_track_sprites()
 
     // Go through the tiles 8 at a time and pack them into a 4bpp sprite (one
     // pixel per tile)
-    for (int y = 0; y < track->height; y++)
+    for (int y = 0; y < track->height; y += 2)
     {
-        for (int x = 0; x < track->width; x += 8)
+        for (int x = 0; x < track->width; x += 16)
         {
             int t1 = grab_tile_id(x, y);
-            int t2 = grab_tile_id(x + 1, y);
-            int t3 = grab_tile_id(x + 2, y);
-            int t4 = grab_tile_id(x + 3, y);
-            int t5 = grab_tile_id(x + 4, y);
-            int t6 = grab_tile_id(x + 5, y);
-            int t7 = grab_tile_id(x + 6, y);
-            int t8 = grab_tile_id(x + 7, y);
+            int t2 = grab_tile_id(x + 2, y);
+            int t3 = grab_tile_id(x + 4, y);
+            int t4 = grab_tile_id(x + 6, y);
+            int t5 = grab_tile_id(x + 8, y);
+            int t6 = grab_tile_id(x + 10, y);
+            int t7 = grab_tile_id(x + 12, y);
+            int t8 = grab_tile_id(x + 14, y);
             int pixel = (t8 << 28) + (t7 << 24) + (t6 << 20) + (t5 << 16) +
                         (t4 << 12) + (t3 << 8) + (t2 << 4) + t1;
-            tile_mem[4][(y / 8) * 8 + (x / 8)].data[y % 8] = pixel;
+            int cols_left = track->width - x;
+            // Clear out remaining last frame if width not divisible by 16
+            if (cols_left < 16) pixel &= (-1 ^ (-1 << (cols_left * 2)));
+            tile_mem[4][(y / 16) * 8 + (x / 16)].data[(y / 2) % 8] = pixel;
         }
     }
 
     // Center the sprite horizontally based on the width of the track
-    int x = SCREEN_WIDTH / 2 - track->width / 2;
+    int x = SCREEN_WIDTH / 2 - track->width / 4;
     obj_mem[0].attr1 = ATTR1_SIZE_64x64 | x;
 }

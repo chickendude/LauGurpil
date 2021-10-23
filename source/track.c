@@ -9,7 +9,7 @@
 // tilemap data
 #include "tracks.h"
 
-const Track* tracks[2] = {&track_1, &track_2};
+const Track *tracks[NUM_TRACKS] = {&track_1, &track_2, &track_3, &track_4};
 
 const Track track_1 = {
         18, 1,
@@ -27,6 +27,24 @@ const Track track_2 = {
         -30, 25,
         15, 25,
         track2_tilemap
+};
+
+const Track track_3 = {
+        29, 12,
+        0xC000,
+        track3Width, track3Height,
+        31, 9,
+        31, 17,
+        track3_tilemap
+};
+
+const Track track_4 = {
+        83, 50,
+        0x0000,
+        track4Width, track4Height,
+        79, 49,
+        109, 49,
+        track4_tilemap
 };
 
 // -----------------------------------------------------------------------------
@@ -151,7 +169,6 @@ int is_car_in_finish_line(Racecar *car, const Track *track)
     int y1 = car->y >> 16;
     int y2 = (car->y + (15 << 12)) >> 16;
 
-    // TODO: Add facing right as well
     // Facing left
     if (track->start_angle == 0x4000)
     {
@@ -168,8 +185,24 @@ int is_car_in_finish_line(Racecar *car, const Track *track)
         return -1;
     }
 
-    // Facing down
-    if (track->start_angle == 0x8000)
+        // Facing right
+    else if (track->start_angle == 0xC000)
+    {
+        // in finish line
+        if (x1 == track->finish_x1)
+        {
+            if ((y1 >= track->finish_y1 && y1 <= track->finish_y2) ||
+                (y2 >= track->finish_y1 && y2 <= track->finish_y2))
+                return 0;
+        }
+        // past finish line
+        if (x1 > track->finish_x1) return 1;
+        // behind finish line
+        return -1;
+    }
+
+        // Facing down
+    else if (track->start_angle == 0x8000)
     {
         // in finish line
         if (y1 == track->finish_y1)
@@ -183,6 +216,20 @@ int is_car_in_finish_line(Racecar *car, const Track *track)
         // behind finish line
         return -1;
     }
-    // TODO: Remove this when other directions have been added
-    return -1;
+
+        // Facing down
+    else
+    {
+        // in finish line
+        if (y1 == track->finish_y1)
+        {
+            if ((x1 >= track->finish_x1 && x1 <= track->finish_x2) ||
+                (x2 >= track->finish_x1 && x2 <= track->finish_x2))
+                return 0;
+        }
+        // past finish line
+        if (y1 < track->finish_y1) return 1;
+        // behind finish line
+        return -1;
+    }
 }

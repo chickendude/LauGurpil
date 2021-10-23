@@ -14,7 +14,8 @@ const RacecarData car5 = {4, 2, 10, 9};
 const RacecarData car6 = {5, 5, 7, 9};
 const RacecarData car7 = {6, 10, 2, 9};
 
-const RacecarData *cars[NUM_CARS] = {&car1, &car2, &car3, &car4, &car5, &car6, &car7};
+const RacecarData *cars[NUM_CARS] = {&car1, &car2, &car3, &car4, &car5, &car6,
+                                     &car7};
 
 // -----------------------------------------------------------------------------
 // Private function declarations
@@ -71,7 +72,8 @@ void move_car(Race *race)
     // Slow down the acceleration once the car reaches a certain speed
     if (car->speed > car->max_speed >> 1)
     {
-        car->speed -= (car->acceleration_power - (car->acceleration_power >> 3));
+        car->speed -= (car->acceleration_power -
+                       (car->acceleration_power >> 3));
     }
 
     // Cap off max speed going forward/backward
@@ -82,7 +84,11 @@ void move_car(Race *race)
     check_terrain(car, race->track);
 
     if (race->countdown == 0)
+    {
         move_and_check_collisions(car, race->track);
+        car->x += (-car->speed * car->slide_x) >> 12;
+        car->y += (-car->speed * car->slide_y) >> 12;
+    }
 
     // Decelerate if we are not accelerating forward
     if (key_is_up(KEY_A) && car->speed > 0)
@@ -126,8 +132,8 @@ void check_terrain(Racecar *car, const Track *track)
 
     // Check if we are off the map and set a tile to 0 so that it causes the
     // car to slow down
-    if (map_x1 < 0 || map_x2 > track->width || map_y1 < 0 ||
-        map_y2 > track->height * track->width)
+    if (map_x1 < 0 || map_x2 >= track->width || map_y1 < 0 ||
+        map_y2 >= track->height * track->width)
     {
         tile_1 = 0;
     }
@@ -152,6 +158,12 @@ void move_and_check_collisions(Racecar *car, const Track *track)
     int dy = lu_cos(car->angle);
     car->slide_x = (dx + 31 * car->slide_x) >> 5;
     car->slide_y = (dy + 31 * car->slide_y) >> 5;
+
+    int x_off = (car->speed * car->slide_x) >> 12;
+    int y_off = (car->speed * car->slide_x) >> 12;
+    if ((car->x - x_off) >> 16 >= track->width - 1 ||
+        (car->y - y_off) >> 16 >= track->height - 1)
+        return;
 
     // Convert car coordinates into pixels from the .12 fixed point values
     int x = (car->speed * car->slide_x) >> 12;
@@ -220,9 +232,6 @@ void move_and_check_collisions(Racecar *car, const Track *track)
             slow_down(car);
         }
     }
-
-    car->x += (-car->speed * car->slide_x) >> 12;
-    car->y += (-car->speed * car->slide_y) >> 12;
 }
 
 void slow_down(Racecar *car)
