@@ -10,7 +10,7 @@ static Race *race;
 // -----------------------------------------------------------------------------
 // Private function declarations
 // -----------------------------------------------------------------------------
-static void initialize(StateType prev_state, void *parameter);
+static void initialize(StateType leaving_state, void *parameter);
 
 static void input(StateStack *state_stack);
 

@@ -4,15 +4,15 @@
 #include "racecar_select.h"
 #include "state.h"
 
-RaceData *race_data;
+static RaceData *race_data;
 
-StateType prev_state;
+static StateType prev_state;
 
 // -----------------------------------------------------------------------------
 // Private function declarations
 // -----------------------------------------------------------------------------
 
-static void initialize(StateType ls, void *parameter);
+static void initialize(StateType leaving_state, void *parameter);
 
 static void input(StateStack *state_stack);
 

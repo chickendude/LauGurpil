@@ -1,25 +1,27 @@
 #include <tonc.h>
-#include "title.h"
-#include "race_single.h"
 #include "race_tournament.h"
+#include "race.h"
+#include "racecar_select.h"
 #include "state.h"
-// Data
-#include "titlescreen.h"
+
+static RaceData *race_data;
+
+static StateType prev_state;
 
 // -----------------------------------------------------------------------------
 // Private function declarations
 // -----------------------------------------------------------------------------
-static void initialize(StateType, void *);
 
-static void update();
+static void initialize(StateType leaving_state, void *parameter);
 
 static void input(StateStack *state_stack);
 
+static void update();
 
 // -----------------------------------------------------------------------------
 // Public variable definitions
 // -----------------------------------------------------------------------------
-State title_state = {
+State race_tournament_state = {
         &initialize,
         &update,
         &input
@@ -28,30 +30,21 @@ State title_state = {
 // -----------------------------------------------------------------------------
 // Public function definitions
 // -----------------------------------------------------------------------------
-
-static void initialize(StateType prev_state, void *parameter)
+void initialize(StateType leaving_state, void *parameter)
 {
-    REG_DISPCNT = DCNT_MODE4 | DCNT_BG2;
+    // Disable display until we're ready
+    REG_DISPCNT = 0;
 
-    memcpy32(vid_mem, titlescreenBitmap, titlescreenBitmapLen / 4);
-    memcpy32(pal_bg_mem, titlescreenPal, titlescreenPalLen / 4);
+    prev_state = leaving_state;
 }
 
-static void update()
+void update()
 {
 
 }
 
-static void input(StateStack *state_stack)
+void input(StateStack *state_stack)
 {
-    if (key_hit(KEY_START))
-    {
-        push_state(state_stack, &race_single_state, NONE, NULL);
-    }
-    else if (key_hit(KEY_SELECT))
-    {
-        push_state(state_stack, &race_tournament_state, NONE, NULL);
-    }
 }
 
 // -----------------------------------------------------------------------------
