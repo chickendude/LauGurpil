@@ -10,6 +10,7 @@ typedef struct ReturnParam ReturnParam;
 typedef struct State State;
 typedef struct StateStack StateStack;
 typedef struct Timer Timer;
+typedef struct Tournament Tournament;
 typedef struct Track Track;
 
 #endif //TEST_TYPES_H
