@@ -24,7 +24,7 @@ struct Race
 
 struct RaceData
 {
-    RacecarData *car_data;
+    const RacecarData *car_data;
     const Track *track;
 };
 

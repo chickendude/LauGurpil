@@ -45,6 +45,18 @@ void update()
 
 void input(StateStack *state_stack)
 {
+    switch (prev_state)
+    {
+        // TODO: Load tournament selection first
+        case NONE:
+            push_state(state_stack, &racecar_select_state, RACE_TOURNAMENT, NULL);
+            break;
+        case TRACK_SELECT:
+            push_state(state_stack, &race_state, RACE_TOURNAMENT, race_data);
+            break;
+        default:
+            pop_state(state_stack, RACE_TOURNAMENT, NULL);
+    }
 }
 
 // -----------------------------------------------------------------------------

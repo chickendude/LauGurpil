@@ -5,8 +5,6 @@
 #include "text.h"
 #include "track.h"
 
-static RaceData race_data;
-
 int selected_track_index;
 
 // -----------------------------------------------------------------------------
@@ -19,7 +17,7 @@ static void input(StateStack *state_stack);
 
 static void update();
 
-static void build_track_sprites();
+static void build_track_sprite();
 
 static int grab_tile_id(int x, int y);
 
@@ -38,9 +36,6 @@ State track_select_state = {
 void initialize(StateType _prev_state, void *parameter)
 {
     // Save car passed in from [racecar_select]
-    race_data.car_data = (RacecarData *) parameter;
-    race_data.track = tracks[0];
-
     selected_track_index = 0;
 
     // Disable display until we're ready
@@ -48,7 +43,7 @@ void initialize(StateType _prev_state, void *parameter)
     oam_init(obj_mem, 128);
 
     // Load Car sprites
-    build_track_sprites();
+    build_track_sprite();
     pal_obj_mem[0] = CLR_WHITE;
     pal_obj_mem[1] = RGB15(16, 16, 16);
     pal_obj_mem[2] = CLR_BLACK;
@@ -80,23 +75,20 @@ void input(StateStack *state_stack)
     {
         selected_track_index++;
         if (selected_track_index == NUM_TRACKS) selected_track_index = 0;
-        race_data.track = tracks[selected_track_index];
-        build_track_sprites();
+        build_track_sprite();
     } else if (key_hit(KEY_LEFT))
     {
         selected_track_index--;
         if (selected_track_index < 0) selected_track_index = NUM_TRACKS - 1;
-        race_data.track = tracks[selected_track_index];
-        build_track_sprites();
+        build_track_sprite();
     }
 
     if (key_hit(KEY_B))
     {
-        pop_state(state_stack, TRACK_SELECT, race_data.car_data);
+        pop_state(state_stack, TRACK_SELECT, NULL);
     } else if (key_hit(KEY_A))
     {
-        pop_state(state_stack, TRACK_SELECT, NULL);
-        pop_state(state_stack, TRACK_SELECT, &race_data);
+        pop_state(state_stack, TRACK_SELECT, tracks[selected_track_index]);
     }
 }
 
@@ -105,7 +97,7 @@ void input(StateStack *state_stack)
 // -----------------------------------------------------------------------------
 static int grab_tile_id(const int x, const int y)
 {
-    const Track *track = race_data.track;
+    const Track *track = tracks[selected_track_index];
 
     int id = track->tilemap[y * track->width + x];
     if (id == 0 || id == 64) return 0;
@@ -113,9 +105,9 @@ static int grab_tile_id(const int x, const int y)
     return 1;
 }
 
-static void build_track_sprites()
+static void build_track_sprite()
 {
-    const Track *track = race_data.track;
+    const Track *track = tracks[selected_track_index];
 
     TILE4 clear_tile = {{0x00000000, 0x00000000, 0x00000000, 0x00000000,
                                 0x00000000, 0x00000000, 0x00000000, 0x00000000}};

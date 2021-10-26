@@ -3,8 +3,9 @@
 #include "race.h"
 #include "racecar_select.h"
 #include "state.h"
+#include "track_select.h"
 
-static RaceData *race_data;
+static RaceData race_data;
 
 static StateType prev_state;
 
@@ -30,16 +31,22 @@ State race_single_state = {
 // -----------------------------------------------------------------------------
 // Public function definitions
 // -----------------------------------------------------------------------------
-void initialize(StateType ls, void *parameter)
+void initialize(StateType leaving_state, void *parameter)
 {
     // Disable display until we're ready
     REG_DISPCNT = 0;
 
-    prev_state = ls;
+    prev_state = leaving_state;
 
-    if (prev_state == TRACK_SELECT)
+    if (parameter == NULL) {
+        prev_state = NONE;
+    }
+    else if (prev_state == RACECAR_SELECT)
     {
-        race_data = (RaceData *) parameter;
+        race_data.car_data = (RacecarData *) parameter;
+    } else if (prev_state == TRACK_SELECT)
+    {
+        race_data.track = (Track *) parameter;
     }
 }
 
@@ -55,8 +62,11 @@ void input(StateStack *state_stack)
         case NONE:
             push_state(state_stack, &racecar_select_state, RACE_SINGLE, NULL);
             break;
+        case RACECAR_SELECT:
+            push_state(state_stack, &track_select_state, RACE_SINGLE, &race_data);
+            break;
         case TRACK_SELECT:
-            push_state(state_stack, &race_state, RACE_SINGLE, race_data);
+            push_state(state_stack, &race_state, RACE_SINGLE, &race_data);
             break;
         default:
             pop_state(state_stack, RACE_SINGLE, NULL);

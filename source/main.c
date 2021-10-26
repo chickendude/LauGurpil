@@ -5,6 +5,12 @@
 // PRE RACE -----------
 // TODO: Add locked state to cars to enable unlocking new vehicles
 // TODO: Set up tournament state
+//  #1. Create files
+//  #2. Make car/track selection independent of each other
+//  3. Create tournament struct
+//  4. Create tournament selection state
+//  5. Select car and load track
+
 //---------------------------------------------------------------------------------
 // Program entry point
 //---------------------------------------------------------------------------------
