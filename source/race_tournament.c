@@ -3,6 +3,7 @@
 #include "race.h"
 #include "racecar_select.h"
 #include "state.h"
+#include "tournament.h"
 
 static RaceData *race_data;
 
@@ -47,8 +48,10 @@ void input(StateStack *state_stack)
 {
     switch (prev_state)
     {
-        // TODO: Load tournament selection first
         case NONE:
+            push_state(state_stack, &tournament_select_state, RACE_TOURNAMENT, NULL);
+            break;
+        case RACE_TOURNAMENT:
             push_state(state_stack, &racecar_select_state, RACE_TOURNAMENT, NULL);
             break;
         case TRACK_SELECT:

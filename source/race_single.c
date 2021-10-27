@@ -39,7 +39,7 @@ void initialize(StateType leaving_state, void *parameter)
     prev_state = leaving_state;
 
     if (parameter == NULL) {
-        prev_state = NONE;
+        prev_state = prev_state == RACECAR_SELECT ? EXIT : NONE;
     }
     else if (prev_state == RACECAR_SELECT)
     {

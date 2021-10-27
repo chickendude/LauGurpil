@@ -22,14 +22,14 @@ void prepare_text(int charblock_base, int screenblock_base)
     {
         se_mem[screenblock_base][i] = SE_PALBANK(15);
     }
-    // enable BG0/Mode 3 (bgs 0-3) and load tiles into character block 0 and
-    // put the map into screenblock 30
+    // enable BG0/Mode 3 (bgs 0-3) and load tiles into supplied character block
+    // and the map into supplied screenblock
     REG_BG3CNT =
             BG_CBB(charblock_base) | BG_SBB(screenblock_base) | BG_PRIO(0) |
             BG_REG_32x32 | BG_4BPP;
 }
 
-void print_text(SCR_ENTRY *sbb, int x, int y, char *text)
+void print_text(SCR_ENTRY *sbb, int x, int y, const char *text)
 {
     unsigned char ch;
     unsigned char converted;

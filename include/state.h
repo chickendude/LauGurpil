@@ -6,12 +6,14 @@
 typedef enum StateType
 {
     NONE,
+    EXIT,
     RACE,
     RACE_SINGLE,
     RACE_STATS,
     RACE_TOURNAMENT,
     RACECAR_SELECT,
-    TRACK_SELECT
+    TRACK_SELECT,
+    TOURNAMENT_SELECT
 } StateType;
 
 struct State
