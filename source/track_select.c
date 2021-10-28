@@ -43,7 +43,6 @@ void initialize(StateType _prev_state, void *parameter)
     oam_init(obj_mem, 128);
 
     // Load Car sprites
-    build_track_sprite();
     pal_obj_mem[0] = CLR_WHITE;
     pal_obj_mem[1] = RGB15(16, 16, 16);
     pal_obj_mem[2] = CLR_BLACK;
@@ -52,13 +51,15 @@ void initialize(StateType _prev_state, void *parameter)
     // Set background color
     pal_bg_mem[0] = RGB15(20, 20, 20);
 
-    prepare_text(3, 31);
-
     obj_set_attr(obj_mem,
                  ATTR0_4BPP | ATTR0_SQUARE | 90,
                  ATTR1_SIZE_64x64 | 100,
                  ATTR2_PALBANK(0) | 0
     );
+
+    prepare_text(3, 31);
+    build_track_sprite();
+
 
     print_text(se_mem[31], 10, 2, "SELECT TRACK");
 
@@ -107,7 +108,13 @@ static int grab_tile_id(const int x, const int y)
 
 static void build_track_sprite()
 {
+    // Hide sprite while we're working on it
+    obj_mem[0].attr0 = ATTR0_HIDE;
+
     const Track *track = tracks[selected_track_index];
+
+    print_text(se_mem[31], 10, 4, "              \0");
+    print_text(se_mem[31], 10, 4, track->title);
 
     TILE4 clear_tile = {{0x00000000, 0x00000000, 0x00000000, 0x00000000,
                                 0x00000000, 0x00000000, 0x00000000, 0x00000000}};
@@ -147,4 +154,6 @@ static void build_track_sprite()
     // Center the sprite horizontally based on the width of the track
     int x = SCREEN_WIDTH / 2 - track->width / 4;
     obj_mem[0].attr1 = ATTR1_SIZE_64x64 | x;
+    // Re-show the sprite
+    obj_mem[0].attr0 = 90;
 }

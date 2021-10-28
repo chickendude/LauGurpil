@@ -6,6 +6,7 @@
 
 struct Track
 {
+    const char title[15];
     int start_x, start_y;
     int start_angle;
     int width, height;

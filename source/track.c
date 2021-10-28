@@ -12,6 +12,7 @@
 const Track *tracks[NUM_TRACKS] = {&track_1, &track_2, &track_3, &track_4};
 
 const Track track_1 = {
+        "BASAMORTUA",
         18, 1,
         0x4000,
         track1Width, track1Height,
@@ -21,6 +22,7 @@ const Track track_1 = {
 };
 
 const Track track_2 = {
+        "LAS TERKA",
         7, 24,
         0x8000,
         track2Width, track2Height,
@@ -30,6 +32,7 @@ const Track track_2 = {
 };
 
 const Track track_3 = {
+        "ERREKA",
         28, 12,
         0xC000,
         track3Width, track3Height,
@@ -39,6 +42,7 @@ const Track track_3 = {
 };
 
 const Track track_4 = {
+        "NON NAGO",
         83, 50,
         0x0000,
         track4Width, track4Height,
