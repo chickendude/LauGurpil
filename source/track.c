@@ -30,7 +30,7 @@ const Track track_2 = {
 };
 
 const Track track_3 = {
-        29, 12,
+        28, 12,
         0xC000,
         track3Width, track3Height,
         31, 9,

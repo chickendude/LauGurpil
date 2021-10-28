@@ -5,7 +5,9 @@
 #include "state.h"
 #include "tournament.h"
 
-static RaceData *race_data;
+static RaceData race_data;
+static Tournament *tournament;
+static int track_index;
 
 static StateType prev_state;
 
@@ -37,6 +39,15 @@ void initialize(StateType leaving_state, void *parameter)
     REG_DISPCNT = 0;
 
     prev_state = leaving_state;
+
+    if (prev_state == TOURNAMENT_SELECT && parameter != NULL)
+    {
+        tournament = (Tournament *) parameter;
+        track_index = 0;
+    } else if (prev_state == RACECAR_SELECT && parameter != NULL)
+    {
+        race_data.car_data = (RacecarData *) parameter;
+    }
 }
 
 void update()
@@ -49,13 +60,21 @@ void input(StateStack *state_stack)
     switch (prev_state)
     {
         case NONE:
-            push_state(state_stack, &tournament_select_state, RACE_TOURNAMENT, NULL);
+            push_state(state_stack, &tournament_select_state, RACE_TOURNAMENT,
+                       NULL);
             break;
-        case RACE_TOURNAMENT:
-            push_state(state_stack, &racecar_select_state, RACE_TOURNAMENT, NULL);
+        case TOURNAMENT_SELECT:
+            push_state(state_stack, &racecar_select_state, RACE_TOURNAMENT,
+                       NULL);
             break;
-        case TRACK_SELECT:
-            push_state(state_stack, &race_state, RACE_TOURNAMENT, race_data);
+        case RACECAR_SELECT:
+        case RACE_STATS:
+            if (track_index < 4)
+            {
+                race_data.track = tournament->tracks[track_index++];
+                push_state(state_stack, &race_state, RACE_TOURNAMENT,
+                           &race_data);
+            } else pop_state(state_stack, RACE_TOURNAMENT, NULL);
             break;
         default:
             pop_state(state_stack, RACE_TOURNAMENT, NULL);
