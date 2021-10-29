@@ -23,6 +23,8 @@ const RacecarData *cars[NUM_CARS] = {&car1, &car2, &car3, &car4, &car5, &car6,
 
 void check_terrain(Racecar *car, const Track *track);
 
+void load_car(Racecar *car, const RacecarData *car_data);
+
 void move_and_check_collisions(Racecar *car, const Track *track);
 
 void slow_down(Racecar *car);
@@ -30,8 +32,7 @@ void slow_down(Racecar *car);
 // -----------------------------------------------------------------------------
 // Public function definitions
 // -----------------------------------------------------------------------------
-
-void load_car(Race *race, RacecarData *car_data)
+void load_cars(Race *race, const RacecarData **car_data)
 {
     Racecar *car = race->car;
 
@@ -40,23 +41,17 @@ void load_car(Race *race, RacecarData *car_data)
     {
         car = malloc(sizeof(Racecar));
         race->car = car;
+        car->oam = &race->obj_buffer[0];
     }
+    load_car(car, car_data[0]);
 
-    // Load chosen car's data
-    car->max_speed = 0x3A00 + car_data->max_speed * 0x0100;
-    car->turning_power = 0xC0 + car_data->turning_power * 0x05;
-    car->acceleration_power = 0x15 + car_data->acceleration_power * 0x05;
-
-    // Load car defaults
-    car->speed = 0;
-    car->x = car->y = 0;
-    car->finish_status = -1;
-    car->oam = &race->obj_buffer[0];
-    car->oam->attr2 ^= ATTR2_PRIO(1);
-
-    // Set position and rotation
-    obj_set_pos(&race->obj_buffer[0], car->x - 32, car->y - 32);
-    obj_aff_rotate((OBJ_AFFINE *) &race->obj_buffer[0], car->angle);
+    // Grab the cars after the one selected to use as the AI cars
+    for (int i = 0; i < NUM_AI_CARS; i++)
+    {
+        Racecar *ai_car = &race->computer_cars[i];
+        ai_car->oam = &race->obj_buffer[i + 1];
+        load_car(ai_car, car_data[i + 1]);
+    }
 }
 
 void move_car(Race *race)
@@ -145,6 +140,24 @@ void check_terrain(Racecar *car, const Track *track)
     {
         car->speed -= 0x0090;
     }
+}
+
+void load_car(Racecar *car, const RacecarData *car_data)
+{
+    // Load chosen car's data
+    car->max_speed = 0x3A00 + car_data->max_speed * 0x0100;
+    car->turning_power = 0xC0 + car_data->turning_power * 0x05;
+    car->acceleration_power = 0x15 + car_data->acceleration_power * 0x05;
+
+    // Load car defaults
+    car->speed = 0;
+    car->x = car->y = 0;
+    car->finish_status = -1;
+    car->oam->attr2 ^= ATTR2_PRIO(1);
+
+    // Set position and rotation
+    obj_set_pos(car->oam, car->x - 32, car->y - 32);
+    obj_aff_rotate((OBJ_AFFINE *) car->oam, car->angle);
 }
 
 void move_and_check_collisions(Racecar *car, const Track *track)

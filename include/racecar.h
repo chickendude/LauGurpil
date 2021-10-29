@@ -1,6 +1,7 @@
 #ifndef TEST_RACECAR_H
 #define TEST_RACECAR_H
 
+#include "constants.h"
 #include "types.h"
 
 struct Racecar {
@@ -42,7 +43,7 @@ struct RacecarData {
     int turning_power, acceleration_power;
 };
 
-void load_car(Race *race, RacecarData *car_data);
+void load_cars(Race *race, const RacecarData **car_data);
 void move_car(Race *race);
 
 extern const RacecarData *cars[7];

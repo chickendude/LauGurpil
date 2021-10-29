@@ -2,9 +2,10 @@
 #include "state.h"
 #include "title.h"
 
+// TODO: Make cars move in circles
 // PRE RACE -----------
 // TODO: Add locked state to cars to enable unlocking new vehicles
-// TODO: Give tracks names
+
 
 //---------------------------------------------------------------------------------
 // Program entry point

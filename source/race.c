@@ -61,18 +61,21 @@ static void initialize(StateType prev_state, void *parameter)
     prepare_text(3, 29);
 
     RaceData *race_data = (RaceData *) parameter;
-    load_car(&race, race_data->car_data);
+    load_cars(&race, race_data->car_data);
     load_track(race_data->track, &race.camera);
     load_timer(&race.timer);
     print_time(se_mem[29], 1, 1, 0, 0, 0);
 
     // Car sprite/affine info
-    obj_set_attr(race.obj_buffer,
-                 ATTR0_SQUARE | ATTR0_4BPP | ATTR0_AFF | ATTR0_AFF_DBL_BIT,
-                 ATTR1_SIZE_16x16 | ATTR1_AFF_ID(0),
-                 ATTR2_PRIO(1) |
-                 ATTR2_PALBANK(race_data->car_data->sprite_id) |
-                 ATTR2_ID(race_data->car_data->sprite_id * 4));
+    for (int i = 0; i < NUM_AI_CARS + 1; i++)
+    {
+        obj_set_attr(&race.obj_buffer[i],
+                     ATTR0_SQUARE | ATTR0_4BPP | ATTR0_AFF | ATTR0_AFF_DBL_BIT,
+                     ATTR1_SIZE_16x16 | ATTR1_AFF_ID(0),
+                     ATTR2_PRIO(1) |
+                     ATTR2_PALBANK(race_data->car_data[i]->sprite_id) |
+                     ATTR2_ID(race_data->car_data[i]->sprite_id * 4));
+    }
 
     obj_aff_identity((OBJ_AFFINE *) &race.obj_buffer[0]);
 
@@ -180,7 +183,7 @@ void show_countdown(int *countdown)
 {
     (*countdown)--;
     int sprite_id = SPRITE(8 + *countdown / 60);
-    obj_set_attr(&race.obj_buffer[1],
+    obj_set_attr(&race.obj_buffer[127],
                  ATTR0_4BPP | ATTR0_SQUARE | ATTR0_Y(SCREEN_HEIGHT / 2 - 8),
                  ATTR1_SIZE_16x16 | ATTR1_X(SCREEN_WIDTH / 2 - 8),
                  ATTR2_PALBANK(7) | ATTR2_PRIO(0) | sprite_id);
@@ -188,7 +191,7 @@ void show_countdown(int *countdown)
     // Hide sprite if countdown is complete
     if (*countdown == 0)
     {
-        obj_set_pos(&race.obj_buffer[1], -16, -16);
+        obj_set_pos(&race.obj_buffer[127], -16, -16);
     }
 }
 

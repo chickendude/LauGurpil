@@ -1,4 +1,5 @@
 #include <tonc.h>
+#include <malloc.h>
 #include "racecar_select.h"
 #include "constants.h"
 #include "racecar.h"
@@ -10,6 +11,8 @@
 int angle;
 
 int selected_car_index;
+
+const RacecarData **selected_cars;
 
 // -----------------------------------------------------------------------------
 // Private function declarations
@@ -100,10 +103,25 @@ void input(StateStack *state_stack)
 
     if (key_hit(KEY_B))
     {
+        // Screen was cancelled
         pop_state(state_stack, RACECAR_SELECT, NULL);
     } else if (key_hit(KEY_A))
     {
-        pop_state(state_stack, RACECAR_SELECT, cars[selected_car_index]);
+        // Car was selected
+        if (selected_cars == NULL)
+        {
+            selected_cars = malloc(sizeof *selected_cars * (NUM_AI_CARS + 1));
+        }
+
+        // First car is player's car
+        selected_cars[0] = cars[selected_car_index];
+        // Select the AI cars
+        for (int i = 1; i < 5; i++)
+        {
+            int index = (selected_car_index + i) % NUM_CARS;
+            selected_cars[i] = cars[index];
+        }
+        pop_state(state_stack, RACECAR_SELECT, selected_cars);
     }
 }
 
@@ -113,9 +131,9 @@ void input(StateStack *state_stack)
 
 void update_stats()
 {
-    char spd_txt[] = "          \0";
-    char acc_txt[] = "          \0";
-    char trn_txt[] = "          \0";
+    char spd_txt[] = "          ";
+    char acc_txt[] = "          ";
+    char trn_txt[] = "          ";
     const RacecarData *data = cars[selected_car_index];
     int spd = data->max_speed;
     int acc = data->acceleration_power;

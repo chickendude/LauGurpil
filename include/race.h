@@ -4,12 +4,14 @@
 #include <tonc.h>
 #include "camera.h"
 #include "constants.h"
+#include "racecar.h"
 #include "timer.h"
 #include "types.h"
 
 struct Race
 {
     Racecar *car;
+    Racecar computer_cars[NUM_AI_CARS];
     Camera camera;
     Camera prev_camera;
     Timer timer;
@@ -24,7 +26,7 @@ struct Race
 
 struct RaceData
 {
-    const RacecarData *car_data;
+    const RacecarData **car_data;
     const Track *track;
 };
 

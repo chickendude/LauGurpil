@@ -1,4 +1,5 @@
 #include <tonc.h>
+#include <malloc.h>
 #include "race_single.h"
 #include "race.h"
 #include "racecar_select.h"
@@ -43,7 +44,7 @@ void initialize(StateType leaving_state, void *parameter)
     }
     else if (prev_state == RACECAR_SELECT)
     {
-        race_data.car_data = (RacecarData *) parameter;
+        race_data.car_data = (const RacecarData **) parameter;
     } else if (prev_state == TRACK_SELECT)
     {
         race_data.track = (Track *) parameter;
