@@ -41,6 +41,7 @@ void load_cars(Race *race, const RacecarData **car_data)
     {
         car = malloc(sizeof(Racecar));
         race->car = car;
+        car->oam_affine = obj_aff_mem;
         car->oam = &race->obj_buffer[0];
     }
     load_car(car, car_data[0]);
@@ -49,14 +50,14 @@ void load_cars(Race *race, const RacecarData **car_data)
     for (int i = 0; i < NUM_AI_CARS; i++)
     {
         Racecar *ai_car = &race->computer_cars[i];
+        ai_car->oam_affine = &obj_aff_mem[i + 1];
         ai_car->oam = &race->obj_buffer[i + 1];
         load_car(ai_car, car_data[i + 1]);
     }
 }
 
-void move_car(Race *race)
+void move_car(Race *race, Racecar *car)
 {
-    Racecar *car = race->car;
     car->angle -= key_tri_horz() * car->turning_power; // Car turning power
 
     // Check for acceleration/brakes, favoring brakes over acceleration
@@ -99,7 +100,7 @@ void move_car(Race *race)
         if (car->speed > 0) car->speed = 0;
     }
 
-    obj_aff_rotate((OBJ_AFFINE *) car->oam, car->angle);
+    obj_aff_rotate(car->oam_affine, car->angle);
 }
 // -----------------------------------------------------------------------------
 // Private functions definitions

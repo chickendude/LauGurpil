@@ -33,6 +33,9 @@ struct Racecar {
 
     int turning_power, acceleration_power;
 
+    // Object's id in oam, since sprites and affine are
+    OBJ_AFFINE *oam_affine;
+
     // Address in OAM
     OBJ_ATTR *oam;
 };
@@ -44,7 +47,7 @@ struct RacecarData {
 };
 
 void load_cars(Race *race, const RacecarData **car_data);
-void move_car(Race *race);
+void move_car(Race *race, Racecar *car);
 
 extern const RacecarData *cars[7];
 extern const RacecarData car1, car2, car3, car4, car5, car6, car7;

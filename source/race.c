@@ -71,13 +71,13 @@ static void initialize(StateType prev_state, void *parameter)
     {
         obj_set_attr(&race.obj_buffer[i],
                      ATTR0_SQUARE | ATTR0_4BPP | ATTR0_AFF | ATTR0_AFF_DBL_BIT,
-                     ATTR1_SIZE_16x16 | ATTR1_AFF_ID(0),
+                     ATTR1_SIZE_16x16 | ATTR1_AFF_ID(i * 4),
                      ATTR2_PRIO(1) |
                      ATTR2_PALBANK(race_data->car_data[i]->sprite_id) |
                      ATTR2_ID(race_data->car_data[i]->sprite_id * 4));
+        obj_aff_identity((OBJ_AFFINE *) &race.obj_buffer[i]);
     }
 
-    obj_aff_identity((OBJ_AFFINE *) &race.obj_buffer[0]);
 
     // Set laps #
     obj_set_attr(&race.obj_buffer[7],
@@ -126,7 +126,11 @@ void input(StateStack *state_stack)
         update_timer(&race.timer);
     }
 
-    move_car(&race);
+    move_car(&race, race.car);
+    for (int i = 0; i < NUM_AI_CARS; i++)
+    {
+        move_car(&race, race.computer_cars);
+    }
     update_camera(&race);
     update_laps();
 
