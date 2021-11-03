@@ -47,7 +47,13 @@ struct RacecarData {
 };
 
 void load_cars(Race *race, const RacecarData **car_data);
+void handle_input(Racecar *car);
 void move_car(Race *race, Racecar *car);
+// Commands
+void accelerate(Racecar *car);
+void decelerate(Racecar *car);
+void brake(Racecar *car);
+void turn(Racecar *car, int direction);
 
 extern const RacecarData *cars[7];
 extern const RacecarData car1, car2, car3, car4, car5, car6, car7;

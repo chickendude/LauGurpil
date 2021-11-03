@@ -126,6 +126,7 @@ void input(StateStack *state_stack)
         update_timer(&race.timer);
     }
 
+    handle_input(race.car);
     move_car(&race, race.car);
     for (int i = 0; i < NUM_AI_CARS; i++)
     {

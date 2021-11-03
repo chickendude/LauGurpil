@@ -56,15 +56,56 @@ void load_cars(Race *race, const RacecarData **car_data)
     }
 }
 
-void move_car(Race *race, Racecar *car)
+void handle_input(Racecar *car)
 {
-    car->angle -= key_tri_horz() * car->turning_power; // Car turning power
+    turn(car, key_tri_horz());
 
     // Check for acceleration/brakes, favoring brakes over acceleration
     // (if both are pressed at the same time, it will brake)
-    if (key_is_down(KEY_B)) car->speed -= 0x0050;
-    else if (key_is_down(KEY_A)) car->speed += car->acceleration_power;
+    if (key_is_down(KEY_B)) accelerate(car);
+    else if (key_is_down(KEY_A)) brake(car);
 
+    // Decelerate if we are not accelerating forward
+    if (key_is_up(KEY_A) && key_is_up(KEY_B))
+    {
+        decelerate(car);
+    }
+}
+
+void accelerate(Racecar *car)
+{
+    car->speed -= 0x0050;
+}
+
+void decelerate(Racecar *car)
+{
+    if (car->speed > 0)
+    {
+        car->speed -= 0x0025;
+        // Stop car if it goes past 0
+        if (car->speed < 0) car->speed = 0;
+    } // Decelerate if we are not accelerating backwards
+    else if (car->speed < 0)
+    {
+        car->speed += 0x0025;
+        // Stop car if it goes past 0
+        if (car->speed > 0) car->speed = 0;
+    }
+}
+
+void brake(Racecar *car)
+{
+    car->speed += car->acceleration_power;
+}
+
+void turn(Racecar *car, int direction)
+{
+    car->angle -= direction * car->turning_power;
+
+}
+
+void move_car(Race *race, Racecar *car)
+{
     // Slow down the acceleration once the car reaches a certain speed
     if (car->speed > car->max_speed >> 1)
     {
@@ -86,22 +127,9 @@ void move_car(Race *race, Racecar *car)
         car->y += (-car->speed * car->slide_y) >> 12;
     }
 
-    // Decelerate if we are not accelerating forward
-    if (key_is_up(KEY_A) && car->speed > 0)
-    {
-        car->speed -= 0x0025;
-        // Stop car if it goes past 0
-        if (car->speed < 0) car->speed = 0;
-    } // Decelerate if we are not accelerating backwards
-    else if (key_is_up(KEY_B) && car->speed < 0)
-    {
-        car->speed += 0x0025;
-        // Stop car if it goes past 0
-        if (car->speed > 0) car->speed = 0;
-    }
-
     obj_aff_rotate(car->oam_affine, car->angle);
 }
+
 // -----------------------------------------------------------------------------
 // Private functions definitions
 // -----------------------------------------------------------------------------
