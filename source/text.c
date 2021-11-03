@@ -18,7 +18,7 @@ void prepare_text(int charblock_base, int screenblock_base)
              (lap_numbersTilesLen) / 4);
     memcpy32(&pal_bg_mem[15 * 16], lap_numbersPal, 8);
 
-    for (int i = 0; i < 32*32; i++)
+    for (int i = 0; i < 32 * 32; i++)
     {
         se_mem[screenblock_base][i] = SE_PALBANK(15);
     }
@@ -94,6 +94,14 @@ print_time(SCR_ENTRY *sbb, int x, int y, int minutes, int seconds, int frames)
 void print_number(SCR_ENTRY *sbb, int x, int y, int number)
 {
     unsigned char number_txt[] = "     \0";
+    int string_index = 0;
+    if (number < 0)
+    {
+        number *= -1;
+        number_txt[0] = 'M';
+        string_index++;
+    }
+
     int tenthous = number / 10000;
     number -= tenthous * 10000;
     int thous = number / 1000;
@@ -103,28 +111,27 @@ void print_number(SCR_ENTRY *sbb, int x, int y, int number)
     int tens = number / 10;
     int ones = number % 10;
 
-    int i = 0;
     if (tenthous > 0)
     {
-        number_txt[i] = '0' + tenthous;
-        i++;
+        number_txt[string_index] = '0' + tenthous;
+        string_index++;
     }
     if (thous > 0)
     {
-        number_txt[i] = '0' + thous;
-        i++;
+        number_txt[string_index] = '0' + thous;
+        string_index++;
     }
     if (hundreds > 0)
     {
-        number_txt[i] = '0' + hundreds;
-        i++;
+        number_txt[string_index] = '0' + hundreds;
+        string_index++;
     }
     if (tens > 0)
     {
-        number_txt[i] = '0' + tens;
-        i++;
+        number_txt[string_index] = '0' + tens;
+        string_index++;
     }
-    number_txt[i] = '0' + ones;
+    number_txt[string_index] = '0' + ones;
     print_text(sbb, x, y, (char *) number_txt);
 }
 // -----------------------------------------------------------------------------
