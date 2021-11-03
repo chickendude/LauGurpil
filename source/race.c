@@ -71,13 +71,12 @@ static void initialize(StateType prev_state, void *parameter)
     {
         obj_set_attr(&race.obj_buffer[i],
                      ATTR0_SQUARE | ATTR0_4BPP | ATTR0_AFF | ATTR0_AFF_DBL_BIT,
-                     ATTR1_SIZE_16x16 | ATTR1_AFF_ID(i * 4),
+                     ATTR1_SIZE_16x16 | ATTR1_AFF_ID(i),
                      ATTR2_PRIO(1) |
                      ATTR2_PALBANK(race_data->car_data[i]->sprite_id) |
                      ATTR2_ID(race_data->car_data[i]->sprite_id * 4));
-        obj_aff_identity((OBJ_AFFINE *) &race.obj_buffer[i]);
+        obj_aff_identity((OBJ_AFFINE *) &race.obj_buffer[i * 4]);
     }
-
 
     // Set laps #
     obj_set_attr(&race.obj_buffer[7],
@@ -95,6 +94,7 @@ static void initialize(StateType prev_state, void *parameter)
     }
 
     race.countdown = 60 * 3;
+
     // * 16 (aka << 4) then shift left 12 because of the 12 point fixed point
     race.car->x = race.track->start_x << 16;
     race.car->y = race.track->start_y << 16;
@@ -126,12 +126,31 @@ void input(StateStack *state_stack)
         update_timer(&race.timer);
     }
 
+    // Move player car
     handle_input(race.car);
     move_car(&race, race.car);
+
+    // Move AI cars
     for (int i = 0; i < NUM_AI_CARS; i++)
     {
-        move_car(&race, race.computer_cars);
+        Racecar *ai_car = &race.computer_cars[i];
+
+        // Apply commands
+        accelerate(ai_car);
+        turn(ai_car, ((i % 1) << 1) - 1);
+
+        // Move car based on speed/angle (and checking terrain)
+        move_car(&race, ai_car);
+
+        // Update position on screen
+        int x = (ai_car->x >> 12) - race.camera.x;
+        int y = (ai_car->y >> 12) - race.camera.y;
+        // Check if car is offscreen and hide it if it is (to avoid wrapping)
+        x = (x > 240 || x < -32) ? 240 : x;
+        y = (y > 160 || y < -32) ? 160 : y;
+        obj_set_pos(ai_car->oam, x, y);
     }
+
     update_camera(&race);
     update_laps();
 

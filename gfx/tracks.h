@@ -1,6 +1,10 @@
 #ifndef GRIT_TRACKS_H
 #define GRIT_TRACKS_H
 
+#define track0Height 32
+#define track0Width 32
+extern const unsigned char track0_tilemap[track0Height * track0Width];
+
 // track1
 #define track1Height 32
 #define track1Width 48

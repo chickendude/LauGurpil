@@ -26,7 +26,7 @@
 
 #define NUM_TOURNAMENTS 2
 
-#define NUM_TRACKS 4
+#define NUM_TRACKS 5
 
 #define SPRITE(n) ((n) * 4)
 

@@ -62,8 +62,8 @@ void handle_input(Racecar *car)
 
     // Check for acceleration/brakes, favoring brakes over acceleration
     // (if both are pressed at the same time, it will brake)
-    if (key_is_down(KEY_B)) accelerate(car);
-    else if (key_is_down(KEY_A)) brake(car);
+    if (key_is_down(KEY_B)) brake(car);
+    else if (key_is_down(KEY_A)) accelerate(car);
 
     // Decelerate if we are not accelerating forward
     if (key_is_up(KEY_A) && key_is_up(KEY_B))
@@ -72,7 +72,7 @@ void handle_input(Racecar *car)
     }
 }
 
-void accelerate(Racecar *car)
+void brake(Racecar *car)
 {
     car->speed -= 0x0050;
 }
@@ -93,7 +93,7 @@ void decelerate(Racecar *car)
     }
 }
 
-void brake(Racecar *car)
+void accelerate(Racecar *car)
 {
     car->speed += car->acceleration_power;
 }
