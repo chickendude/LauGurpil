@@ -93,6 +93,7 @@ print_time(SCR_ENTRY *sbb, int x, int y, int minutes, int seconds, int frames)
 
 void print_number(SCR_ENTRY *sbb, int x, int y, int number)
 {
+    int orig_num = number;
     unsigned char number_txt[] = "     \0";
     int string_index = 0;
     if (number < 0)
@@ -111,22 +112,22 @@ void print_number(SCR_ENTRY *sbb, int x, int y, int number)
     int tens = number / 10;
     int ones = number % 10;
 
-    if (tenthous > 0)
+    if (orig_num >= 10000)
     {
         number_txt[string_index] = '0' + tenthous;
         string_index++;
     }
-    if (thous > 0)
+    if (orig_num >= 1000)
     {
         number_txt[string_index] = '0' + thous;
         string_index++;
     }
-    if (hundreds > 0)
+    if (orig_num >= 100)
     {
         number_txt[string_index] = '0' + hundreds;
         string_index++;
     }
-    if (tens > 0)
+    if (orig_num >= 10)
     {
         number_txt[string_index] = '0' + tens;
         string_index++;
