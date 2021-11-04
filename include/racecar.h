@@ -14,7 +14,7 @@ struct Racecar {
     int slide_x, slide_y;
 
     // 0x0000-0xFFFF
-    int angle;
+    u16 angle;
 
     // .12 fixed point
     int speed;

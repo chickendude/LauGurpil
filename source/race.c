@@ -135,9 +135,26 @@ void input(StateStack *state_stack)
     {
         Racecar *ai_car = &race.computer_cars[i];
 
-        // Apply commands
+        u16 dx = (race.car->x >> 12) - (ai_car->x >> 12);
+        u16 dy = (race.car->y >> 12) - (ai_car->y >> 12);
+
+        u16 angle = ArcTan2(-dy, -dx);
+        u16 car_angle = ai_car->angle;
+        if (angle > 0x8000)
+        {
+            car_angle -= 0x8000;
+            angle -= 0x8000;
+        }
+
+        if (car_angle > angle && car_angle < angle + 0x8000)
+        {
+            turn(ai_car, 1);
+        } else if (car_angle != angle)
+        {
+            turn(ai_car, -1);
+        }
+
         accelerate(ai_car);
-        turn(ai_car, ((i % 1) << 1) - 1);
 
         // Move car based on speed/angle (and checking terrain)
         move_car(&race, ai_car);
@@ -148,7 +165,7 @@ void input(StateStack *state_stack)
         // Check if car is offscreen and hide it if it is (to avoid wrapping)
         x = (x > 240 || x < -32) ? 240 : x;
         y = (y > 160 || y < -32) ? 160 : y;
-        obj_set_pos(ai_car->oam, x, y);
+        obj_set_pos(ai_car->oam, x - 8, y - 8);
     }
 
     update_camera(&race);

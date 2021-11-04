@@ -16,8 +16,8 @@ const Track track_1 = {
         18, 1,
         0x4000,
         track1Width, track1Height,
-        17, -30,
-        17, 3,
+        16, -30,
+        16, 3,
         track1_tilemap
 };
 

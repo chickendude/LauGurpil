@@ -101,7 +101,6 @@ void accelerate(Racecar *car)
 void turn(Racecar *car, int direction)
 {
     car->angle -= direction * car->turning_power;
-
 }
 
 void move_car(Race *race, Racecar *car)

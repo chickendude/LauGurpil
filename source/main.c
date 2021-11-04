@@ -2,7 +2,15 @@
 #include "state.h"
 #include "title.h"
 
-// TODO: Make cars move in circles
+// TODO: Extract AI into its own function/file
+// TODO: Load cars in starting position
+// TODO: Make cars target check points
+// TODO: Probably want to give each car its own route through a track
+// TODO: Allow adjusting car speed
+// TODO: Keep track of ai cars' laps
+// TODO: Let camera follow any car (add Racecar pointer to camera struct and
+//  calculate camera position based on that car's x/y)
+// TODO: Add function to switch camera (probably need to redraw full tilemap)
 // PRE RACE -----------
 // TODO: Add locked state to cars to enable unlocking new vehicles
 
