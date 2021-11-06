@@ -1,8 +1,10 @@
 #include <tonc.h>
 
 #include "racecar_ai.h"
+#include "camera.h"
 #include "race.h"
 #include "racecar.h"
+#include "track.h"
 
 // -----------------------------------------------------------------------------
 // Private function declarations
@@ -47,6 +49,19 @@ void move_ai_car(Racecar *ai_car, Race *race)
     obj_set_pos(ai_car->oam, x - 8, y - 8);
 }
 
+void load_ai_car(Racecar *ai_car, Race *race)
+{
+    int start_x = race->track->start_x + ((ai_car->overall_standing) / 2);
+    int start_y = race->track->start_y + ((ai_car->overall_standing) % 2);
+    ai_car->x = start_x << 16;
+    ai_car->y = start_y << 16;
+    ai_car->angle = race->track->start_angle;
+    ai_car->slide_x = lu_sin(race->car->angle);
+    ai_car->slide_y = lu_cos(race->car->angle);
+    obj_set_pos(ai_car->oam,
+                (race->car->x >> 12) - 8 - race->camera.x,
+                (race->car->y >> 12) - 8 - race->camera.y);
+}
 // -----------------------------------------------------------------------------
 // Private functions definitions
 // -----------------------------------------------------------------------------

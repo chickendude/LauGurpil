@@ -2,8 +2,7 @@
 #include "state.h"
 #include "title.h"
 
-// TODO: Extract AI into its own function/file
-// TODO: Load cars in starting position
+// TODO: Load cars in starting position according to starting angle
 // TODO: Make cars target check points
 // TODO: Probably want to give each car its own route through a track
 // TODO: Allow adjusting car speed

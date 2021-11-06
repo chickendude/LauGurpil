@@ -43,6 +43,7 @@ void load_cars(Race *race, const RacecarData **car_data)
         race->car = car;
         car->oam_affine = obj_aff_mem;
         car->oam = &race->obj_buffer[0];
+        car->overall_standing = 0;
     }
     load_car(car, car_data[0]);
 
@@ -52,6 +53,7 @@ void load_cars(Race *race, const RacecarData **car_data)
         Racecar *ai_car = &race->computer_cars[i];
         ai_car->oam_affine = &obj_aff_mem[i + 1];
         ai_car->oam = &race->obj_buffer[i + 1];
+        ai_car->overall_standing = i + 1;
         load_car(ai_car, car_data[i + 1]);
     }
 }

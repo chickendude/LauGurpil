@@ -67,11 +67,22 @@ static void initialize(StateType prev_state, void *parameter)
     load_timer(&race.timer);
     print_time(se_mem[29], 1, 1, 0, 0, 0);
 
+    race.track = race_data->track;
+    race.laps = 0;
+    race.laps_total = 3;
+    race.laps_remaining = 0;
+    race.countdown = 60 * 3;
+    for (int i = 0; i < race.laps_total; i++)
+    {
+        race.lap_times[i] = 0;
+    }
+
     // Car sprite/affine info
     for (int i = 0; i < NUM_AI_CARS + 1; i++)
     {
         obj_set_attr(&race.obj_buffer[i],
-                     ATTR0_SQUARE | ATTR0_4BPP | ATTR0_AFF | ATTR0_AFF_DBL_BIT,
+                     ATTR0_SQUARE | ATTR0_4BPP | ATTR0_AFF |
+                     ATTR0_AFF_DBL_BIT,
                      ATTR1_SIZE_16x16 | ATTR1_AFF_ID(i),
                      ATTR2_PRIO(1) |
                      ATTR2_PALBANK(race_data->car_data[i]->sprite_id) |
@@ -79,22 +90,17 @@ static void initialize(StateType prev_state, void *parameter)
         obj_aff_identity((OBJ_AFFINE *) &race.obj_buffer[i * 4]);
     }
 
+    // Load AI cars
+    for (int i = 0; i < NUM_AI_CARS; i++)
+    {
+        load_ai_car(&race.computer_cars[i], &race);
+    }
+
     // Set laps #
     obj_set_attr(&race.obj_buffer[7],
                  ATTR0_SQUARE | ATTR0_4BPP | 10,
                  ATTR1_SIZE_16x16 | 200,
                  ATTR2_PALBANK(7) | 32);
-
-    race.track = race_data->track;
-    race.laps = 0;
-    race.laps_total = 3;
-    race.laps_remaining = 0;
-    for (int i = 0; i < race.laps_total; i++)
-    {
-        race.lap_times[i] = 0;
-    }
-
-    race.countdown = 60 * 3;
 
     // * 16 (aka << 4) then shift left 12 because of the 12 point fixed point
     race.car->x = race.track->start_x << 16;
@@ -175,8 +181,8 @@ void update()
     // Update timer every other frame
     if (race.timer.frames & 2)
     {
-        print_time(se_mem[29], 1, 1, race.timer.minutes, race.timer.seconds,
-                   race.timer.millis);
+        print_time(se_mem[29], 1, 1, race.timer.minutes,
+                   race.timer.seconds, race.timer.millis);
     }
 
     REG_BG0HOFS = race.camera.x;

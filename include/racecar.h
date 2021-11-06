@@ -22,6 +22,9 @@ struct Racecar {
     // 0 = in finish line, -1 = behind, 1 = in front
     int finish_status;
 
+    // Determines car's starting position in a race
+    int overall_standing;
+
     // #### Stats ####
 
     /**
@@ -32,6 +35,8 @@ struct Racecar {
     int max_speed;
 
     int turning_power, acceleration_power;
+
+    // #### OAM ####
 
     // Object's id in oam, since sprites and affine are
     OBJ_AFFINE *oam_affine;
