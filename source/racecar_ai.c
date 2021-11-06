@@ -10,12 +10,20 @@
 // Private function declarations
 // -----------------------------------------------------------------------------
 
+void update_pos(Racecar *ai_car, Camera *camera);
 
 // -----------------------------------------------------------------------------
 // Public function definitions
 // -----------------------------------------------------------------------------
 void move_ai_car(Racecar *ai_car, Race *race)
 {
+    // Move car based on speed/angle (and checking terrain)
+    if (race->countdown > 0) {
+        move_car(race, ai_car);
+        update_pos(ai_car, &race->camera);
+        return;
+    }
+
     u16 dx = (race->car->x >> 12) - (ai_car->x >> 12);
     u16 dy = (race->car->y >> 12) - (ai_car->y >> 12);
 
@@ -36,17 +44,8 @@ void move_ai_car(Racecar *ai_car, Race *race)
     }
 
     accelerate(ai_car);
-
-    // Move car based on speed/angle (and checking terrain)
     move_car(race, ai_car);
-
-    // Update position on screen
-    int x = (ai_car->x >> 12) - race->camera.x;
-    int y = (ai_car->y >> 12) - race->camera.y;
-    // Check if car is offscreen and hide it if it is (to avoid wrapping)
-    x = (x > 240 || x < -32) ? 240 : x;
-    y = (y > 160 || y < -32) ? 160 : y;
-    obj_set_pos(ai_car->oam, x - 8, y - 8);
+    update_pos(ai_car, &race->camera);
 }
 
 void load_ai_car(Racecar *ai_car, Race *race)
@@ -65,3 +64,13 @@ void load_ai_car(Racecar *ai_car, Race *race)
 // -----------------------------------------------------------------------------
 // Private functions definitions
 // -----------------------------------------------------------------------------
+
+void update_pos(Racecar *ai_car, Camera *camera) {
+    // Update position on screen
+    int x = (ai_car->x >> 12) - camera->x;
+    int y = (ai_car->y >> 12) - camera->y;
+    // Check if car is offscreen and hide it if it is (to avoid wrapping)
+    x = (x > 240 || x < -32) ? 240 : x;
+    y = (y > 160 || y < -32) ? 160 : y;
+    obj_set_pos(ai_car->oam, x - 8, y - 8);
+}
