@@ -12,13 +12,16 @@
 
 void update_pos(Racecar *ai_car, Camera *camera);
 
+void set_coordinates(Racecar *ai_car, Race *race);
+
 // -----------------------------------------------------------------------------
 // Public function definitions
 // -----------------------------------------------------------------------------
-void move_ai_car(Racecar *ai_car, Race *race)
+        void move_ai_car(Racecar *ai_car, Race *race)
 {
     // Move car based on speed/angle (and checking terrain)
-    if (race->countdown > 0) {
+    if (race->countdown > 0)
+    {
         move_car(race, ai_car);
         update_pos(ai_car, &race->camera);
         return;
@@ -50,10 +53,11 @@ void move_ai_car(Racecar *ai_car, Race *race)
 
 void load_ai_car(Racecar *ai_car, Race *race)
 {
-    int start_x = race->track->start_x + ((ai_car->overall_standing) / 2);
-    int start_y = race->track->start_y + ((ai_car->overall_standing) % 2);
-    ai_car->x = start_x << 16;
-    ai_car->y = start_y << 16;
+    set_coordinates(ai_car, race);
+//    int start_x = race->track->start_x + ((ai_car->overall_standing) / 2);
+//    int start_y = race->track->start_y + ((ai_car->overall_standing) % 2);
+//    ai_car->x = start_x << 16;
+//    ai_car->y = start_y << 16;
     ai_car->angle = race->track->start_angle;
     ai_car->slide_x = lu_sin(race->car->angle);
     ai_car->slide_y = lu_cos(race->car->angle);
@@ -65,7 +69,8 @@ void load_ai_car(Racecar *ai_car, Race *race)
 // Private functions definitions
 // -----------------------------------------------------------------------------
 
-void update_pos(Racecar *ai_car, Camera *camera) {
+void update_pos(Racecar *ai_car, Camera *camera)
+{
     // Update position on screen
     int x = (ai_car->x >> 12) - camera->x;
     int y = (ai_car->y >> 12) - camera->y;
@@ -73,4 +78,32 @@ void update_pos(Racecar *ai_car, Camera *camera) {
     x = (x > 240 || x < -32) ? 240 : x;
     y = (y > 160 || y < -32) ? 160 : y;
     obj_set_pos(ai_car->oam, x - 8, y - 8);
+}
+
+void set_coordinates(Racecar *ai_car, Race *race)
+{
+    const int start_angle = race->track->start_angle;
+    const int position = ai_car->overall_standing;
+    int x_off, y_off;
+    if (start_angle == 0x0000) // up
+    {
+        x_off = -position % 2;
+        y_off = (position / 2) * 2;
+    } else if (start_angle == 0x4000) // left
+    {
+        x_off = (position / 2) * 2;
+        y_off = position % 2;
+    } else if (start_angle == 0x8000) // down
+    {
+        x_off = position % 2;
+        y_off = -(position / 2) * 2;
+    } else // right
+    {
+        x_off = -(position / 2) * 2;
+                y_off = -position % 2;
+                        }
+            int start_x = race->track->start_x + x_off;
+            int start_y = race->track->start_y + y_off;
+            ai_car->x = start_x << 16;
+            ai_car->y = start_y << 16;
 }

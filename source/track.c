@@ -43,7 +43,7 @@ const Track track_3 = {
 
 const Track track_4 = {
         "NON NAGO",
-        83, 50,
+        82, 50,
         0x0000,
         track4Width, track4Height,
         79, 49,
