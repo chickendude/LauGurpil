@@ -10,6 +10,8 @@ struct Track
     int start_x, start_y;
     int start_angle;
     int width, height;
+    int num_checkpoints;
+    Checkpoint *checkpoints;
     // x1/y1 should be < x2/y2
     const int finish_x1, finish_y1;
     const int finish_x2, finish_y2;

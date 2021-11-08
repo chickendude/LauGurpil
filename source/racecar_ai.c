@@ -2,6 +2,7 @@
 
 #include "racecar_ai.h"
 #include "camera.h"
+#include "checkpoint.h"
 #include "race.h"
 #include "racecar.h"
 #include "track.h"
@@ -17,7 +18,7 @@ void set_coordinates(Racecar *ai_car, Race *race);
 // -----------------------------------------------------------------------------
 // Public function definitions
 // -----------------------------------------------------------------------------
-        void move_ai_car(Racecar *ai_car, Race *race)
+void move_ai_car(Racecar *ai_car, Race *race)
 {
     // Move car based on speed/angle (and checking terrain)
     if (race->countdown > 0)
@@ -27,8 +28,22 @@ void set_coordinates(Racecar *ai_car, Race *race);
         return;
     }
 
-    u16 dx = (race->car->x >> 12) - (ai_car->x >> 12);
-    u16 dy = (race->car->y >> 12) - (ai_car->y >> 12);
+    // Check if car has reached a checkpoint
+    Checkpoint *checkpoint = &race->track->checkpoints[ai_car->checkpoint_index];
+    int x = ai_car->x >> 12;
+    int y = ai_car->y >> 12;
+    int check_x = checkpoint->x - 16;
+    int check_y = checkpoint->y - 16;
+    if (x >= check_x && x <= check_x + 32 &&
+        y >= check_y && y <= check_y + 32)
+    {
+        ai_car->checkpoint_index =
+                (ai_car->checkpoint_index + 1) % race->track->num_checkpoints;
+    }
+
+    // Check if car needs to turn to point to next checkpoint
+    u16 dx = checkpoint->x - (ai_car->x >> 12);
+    u16 dy = checkpoint->y - (ai_car->y >> 12);
 
     u16 angle = ArcTan2(-dy, -dx);
     u16 car_angle = ai_car->angle;
@@ -46,7 +61,10 @@ void set_coordinates(Racecar *ai_car, Race *race);
         turn(ai_car, -1);
     }
 
-    accelerate(ai_car);
+    if (ai_car->speed >> 7 < checkpoint->speed)
+        accelerate(ai_car);
+    else
+        brake(ai_car);
     move_car(race, ai_car);
     update_pos(ai_car, &race->camera);
 }
@@ -54,11 +72,8 @@ void set_coordinates(Racecar *ai_car, Race *race);
 void load_ai_car(Racecar *ai_car, Race *race)
 {
     set_coordinates(ai_car, race);
-//    int start_x = race->track->start_x + ((ai_car->overall_standing) / 2);
-//    int start_y = race->track->start_y + ((ai_car->overall_standing) % 2);
-//    ai_car->x = start_x << 16;
-//    ai_car->y = start_y << 16;
     ai_car->angle = race->track->start_angle;
+    ai_car->checkpoint_index = 0;
     ai_car->slide_x = lu_sin(race->car->angle);
     ai_car->slide_y = lu_cos(race->car->angle);
     obj_set_pos(ai_car->oam,
@@ -100,10 +115,10 @@ void set_coordinates(Racecar *ai_car, Race *race)
     } else // right
     {
         x_off = -(position / 2) * 2;
-                y_off = -position % 2;
-                        }
-            int start_x = race->track->start_x + x_off;
-            int start_y = race->track->start_y + y_off;
-            ai_car->x = start_x << 16;
-            ai_car->y = start_y << 16;
+        y_off = -position % 2;
+    }
+    int start_x = race->track->start_x + x_off;
+    int start_y = race->track->start_y + y_off;
+    ai_car->x = start_x << 16;
+    ai_car->y = start_y << 16;
 }

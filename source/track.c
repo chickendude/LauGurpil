@@ -1,5 +1,6 @@
 #include <tonc.h>
 #include "track.h"
+#include "checkpoint.h"
 #include "constants.h"
 #include "race.h"
 #include "racecar.h"
@@ -16,6 +17,8 @@ const Track track_1 = {
         18, 1,
         0x4000,
         track1Width, track1Height,
+        T1_CHECKPOINT_COUNT,
+        t1_checkpoints,
         16, -30,
         16, 3,
         track1_tilemap
@@ -26,6 +29,8 @@ const Track track_2 = {
         7, 24,
         0x8000,
         track2Width, track2Height,
+        T1_CHECKPOINT_COUNT,
+        t1_checkpoints,
         -30, 25,
         15, 25,
         track2_tilemap
@@ -36,6 +41,8 @@ const Track track_3 = {
         28, 12,
         0xC000,
         track3Width, track3Height,
+        T1_CHECKPOINT_COUNT,
+        t1_checkpoints,
         31, 9,
         31, 17,
         track3_tilemap
@@ -46,6 +53,8 @@ const Track track_4 = {
         82, 50,
         0x0000,
         track4Width, track4Height,
+        T1_CHECKPOINT_COUNT,
+        t1_checkpoints,
         79, 49,
         109, 49,
         track4_tilemap

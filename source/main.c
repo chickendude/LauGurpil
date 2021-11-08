@@ -2,8 +2,7 @@
 #include "state.h"
 #include "title.h"
 
-// TODO: Load cars in starting position according to starting angle
-// TODO: Make cars target check points
+// TODO: Copy code that tests if car is in checkpoint to checkpoint.c file
 // TODO: Probably want to give each car its own route through a track
 // TODO: Allow adjusting car speed
 // TODO: Keep track of ai cars' laps

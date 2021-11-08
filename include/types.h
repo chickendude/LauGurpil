@@ -2,6 +2,7 @@
 #define TEST_TYPES_H
 
 typedef struct Camera Camera;
+typedef struct Checkpoint Checkpoint;
 typedef struct Race Race;
 typedef struct Racecar Racecar;
 typedef struct RacecarData RacecarData;

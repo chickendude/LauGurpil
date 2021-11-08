@@ -25,6 +25,8 @@ struct Racecar {
     // Determines car's starting position in a race
     int overall_standing;
 
+    int checkpoint_index;
+
     // #### Stats ####
 
     /**
