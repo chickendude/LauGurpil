@@ -15,6 +15,8 @@
 
 static Race race;
 
+static u32 car_on_camera;
+
 // -----------------------------------------------------------------------------
 // Private function declarations
 // -----------------------------------------------------------------------------
@@ -144,7 +146,7 @@ void input(StateStack *state_stack)
         move_ai_car(ai_car, &race);
     }
 
-    update_camera(&race);
+    update_camera(&race, car_on_camera);
     update_laps();
 
     // Check if final lap has been completed.
@@ -168,6 +170,14 @@ void input(StateStack *state_stack)
     if (key_hit(KEY_SELECT))
     {
         pop_state(state_stack, RACE, &race);
+    }
+    if (key_hit(KEY_R))
+    {
+        car_on_camera = (car_on_camera + 1) % NUM_CARS;
+    }
+    if (key_hit(KEY_L))
+    {
+        car_on_camera = (car_on_camera - 1) % NUM_CARS;
     }
 }
 
