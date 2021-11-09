@@ -2,7 +2,7 @@
 #include "state.h"
 #include "title.h"
 
-// TODO: Copy code that tests if car is in checkpoint to checkpoint.c file
+// TODO: Check checkpoint vertical/horizontally
 // TODO: Keep track of ai cars' laps
 // TODO: Add function to switch camera (probably need to redraw full tilemap)
 // PRE RACE -----------

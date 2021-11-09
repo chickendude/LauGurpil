@@ -29,16 +29,14 @@ void move_ai_car(Racecar *ai_car, Race *race)
     }
 
     // Check if car has reached a checkpoint
-    Checkpoint *checkpoint = &race->track->checkpoints[ai_car->checkpoint_index];
-    int x = ai_car->x >> 12;
-    int y = ai_car->y >> 12;
-    int check_x = checkpoint->x - 16;
-    int check_y = checkpoint->y - 16;
-    if (x >= check_x && x <= check_x + 32 &&
-        y >= check_y && y <= check_y + 32)
-    {
-        ai_car->checkpoint_index =
-                (ai_car->checkpoint_index + 1) % race->track->num_checkpoints;
+    Checkpoint *checkpoint = check_checkpoint(race->track, ai_car);
+
+    // TODO: Remove eventually
+    if (ai_car->overall_standing == 1) {
+        obj_set_attr(&race->obj_buffer[100],
+                     ATTR0_SQUARE | ATTR0_4BPP | checkpoint->y - race->camera.y,
+                     ATTR1_SIZE_16x16 | checkpoint->x - race->camera.x,
+                     ATTR2_PALBANK(1) | 4);
     }
 
     // Check if car needs to turn to point to next checkpoint
