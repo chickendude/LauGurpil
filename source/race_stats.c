@@ -50,8 +50,8 @@ static void initialize(StateType prev_state, void *parameter)
                race->timer.millis);
     for (int i = 0; i < race->laps_total; i++)
     {
-        int frames = race->lap_times[i];
-        if (i > 0) frames -= race->lap_times[i - 1];
+        int frames = race->car->lap_times[i];
+        if (i > 0) frames -= race->car->lap_times[i - 1];
         int minutes = frames / (60 * 60);
         int seconds = (frames - minutes * 3600) / 60;
         int millis = frames % 60;

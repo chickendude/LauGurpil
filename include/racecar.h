@@ -4,7 +4,8 @@
 #include "constants.h"
 #include "types.h"
 
-struct Racecar {
+struct Racecar
+{
     // .12 fixed point
     int x, y;
 
@@ -27,6 +28,16 @@ struct Racecar {
 
     int checkpoint_index;
 
+    int current_lap;
+
+    int lap_times[MAX_LAPS];
+
+    /**
+     * In case the user (or some other car) goes backwards across the finish
+     * line, we need to track that so they can't go back and forth to cheat.
+     */
+    int laps_remaining;
+
     // #### Stats ####
 
     /**
@@ -47,19 +58,26 @@ struct Racecar {
     OBJ_ATTR *oam;
 };
 
-struct RacecarData {
+struct RacecarData
+{
     int sprite_id;
     int max_speed;
     int turning_power, acceleration_power;
 };
 
 void load_cars(Race *race, const RacecarData **car_data);
+
 void handle_input(Racecar *car);
+
 void move_car(Race *race, Racecar *car);
+
 // Commands
 void accelerate(Racecar *car);
+
 void decelerate(Racecar *car);
+
 void brake(Racecar *car);
+
 void turn(Racecar *car, int direction);
 
 extern const RacecarData *cars[7];

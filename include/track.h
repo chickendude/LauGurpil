@@ -11,7 +11,7 @@ struct Track
     int start_angle;
     int width, height;
     int num_checkpoints;
-    Checkpoint *checkpoints;
+    const Checkpoint *checkpoints;
     // x1/y1 should be < x2/y2
     const int finish_x1, finish_y1;
     const int finish_x2, finish_y2;
@@ -22,15 +22,7 @@ void load_track(const Track *track, Camera *camera);
 
 void update_tilemap(Race *race);
 
-/**
- * -1 = behind finish line, 0 = in finish line, 1 = beyond finish line
- *
- * @param car The car whose position should be checked
- * @param track The track to check
- * @return int containing finish line status: 0 = in finish line, 1 = beyond
- * finish line, -1 = behind finish line
- */
-int is_car_in_finish_line(Racecar *car, const Track *track);
+void check_car_crossed_finish_line(Race *race, Racecar *car);
 
 extern const Track* tracks[NUM_TRACKS];
 

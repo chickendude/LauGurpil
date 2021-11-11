@@ -3,6 +3,7 @@
 #include "title.h"
 
 // TODO: Check checkpoint vertical/horizontally
+// TODO: Fix race results screen showing an extra minute
 // TODO: Keep track of ai cars' laps
 // TODO: Add function to switch camera (probably need to redraw full tilemap)
 // PRE RACE -----------

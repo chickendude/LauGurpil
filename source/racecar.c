@@ -34,28 +34,21 @@ void slow_down(Racecar *car);
 // -----------------------------------------------------------------------------
 void load_cars(Race *race, const RacecarData **car_data)
 {
-    Racecar *car = race->car;
-
-    // Create car if it doesn't exist
-    if (car == NULL)
-    {
-        car = malloc(sizeof(Racecar));
-        race->car = car;
-        car->oam_affine = obj_aff_mem;
-        car->oam = &race->obj_buffer[0];
-        car->overall_standing = 0;
-    }
-    load_car(car, car_data[0]);
-
     // Grab the cars after the one selected to use as the AI cars
     for (int i = 0; i < NUM_AI_CARS; i++)
     {
-        Racecar *ai_car = &race->computer_cars[i];
-        ai_car->oam_affine = &obj_aff_mem[i + 1];
-        ai_car->oam = &race->obj_buffer[i + 1];
-        ai_car->overall_standing = i + 1;
-        load_car(ai_car, car_data[i + 1]);
+        Racecar *car = &race->cars[i];
+        car->oam_affine = &obj_aff_mem[i];
+        car->oam = &race->obj_buffer[i];
+        car->overall_standing = i;
+        car->x = race->track->start_x << 16;
+        car->y = race->track->start_y << 16;
+        car->angle = race->track->start_angle;
+        car->slide_x = lu_sin(car->angle);
+        car->slide_y = lu_cos(car->angle);
+        load_car(car, car_data[i]);
     }
+    race->car = &race->cars[0];
 }
 
 void handle_input(Racecar *car)
@@ -182,7 +175,7 @@ void load_car(Racecar *car, const RacecarData *car_data)
     // Load car defaults
     car->speed = 0;
     car->x = car->y = 0;
-    car->finish_status = -1;
+    car->finish_status = -1; // -1 = behind finish line
     car->oam->attr2 ^= ATTR2_PRIO(1);
 
     // Set position and rotation

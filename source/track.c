@@ -68,6 +68,15 @@ void draw_tile(int x, int y, int tile_offset, const Track *track);
 
 bool is_tile_in_map(int x, int y, const Track *track);
 
+/**
+ * -1 = behind finish line, 0 = in finish line, 1 = beyond finish line
+ *
+ * @param car The car whose position should be checked
+ * @param track The track to check
+ * @return int containing finish line status: 0 = in finish line, 1 = beyond
+ * finish line, -1 = behind finish line
+ */
+int is_car_in_finish_line(Racecar *car, const Track *track);
 
 // -----------------------------------------------------------------------------
 // Public function definitions
@@ -173,6 +182,32 @@ void draw_tile(int x, int y, int tile_offset, const Track *track)
 bool is_tile_in_map(int x, int y, const Track *track)
 {
     return !(x < 0 || y < 0 || x >= track->width || y >= track->height);
+}
+
+void check_car_crossed_finish_line(Race *race, Racecar *car) {
+    int finish_status = is_car_in_finish_line(car, race->track);
+
+    if (car->finish_status == -1 && finish_status == 0)
+    {
+        // If the user hasn't gone backwards through the course
+        if (car->laps_remaining == 0)
+        {
+            // If it's not the first "lap" (crossing the finish line from the
+            // starting point), then we don't want to save the lap time.
+            if (car->current_lap > 0)
+            {
+                car->lap_times[car->current_lap - 1] = race->timer.frames;
+            }
+            car->current_lap++;
+        } else
+        {
+            car->laps_remaining--;
+        }
+    } else if (car->finish_status == 0 && finish_status == -1)
+    {
+        car->laps_remaining++;
+    }
+    car->finish_status = finish_status;
 }
 
 int is_car_in_finish_line(Racecar *car, const Track *track)

@@ -4,8 +4,6 @@
 #include "text.h"
 #include "track.h"
 
-Tournament *tournaments[NUM_TOURNAMENTS] = {&tournament_1, &tournament_2};
-
 const Tournament tournament_1 = {
         "IKASTEN\0",
         {&track_1, &track_2, &track_3, &track_4},
@@ -15,6 +13,8 @@ const Tournament tournament_2 = {
         "IRAKASTEN\0",
         {&track_2, &track_3, &track_4, &track_1},
 };
+
+const Tournament *tournaments[NUM_TOURNAMENTS] = {&tournament_1, &tournament_2};
 
 #define TITLE_X 5
 #define TITLE_Y 4

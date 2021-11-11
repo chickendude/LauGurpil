@@ -31,7 +31,7 @@ void move_ai_car(Racecar *ai_car, Race *race)
     // Check if car has reached a checkpoint
     Checkpoint *checkpoint = check_checkpoint(race->track, ai_car);
 
-    // TODO: Remove eventually
+    // TODO: Remove eventually (adds a car to the map showing next checkpoint)
     if (ai_car->overall_standing == 1) {
         obj_set_attr(&race->obj_buffer[100],
                      ATTR0_SQUARE | ATTR0_4BPP | checkpoint->y - race->camera.y,
@@ -70,13 +70,13 @@ void move_ai_car(Racecar *ai_car, Race *race)
 void load_ai_car(Racecar *ai_car, Race *race)
 {
     set_coordinates(ai_car, race);
-    ai_car->angle = race->track->start_angle;
-    ai_car->checkpoint_index = 0;
-    ai_car->slide_x = lu_sin(race->car->angle);
-    ai_car->slide_y = lu_cos(race->car->angle);
-    obj_set_pos(ai_car->oam,
-                (race->car->x >> 12) - 8 - race->camera.x,
-                (race->car->y >> 12) - 8 - race->camera.y);
+//    ai_car->angle = race->track->start_angle;
+//    ai_car->checkpoint_index = 0;
+//    ai_car->slide_x = lu_sin(race->car->angle);
+//    ai_car->slide_y = lu_cos(race->car->angle);
+//    obj_set_pos(ai_car->oam,
+//                (race->car->x >> 12) - 8 - race->camera.x,
+//                (race->car->y >> 12) - 8 - race->camera.y);
 }
 // -----------------------------------------------------------------------------
 // Private functions definitions

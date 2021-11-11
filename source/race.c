@@ -15,7 +15,7 @@
 
 static Race race;
 
-static u32 car_on_camera;
+static unsigned int car_on_camera;
 
 // -----------------------------------------------------------------------------
 // Private function declarations
@@ -64,27 +64,28 @@ static void initialize(StateType prev_state, void *parameter)
     prepare_text(3, 29);
 
     RaceData *race_data = (RaceData *) parameter;
+    race.track = race_data->track;
     load_cars(&race, race_data->car_data);
     load_track(race_data->track, &race.camera);
     load_timer(&race.timer);
     print_time(se_mem[29], 1, 1, 0, 0, 0);
 
-    race.track = race_data->track;
-    race.laps = 0;
     race.laps_total = 3;
-    race.laps_remaining = 0;
     race.countdown = 60 * 3;
-    for (int i = 0; i < race.laps_total; i++)
-    {
-        race.lap_times[i] = 0;
-    }
 
     // Car sprite/affine info
-    for (int i = 0; i < NUM_AI_CARS + 1; i++)
+    for (int i = 0; i < NUM_CARS_IN_RACE; i++)
     {
+        Racecar *car = &race.cars[i];
+        car->current_lap = 0;
+        car->laps_remaining = 0;
+        for (int j = 0; j < race.laps_total; j++)
+        {
+            car->lap_times[j] = 0;
+        }
+
         obj_set_attr(&race.obj_buffer[i],
-                     ATTR0_SQUARE | ATTR0_4BPP | ATTR0_AFF |
-                     ATTR0_AFF_DBL_BIT,
+                     ATTR0_SQUARE | ATTR0_4BPP | ATTR0_AFF | ATTR0_AFF_DBL_BIT,
                      ATTR1_SIZE_16x16 | ATTR1_AFF_ID(i),
                      ATTR2_PRIO(1) |
                      ATTR2_PALBANK(race_data->car_data[i]->sprite_id) |
@@ -93,9 +94,9 @@ static void initialize(StateType prev_state, void *parameter)
     }
 
     // Load AI cars
-    for (int i = 0; i < NUM_AI_CARS; i++)
+    for (int i = 1; i < NUM_CARS_IN_RACE; i++)
     {
-        load_ai_car(&race.computer_cars[i], &race);
+        load_ai_car(&race.cars[i], &race);
     }
 
     // Set laps #
@@ -107,12 +108,6 @@ static void initialize(StateType prev_state, void *parameter)
     // * 16 (aka << 4) then shift left 12 because of the 12 point fixed point
     race.car->x = race.track->start_x << 16;
     race.car->y = race.track->start_y << 16;
-    race.car->angle = race.track->start_angle;
-    race.car->slide_x = lu_sin(race.car->angle);
-    race.car->slide_y = lu_cos(race.car->angle);
-    obj_set_pos(race.car->oam,
-                (race.car->x >> 12) - 8 - race.camera.x,
-                (race.car->y >> 12) - 8 - race.camera.y);
 
     vid_vsync();
     REG_DISPCNT = DCNT_MODE0 | DCNT_BG0 | DCNT_BG1 | DCNT_BG3 | DCNT_OBJ |
@@ -140,9 +135,9 @@ void input(StateStack *state_stack)
     move_car(&race, race.car);
 
     // Move AI cars
-    for (int i = 0; i < NUM_AI_CARS; i++)
+    for (int i = 1; i < NUM_CARS_IN_RACE; i++)
     {
-        Racecar *ai_car = &race.computer_cars[i];
+        Racecar *ai_car = &race.cars[i];
         move_ai_car(ai_car, &race);
     }
 
@@ -153,7 +148,7 @@ void input(StateStack *state_stack)
     // We use > because laps start at 1, so if we want 3 laps, race.laps needs
     // to be 4 (start of first lap = 1, second = 2, third = 3, and once third
     // lap completes it will be 4)
-    if (race.laps > race.laps_total || key_hit(KEY_START))
+    if (race.car->current_lap > race.laps_total || key_hit(KEY_START))
     {
         // Remove this state from stack so that when the stats screen returns
         // it goes straight to the previous screen
@@ -224,29 +219,11 @@ void show_countdown(int *countdown)
 
 void update_laps()
 {
-    // Check car's position ("finish_(line_)status") in relation to finish line
-    // (if it is on, before, or after the finish line)
-    int finish_status = is_car_in_finish_line(race.car, race.track);
-    if (race.car->finish_status == -1 && finish_status == 0)
+    for (int i = 0; i < NUM_CARS; i++)
     {
-        // If the user hasn't gone backwards through the course
-        if (race.laps_remaining == 0)
-        {
-            // If it's not the first "lap" (crossing the finish line from the
-            // starting point), then we don't want to save the lap time.
-            if (race.laps > 0)
-            {
-                race.lap_times[race.laps - 1] = race.timer.frames;
-                race.obj_buffer[7].attr2 += 4;
-            }
-            race.laps++;
-        } else
-        {
-            race.laps_remaining--;
-        }
-    } else if (race.car->finish_status == 0 && finish_status == -1)
-    {
-        race.laps_remaining++;
+        check_car_crossed_finish_line(&race, &race.cars[i]);
     }
-    race.car->finish_status = finish_status;
+
+    int lap = race.car->current_lap == 0 ? 32 : race.car->current_lap * 4 + 28;
+    race.obj_buffer[7].attr2 = ATTR2_PALBANK(7) | lap;
 }

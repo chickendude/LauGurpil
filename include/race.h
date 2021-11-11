@@ -11,14 +11,11 @@
 struct Race
 {
     Racecar *car;
-    Racecar computer_cars[NUM_AI_CARS];
+    Racecar cars[NUM_CARS_IN_RACE];
     Camera camera;
     Camera prev_camera;
     Timer timer;
-    int laps;
     int laps_total;
-    int laps_remaining;
-    int lap_times[MAX_LAPS];
     int countdown;
     const Track *track;
     OBJ_ATTR obj_buffer[128];

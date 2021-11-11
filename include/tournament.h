@@ -10,7 +10,7 @@ struct Tournament
     const Track *tracks[4];
 };
 
-extern Tournament* tournaments[NUM_TOURNAMENTS];
+extern const Tournament* tournaments[NUM_TOURNAMENTS];
 extern const Tournament tournament_1, tournament_2;
 
 extern State tournament_select_state;
