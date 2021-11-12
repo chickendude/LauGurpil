@@ -219,7 +219,7 @@ void show_countdown(int *countdown)
 
 void update_laps()
 {
-    for (int i = 0; i < NUM_CARS; i++)
+    for (int i = 0; i < NUM_CARS_IN_RACE; i++)
     {
         check_car_crossed_finish_line(&race, &race.cars[i]);
     }
