@@ -57,6 +57,13 @@ static void initialize(StateType prev_state, void *parameter)
         int millis = frames % 60;
         print_time(se_mem[30], 11, 7 + i, minutes, seconds, millis);
     }
+
+    print_text(se_mem[30], 6, 11, "AI LAPS IN FRAMES:");
+    for (int i = 0; i < NUM_AI_CARS; i++)
+    {
+        Racecar *car = &race->cars[i + 1];
+        print_number(se_mem[30], 11, 13 + i, car->lap_times[0]);
+    }
 }
 
 static void update()
