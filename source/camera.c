@@ -12,12 +12,10 @@
 // -----------------------------------------------------------------------------
 
 // TODO: Pass in car pointer directly
-void update_camera(Race *race, unsigned int car_on_camera)
+void update_camera(Camera *camera, Racecar *focused_car)
 {
-    Camera *cam = &race->camera;
-    Racecar *car = &race->cars[car_on_camera];
-    cam->x = (car->x >> 12) - SCREEN_WIDTH / 2;
-    cam->y = (car->y >> 12) - SCREEN_HEIGHT / 2;
+    camera->x = (focused_car->x >> 12) - SCREEN_WIDTH / 2;
+    camera->y = (focused_car->y >> 12) - SCREEN_HEIGHT / 2;
 }
 
 // -----------------------------------------------------------------------------

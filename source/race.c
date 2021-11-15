@@ -146,7 +146,7 @@ void input(StateStack *state_stack)
     }
 
     // TODO: Update to use camera/car pointers
-    update_camera(&race, car_on_camera);
+    update_camera(&race.camera, &race.cars[car_on_camera]);
     update_laps();
 
     // Check if final lap has been completed.

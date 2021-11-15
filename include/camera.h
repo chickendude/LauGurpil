@@ -7,6 +7,6 @@ struct Camera {
     signed int x, y;
 };
 
-void update_camera(Race *race, unsigned int car_on_camera);
+void update_camera(Camera *camera, Racecar *focused_car);
 
 #endif //LAUGURPIL_CAMERA_H
