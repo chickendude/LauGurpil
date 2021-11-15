@@ -24,6 +24,7 @@
 
 #define NUM_AI_CARS 4
 
+/** The number of AI cars + the player */
 #define NUM_CARS_IN_RACE (NUM_AI_CARS + 1)
 
 #define NUM_TOURNAMENTS 2

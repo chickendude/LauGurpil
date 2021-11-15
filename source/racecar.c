@@ -35,7 +35,7 @@ void slow_down(Racecar *car);
 void load_cars(Race *race, const RacecarData **car_data)
 {
     // Grab the cars after the one selected to use as the AI cars
-    for (int i = 0; i < NUM_AI_CARS; i++)
+    for (int i = 0; i < NUM_CARS_IN_RACE; i++)
     {
         Racecar *car = &race->cars[i];
         car->oam_affine = &obj_aff_mem[i];
