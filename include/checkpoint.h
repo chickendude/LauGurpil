@@ -4,11 +4,12 @@
 #include <tonc.h>
 #include "types.h"
 
+typedef enum { VERT, HORZ } CHECKPOINT_DIRECTION;
 struct Checkpoint
 {
    int x, y;
    int speed;
-   bool is_vertical;
+   CHECKPOINT_DIRECTION direction;
 };
 
 #define T1_CHECKPOINT_COUNT 19

@@ -3,25 +3,25 @@
 #include "track.h"
 
 const Checkpoint t1_checkpoints[] = {
-        {101, 49,  50,  true}, // 1
-        {35,  85,  50,  true},
-        {29,  140, 30,  true},
-        {112, 152, 70,  true},
-        {248, 144, 200, true},
-        {436, 156, 200, true}, // 6
-        {538, 265, 50,  true},
-        {507, 349, 50,  true},
-        {338, 344, 50,  true},
-        {268, 281, 30,  true}, // 10
-        {139, 266, 40,  true}, // 11
-        {111, 340, 40,  false}, // 12
-        {144, 430, 200, true}, // 13
-        {308, 475, 200, true}, // 14
-        {508, 455, 200, true}, // 14
-        {712, 345, 200, true}, // 15
-        {739, 183, 200, true}, // 16
-        {718, 69,  40,  true}, // 17
-        {294, 32,  200, true}, // 18
+        {101, 49,  90,  VERT}, // 1
+        {35,  85,  50,  HORZ}, // 2
+        {29,  140, 30,  HORZ}, // 3
+        {112, 152, 70,  VERT}, // 4
+        {248, 144, 200, VERT}, // 5
+        {436, 156, 200, VERT}, // 6
+        {538, 265, 50,  HORZ}, // 7
+        {507, 349, 50,  VERT}, // 8
+        {338, 344, 50,  VERT}, // 9
+        {268, 281, 30,  HORZ}, // 10
+        {139, 266, 40,  VERT}, // 11
+        {111, 340, 40,  HORZ}, // 12
+        {144, 430, 200, VERT}, // 13
+        {308, 475, 200, VERT}, // 14
+        {508, 455, 200, VERT}, // 14
+        {712, 345, 200, HORZ}, // 15
+        {739, 183, 200, HORZ}, // 16
+        {718, 69,  40,  HORZ}, // 17
+        {294, 32,  200, VERT}, // 18
 };
 
 // -----------------------------------------------------------------------------
@@ -42,8 +42,8 @@ Checkpoint* check_checkpoint(const Track *track, Racecar *car)
     int check_y = checkpoint->y - 16;
 
     // Advance to next checkpoint if car is near current checkpoint
-    if (x >= check_x && x <= check_x + 32 &&
-        y >= check_y && y <= check_y + 32)
+    if ((x >= check_x && x <= check_x + 32 && checkpoint->direction == VERT) ||
+            (y >= check_y && y <= check_y + 32 && checkpoint->direction == HORZ))
     {
         car->checkpoint_index =
                 (car->checkpoint_index + 1) % track->num_checkpoints;
