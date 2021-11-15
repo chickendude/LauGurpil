@@ -2,9 +2,20 @@
 #include "state.h"
 #include "title.h"
 
-// TODO: Separate control and moving logic
 // TODO: Add function to switch camera (probably need to redraw full tilemap)
+// TODO: Show data of currently followed car (speed, lap time, etc.)
+// TODO: Complete race (remaining AI cars) after player finishes
+//  - Probably want to do this very quickly in a for loop without waiting for
+//    VBlank (and perhaps set a timeout)
+// TODO: Display AI car times in minutes/seconds
 // TODO: Add final stop for cars that have finished all their laps
+// TODO: Determine place during race time:
+//  a) Add "checkpoints" to game to determine player/car's progress
+//  b) Calculate which checkpoint each car is at and sort based on that
+//  c) If two cars are at the same checkpoint, calculate distance to the next
+//     checkpoint and determine place based on who's closest
+//     * Alternatively, use which car reached the checkpoint first
+// TODO: Add collisions between cars
 // PRE RACE -----------
 // TODO: Add locked state to cars to enable unlocking new vehicles
 

@@ -145,7 +145,6 @@ void input(StateStack *state_stack)
         move_car(&race, &race.cars[i]);
     }
 
-    // TODO: Update to use camera/car pointers
     update_camera(&race.camera, &race.cars[car_on_camera]);
     update_laps();
 

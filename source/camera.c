@@ -11,7 +11,6 @@
 // Public function definitions
 // -----------------------------------------------------------------------------
 
-// TODO: Pass in car pointer directly
 void update_camera(Camera *camera, Racecar *focused_car)
 {
     camera->x = (focused_car->x >> 12) - SCREEN_WIDTH / 2;
