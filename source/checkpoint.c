@@ -33,9 +33,9 @@ const Checkpoint t1_checkpoints[] = {
 // Public function definitions
 // -----------------------------------------------------------------------------
 
-Checkpoint* check_checkpoint(const Track *track, Racecar *car)
+const Checkpoint* check_checkpoint(const Track *track, Racecar *car)
 {
-    Checkpoint *checkpoint = &track->checkpoints[car->checkpoint_index];
+    const Checkpoint *checkpoint = &track->checkpoints[car->checkpoint_index];
     int x = car->x >> 12;
     int y = car->y >> 12;
     int check_x = checkpoint->x - 16;
