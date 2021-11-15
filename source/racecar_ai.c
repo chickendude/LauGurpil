@@ -21,21 +21,29 @@ void set_coordinates(Racecar *ai_car, Race *race);
 void move_ai_car(Racecar *ai_car, Race *race)
 {
     // Move car based on speed/angle (and checking terrain)
-    if (race->countdown > 0)
+    if (race->countdown > 0 || ai_car->current_lap > race->laps_total)
     {
-        move_car(race, ai_car);
+        decelerate(ai_car);
         update_pos(ai_car, &race->camera);
         return;
     }
 
     // Check if car has reached a checkpoint
-    Checkpoint *checkpoint = check_checkpoint(race->track, ai_car);
+    const Checkpoint *checkpoint = check_checkpoint(race->track, ai_car);
 
     // TODO: Remove eventually (adds a car to the map showing next checkpoint)
-    if (ai_car->overall_standing == 1) {
+    if (ai_car->overall_standing == 1)
+    {
+        int x = checkpoint->x - race->camera.x;
+        int y = checkpoint->y - race->camera.y;
+        if (checkpoint->x - race->camera.x > 240 ||
+            checkpoint->x - race->camera.x < -32 ||
+            checkpoint->y - race->camera.y > 160 ||
+            checkpoint->y - race->camera.y < -32)
+            x = 240;
         obj_set_attr(&race->obj_buffer[100],
-                     ATTR0_SQUARE | ATTR0_4BPP | checkpoint->y - race->camera.y,
-                     ATTR1_SIZE_16x16 | checkpoint->x - race->camera.x,
+                     ATTR0_SQUARE | ATTR0_4BPP | y,
+                     ATTR1_SIZE_16x16 | x,
                      ATTR2_PALBANK(1) | 4);
     }
 
@@ -63,7 +71,6 @@ void move_ai_car(Racecar *ai_car, Race *race)
         accelerate(ai_car);
     else
         brake(ai_car);
-    move_car(race, ai_car);
     update_pos(ai_car, &race->camera);
 }
 

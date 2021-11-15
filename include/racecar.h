@@ -6,7 +6,8 @@
 
 struct Racecar
 {
-    // .12 fixed point
+    // Car's position in .12 fixed point (first 12 bits are treated as
+    // decimals)
     int x, y;
 
     // .12 fixed point

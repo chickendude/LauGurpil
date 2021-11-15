@@ -2,8 +2,9 @@
 #include "state.h"
 #include "title.h"
 
-// TODO: Keep track of ai cars' laps
+// TODO: Separate control and moving logic
 // TODO: Add function to switch camera (probably need to redraw full tilemap)
+// TODO: Add final stop for cars that have finished all their laps
 // PRE RACE -----------
 // TODO: Add locked state to cars to enable unlocking new vehicles
 

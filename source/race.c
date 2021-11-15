@@ -130,17 +130,22 @@ void input(StateStack *state_stack)
         update_timer(&race.timer);
     }
 
-    // Move player car
+    // Handle player input
     handle_input(race.car);
-    move_car(&race, race.car);
 
-    // Move AI cars
+    // Handle AI input
     for (int i = 1; i < NUM_CARS_IN_RACE; i++)
     {
-        Racecar *ai_car = &race.cars[i];
-        move_ai_car(ai_car, &race);
+        move_ai_car(&race.cars[i], &race);
     }
 
+    // Move all cars
+    for (int i = 0; i < NUM_CARS_IN_RACE; i++)
+    {
+        move_car(&race, &race.cars[i]);
+    }
+
+    // TODO: Update to use camera/car pointers
     update_camera(&race, car_on_camera);
     update_laps();
 
@@ -224,6 +229,7 @@ void update_laps()
         check_car_crossed_finish_line(&race, &race.cars[i]);
     }
 
-    int lap = race.car->current_lap == 0 ? 32 : race.car->current_lap * 4 + 28;
+    int lap = race.cars[car_on_camera].current_lap == 0 ? 32 :
+              race.cars[car_on_camera].current_lap * 4 + 28;
     race.obj_buffer[7].attr2 = ATTR2_PALBANK(7) | lap;
 }
