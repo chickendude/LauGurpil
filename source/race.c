@@ -185,7 +185,7 @@ void update()
     update_tilemap(&race);
 
     // Show current MPH
-    print_speed(se_mem[29], 10, 1, race.car->speed);
+    print_speed(se_mem[29], 10, 1, race.cars[car_on_camera].speed);
 
     // Update timer every other frame
     if (race.timer.frames & 2)
