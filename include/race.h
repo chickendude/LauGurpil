@@ -5,7 +5,6 @@
 #include "camera.h"
 #include "constants.h"
 #include "racecar.h"
-#include "timer.h"
 #include "types.h"
 
 struct Race
@@ -14,7 +13,7 @@ struct Race
     Racecar cars[NUM_CARS_IN_RACE];
     Camera camera;
     Camera prev_camera;
-    Timer timer;
+    int frames;
     int laps_total;
     int countdown;
     const Track *track;

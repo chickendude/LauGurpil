@@ -75,19 +75,22 @@ void print_speed(SCR_ENTRY *sbb, int x, int y, int speed)
     print_text(sbb, x, y, (char *) time);
 }
 
-void
-print_time(SCR_ENTRY *sbb, int x, int y, int minutes, int seconds, int frames)
+void print_time(SCR_ENTRY *sbb, int x, int y, int frames)
 {
+
     unsigned char time[] = "00:00;00\0";
-    // convert millis to a percentage, 60 * 5 / 3 = 100 %
-    frames *= 5;
-    frames /= 3;
+    int minutes = frames / (60 * 60);
+    int seconds = (frames - minutes * 3600) / 60;
+    int millis = frames % 60;
+    // convert frames (60 frames/s) to a percentage, 60 * 5 / 3 = 100 %
+    millis *= 5;
+    millis /= 3;
     time[0] += minutes / 10;
     time[1] += minutes % 10;
     time[3] += seconds / 10;
     time[4] += seconds % 10;
-    time[6] += frames / 10;
-    time[7] += frames % 10;
+    time[6] += millis / 10;
+    time[7] += millis % 10;
     print_text(sbb, x, y, (char *) time);
 }
 

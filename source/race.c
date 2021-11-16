@@ -67,8 +67,7 @@ static void initialize(StateType prev_state, void *parameter)
     race.track = race_data->track;
     load_cars(&race, race_data->car_data);
     load_track(race_data->track, &race.camera);
-    load_timer(&race.timer);
-    print_time(se_mem[29], 1, 1, 0, 0, 0);
+    print_time(se_mem[29], 1, 1, 0);
 
     race.laps_total = 3;
     race.countdown = 60 * 3;
@@ -127,7 +126,7 @@ void input(StateStack *state_stack)
         show_countdown(&race.countdown);
     } else
     {
-        update_timer(&race.timer);
+        race.frames++;
     }
 
     // Handle player input
@@ -188,10 +187,9 @@ void update()
     print_speed(se_mem[29], 10, 1, race.cars[car_on_camera].speed);
 
     // Update timer every other frame
-    if (race.timer.frames & 2)
+    if (race.frames & 2)
     {
-        print_time(se_mem[29], 1, 1, race.timer.minutes,
-                   race.timer.seconds, race.timer.millis);
+        print_time(se_mem[29], 1, 1, race.frames);
     }
 
     REG_BG0HOFS = race.camera.x;

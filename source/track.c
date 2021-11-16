@@ -196,7 +196,7 @@ void check_car_crossed_finish_line(Race *race, Racecar *car) {
             // starting point), then we don't want to save the lap time.
             if (car->current_lap > 0)
             {
-                car->lap_times[car->current_lap - 1] = race->timer.frames;
+                car->lap_times[car->current_lap - 1] = race->frames;
             }
             car->current_lap++;
         } else

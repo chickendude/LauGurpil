@@ -2,7 +2,6 @@
 #include "state.h"
 #include "title.h"
 
-// TODO: Show data of currently followed car (speed, lap time, etc.)
 // TODO: Complete race (remaining AI cars) after player finishes
 //  - Probably want to do this very quickly in a for loop without waiting for
 //    VBlank (and perhaps set a timeout)

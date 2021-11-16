@@ -46,23 +46,19 @@ static void initialize(StateType prev_state, void *parameter)
     }
     print_text(se_mem[30], 11, 1, "RESULTS:\0");
     print_text(se_mem[30], 10, 5, "LAP TIMES:\0");
-    print_time(se_mem[30], 11, 3, race->timer.minutes, race->timer.seconds,
-               race->timer.millis);
+    print_time(se_mem[30], 11, 3, race->frames);
     for (int i = 0; i < race->laps_total; i++)
     {
         int frames = race->car->lap_times[i];
         if (i > 0) frames -= race->car->lap_times[i - 1];
-        int minutes = frames / (60 * 60);
-        int seconds = (frames - minutes * 3600) / 60;
-        int millis = frames % 60;
-        print_time(se_mem[30], 11, 7 + i, minutes, seconds, millis);
+        print_time(se_mem[30], 11, 7 + i, frames);
     }
 
     print_text(se_mem[30], 6, 11, "AI LAPS IN FRAMES:");
     for (int i = 0; i < NUM_AI_CARS; i++)
     {
         Racecar *car = &race->cars[i + 1];
-        print_number(se_mem[30], 11, 13 + i, car->lap_times[0]);
+        print_time(se_mem[30], 11, 13 + i, car->lap_times[race->laps_total - 1]);
     }
 }
 
