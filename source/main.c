@@ -2,7 +2,6 @@
 #include "state.h"
 #include "title.h"
 
-// TODO: Add function to switch camera (probably need to redraw full tilemap)
 // TODO: Show data of currently followed car (speed, lap time, etc.)
 // TODO: Complete race (remaining AI cars) after player finishes
 //  - Probably want to do this very quickly in a for loop without waiting for
@@ -16,6 +15,9 @@
 //     checkpoint and determine place based on who's closest
 //     * Alternatively, use which car reached the checkpoint first
 // TODO: Add collisions between cars
+// TODO: Add counter to main update and add to a "global.c/h" file to use as a
+//       random number. Use to calculate how accurately ai cars should follow
+//       the paths.
 // PRE RACE -----------
 // TODO: Add locked state to cars to enable unlocking new vehicles
 
