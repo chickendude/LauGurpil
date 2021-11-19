@@ -3,9 +3,9 @@
 #include "title.h"
 
 // TODO: Complete race (remaining AI cars) after player finishes
+//  - Show user's stats while race completes
 //  - Probably want to do this very quickly in a for loop without waiting for
 //    VBlank (and perhaps set a timeout)
-// TODO: Display AI car times in minutes/seconds
 // TODO: Add final stop for cars that have finished all their laps
 // TODO: Determine place during race time:
 //  a) Add "checkpoints" to game to determine player/car's progress
@@ -21,6 +21,7 @@
 // TODO: Add locked state to cars to enable unlocking new vehicles
 
 
+// 5, 5
 //---------------------------------------------------------------------------------
 // Program entry point
 //---------------------------------------------------------------------------------
