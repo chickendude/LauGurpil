@@ -144,6 +144,9 @@ void input(StateStack *state_stack)
         move_car(&race, &race.cars[i]);
     }
 
+    // Calculate selected car's current position
+    update_standing(&race, &race.cars[car_on_camera]);
+
     update_camera(&race.camera, &race.cars[car_on_camera]);
     update_laps();
 
@@ -190,6 +193,10 @@ void update()
     if (race.frames & 2)
     {
         print_time(se_mem[29], 1, 1, race.frames);
+        print_number(se_mem[29], 21, 1,
+                     race.cars[car_on_camera].current_standing);
+        print_number(se_mem[29], 21, 2,
+                     race.cars[car_on_camera].progress_index);
     }
 
     REG_BG0HOFS = race.camera.x;

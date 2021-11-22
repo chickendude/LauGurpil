@@ -77,13 +77,6 @@ void move_ai_car(Racecar *ai_car, Race *race)
 void load_ai_car(Racecar *ai_car, Race *race)
 {
     set_coordinates(ai_car, race);
-//    ai_car->angle = race->track->start_angle;
-//    ai_car->checkpoint_index = 0;
-//    ai_car->slide_x = lu_sin(race->car->angle);
-//    ai_car->slide_y = lu_cos(race->car->angle);
-//    obj_set_pos(ai_car->oam,
-//                (race->car->x >> 12) - 8 - race->camera.x,
-//                (race->car->y >> 12) - 8 - race->camera.y);
 }
 // -----------------------------------------------------------------------------
 // Private functions definitions

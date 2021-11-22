@@ -9,6 +9,7 @@
 #include "track_tiles.h"
 // tilemap data
 #include "tracks.h"
+#include "track_markers.h"
 
 const Track *tracks[NUM_TRACKS] = {&track_1, &track_2, &track_3, &track_4};
 
@@ -19,6 +20,8 @@ const Track track_1 = {
         track1Width, track1Height,
         T1_CHECKPOINT_COUNT,
         t1_checkpoints,
+        T1_PROGRESS_COUNT,
+        t1_progress_markers,
         16, -30,
         16, 3,
         track1_tilemap
@@ -31,6 +34,8 @@ const Track track_2 = {
         track2Width, track2Height,
         T1_CHECKPOINT_COUNT,
         t1_checkpoints,
+        T1_PROGRESS_COUNT,
+        t1_progress_markers,
         -30, 25,
         15, 25,
         track2_tilemap
@@ -43,6 +48,8 @@ const Track track_3 = {
         track3Width, track3Height,
         T1_CHECKPOINT_COUNT,
         t1_checkpoints,
+        T1_PROGRESS_COUNT,
+        t1_progress_markers,
         31, 9,
         31, 17,
         track3_tilemap
@@ -55,6 +62,8 @@ const Track track_4 = {
         track4Width, track4Height,
         T1_CHECKPOINT_COUNT,
         t1_checkpoints,
+        T1_PROGRESS_COUNT,
+        t1_progress_markers,
         79, 49,
         109, 49,
         track4_tilemap
@@ -199,6 +208,7 @@ void check_car_crossed_finish_line(Race *race, Racecar *car) {
                 car->lap_times[car->current_lap - 1] = race->frames;
             }
             car->current_lap++;
+            car->progress_index = 0;
         } else
         {
             car->laps_remaining--;

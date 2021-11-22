@@ -12,6 +12,8 @@ struct Track
     int width, height;
     int num_checkpoints;
     const Checkpoint *checkpoints;
+    int num_progress_markers;
+    const Checkpoint *progress_markers;
     // x1/y1 should be < x2/y2
     const int finish_x1, finish_y1;
     const int finish_x2, finish_y2;

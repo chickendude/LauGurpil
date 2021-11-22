@@ -27,7 +27,13 @@ struct Racecar
     // Determines car's starting position in a race
     int overall_standing;
 
+    // Car's current position in the race
+    int current_standing;
+
     int checkpoint_index;
+
+    // Which progress marker the car has reached
+    int progress_index;
 
     int current_lap;
 
@@ -71,6 +77,8 @@ void load_cars(Race *race, const RacecarData **car_data);
 void handle_input(Racecar *car);
 
 void move_car(Race *race, Racecar *car);
+
+int update_standing(Race *race, Racecar *car);
 
 // Commands
 void accelerate(Racecar *car);

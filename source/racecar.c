@@ -3,6 +3,7 @@
 
 #include "racecar.h"
 #include "constants.h"
+#include "checkpoint.h"
 #include "race.h"
 #include "track.h"
 
@@ -121,7 +122,20 @@ void move_car(Race *race, Racecar *car)
         car->y += (-car->speed * car->slide_y) >> 12;
     }
 
+    // Check if car has gone through progress marker
+    check_progress_marker(race->track, car);
+
     obj_aff_rotate(car->oam_affine, car->angle);
+}
+
+// TODO: Change to update position and store current position to Racecar struct
+int update_standing(Race *race, Racecar *car)
+{
+    // for other_car in cars
+    // if other_car.lap > car.lap, position++
+    // if other_car.lap == car.lap && other_car.progress_index > car.p_i, position ++
+    // if other_car.lap == car.lap && other_car.progress_index == car.p_i && other_car.x/y - progress_marker.x/y < car values, position ++
+    return 0;
 }
 
 // -----------------------------------------------------------------------------
