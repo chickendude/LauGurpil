@@ -33,6 +33,8 @@ void show_countdown(int *countdown);
 
 void update_laps();
 
+void show_stats_screen(StateStack *state_stack);
+
 // -----------------------------------------------------------------------------
 // Public variable definitions
 // -----------------------------------------------------------------------------
@@ -65,11 +67,12 @@ static void initialize(StateType prev_state, void *parameter)
 
     RaceData *race_data = (RaceData *) parameter;
     race.track = race_data->track;
+    race.frames = 0;
     load_cars(&race, race_data->car_data);
     load_track(race_data->track, &race.camera);
     print_time(se_mem[29], 1, 1, 0);
 
-    race.laps_total = 3;
+    race.laps_total = 1;
     race.countdown = 60 * 3;
 
     // Car sprite/affine info
@@ -130,7 +133,14 @@ void input(StateStack *state_stack)
     }
 
     // Handle player input
-    handle_input(race.car);
+    if (race.cars[0].current_lap <= race.laps_total)
+    {
+        handle_input(race.car);
+    } else
+    {
+        decelerate(race.car);
+        decelerate(race.car);
+    }
 
     // Handle AI input
     for (int i = 1; i < NUM_CARS_IN_RACE; i++)
@@ -154,14 +164,14 @@ void input(StateStack *state_stack)
     // We use > because laps start at 1, so if we want 3 laps, race.laps needs
     // to be 4 (start of first lap = 1, second = 2, third = 3, and once third
     // lap completes it will be 4)
-    if (race.car->current_lap > race.laps_total || key_hit(KEY_START))
+    if (race.car->current_lap > race.laps_total && key_hit(KEY_START))
     {
-        // Remove this state from stack so that when the stats screen returns
-        // it goes straight to the previous screen
-        pop_state(state_stack, RACE, NULL);
-        // Load the race stats screen
-        push_state(state_stack, &race_stats_state, RACE, &race);
+        show_stats_screen(state_stack);
     }
+
+#ifdef DEBUG
+    if (key_hit(KEY_START)) show_stats_screen(state_stack);
+#endif
 
     // Set player so that they are aligned with the camera
     obj_set_pos(race.car->oam,
@@ -234,4 +244,13 @@ void update_laps()
     int lap = race.cars[car_on_camera].current_lap == 0 ? 32 :
               race.cars[car_on_camera].current_lap * 4 + 28;
     race.obj_buffer[7].attr2 = ATTR2_PALBANK(7) | lap;
+}
+
+void show_stats_screen(StateStack *state_stack)
+{
+    // Remove this state from stack so that when the stats screen returns
+    // it goes straight to the previous screen
+    pop_state(state_stack, RACE, NULL);
+    // Load the race stats screen
+    push_state(state_stack, &race_stats_state, RACE, &race);
 }

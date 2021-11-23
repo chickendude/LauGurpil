@@ -7,12 +7,6 @@
 //  - Probably want to do this very quickly in a for loop without waiting for
 //    VBlank (and perhaps set a timeout)
 // TODO: Add final stop for cars that have finished all their laps
-// TODO: Determine place during race time:
-//  a) Add "checkpoints" to game to determine player/car's progress
-//  b) Calculate which checkpoint each car is at and sort based on that
-//  c) If two cars are at the same checkpoint, calculate distance to the next
-//     checkpoint and determine place based on who's closest
-//     * Alternatively, use which car reached the checkpoint first
 // TODO: Add collisions between cars
 // TODO: Add counter to main update and add to a "global.c/h" file to use as a
 //       random number. Use to calculate how accurately ai cars should follow
