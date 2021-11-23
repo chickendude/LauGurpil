@@ -11,6 +11,9 @@ typedef struct Progress
     int is_vertical;
 } Progress;
 
+Progress checkpoints[MAX_CHECKPOINTS];
+int num_checkpoints = 0;
+
 // Function definitions
 
 int read_tmx(char *filename);
@@ -24,9 +27,6 @@ void extract_checkpoints(FILE *file);
 int extract_number(char *number_str);
 
 // Function declarations
-
-Progress checkpoints[MAX_CHECKPOINTS];
-int num_checkpoints = 0;
 
 int main(int argc, char **argv)
 {
