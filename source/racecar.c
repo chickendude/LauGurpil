@@ -128,14 +128,40 @@ void move_car(Race *race, Racecar *car)
     obj_aff_rotate(car->oam_affine, car->angle);
 }
 
-// TODO: Change to update position and store current position to Racecar struct
-int update_standing(Race *race, Racecar *car)
+void update_standing(Race *race, Racecar *car)
 {
-    // for other_car in cars
-    // if other_car.lap > car.lap, position++
-    // if other_car.lap == car.lap && other_car.progress_index > car.p_i, position ++
-    // if other_car.lap == car.lap && other_car.progress_index == car.p_i && other_car.x/y - progress_marker.x/y < car values, position ++
-    return 0;
+    int standing = 0;
+    for (int i = 0; i < NUM_CARS_IN_RACE; i++)
+    {
+        Racecar *other_car = &race->cars[i];
+        if (other_car == car) continue;
+
+        if (other_car->current_lap > car->current_lap) standing++;
+        else if (other_car->current_lap == car->current_lap)
+        {
+            if (other_car->progress_index > car->progress_index)
+            {
+                standing++;
+                continue;
+            } else if (other_car->progress_index == car->progress_index)
+            {
+                const Checkpoint *marker =
+                        &race->track->progress_markers[car->progress_index];
+                int other_dx = (other_car->x >> 12) - marker->x;
+                if (other_dx < 0) other_dx *= -1;
+                int other_dy = (other_car->y >> 12) - marker->y;
+                if (other_dy < 0) other_dy *= -1;
+                int other_distance = other_dx + other_dy;
+                int car_dx = (car->x >> 12) - marker->x;
+                if (car_dx < 0) car_dx *= -1;
+                int car_dy = (car->y >> 12) - marker->y;
+                if (car_dy < 0) car_dy *= -1;
+                int car_distance = car_dx + car_dy;
+                if (other_distance < car_distance) standing++;
+            }
+        }
+    }
+    car->current_standing = standing;
 }
 
 // -----------------------------------------------------------------------------

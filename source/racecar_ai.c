@@ -31,21 +31,21 @@ void move_ai_car(Racecar *ai_car, Race *race)
     // Check if car has reached a checkpoint
     const Checkpoint *checkpoint = check_checkpoint(race->track, ai_car);
 
-    // TODO: Remove eventually (adds a car to the map showing next checkpoint)
-    if (ai_car->overall_standing == 1)
-    {
-        int x = checkpoint->x - race->camera.x;
-        int y = checkpoint->y - race->camera.y;
-        if (checkpoint->x - race->camera.x > 240 ||
-            checkpoint->x - race->camera.x < -32 ||
-            checkpoint->y - race->camera.y > 160 ||
-            checkpoint->y - race->camera.y < -32)
-            x = 240;
-        obj_set_attr(&race->obj_buffer[100],
-                     ATTR0_SQUARE | ATTR0_4BPP | y,
-                     ATTR1_SIZE_16x16 | x,
-                     ATTR2_PALBANK(1) | 4);
-    }
+//    // TODO: Remove eventually (adds a car to the map showing next checkpoint)
+//    if (ai_car->overall_standing == 1)
+//    {
+//        int x = checkpoint->x - race->camera.x;
+//        int y = checkpoint->y - race->camera.y;
+//        if (checkpoint->x - race->camera.x > 240 ||
+//            checkpoint->x - race->camera.x < -32 ||
+//            checkpoint->y - race->camera.y > 160 ||
+//            checkpoint->y - race->camera.y < -32)
+//            x = 240;
+//        obj_set_attr(&race->obj_buffer[100],
+//                     ATTR0_SQUARE | ATTR0_4BPP | y,
+//                     ATTR1_SIZE_16x16 | x,
+//                     ATTR2_PALBANK(1) | 4);
+//    }
 
     // Check if car needs to turn to point to next checkpoint
     u16 dx = checkpoint->x - (ai_car->x >> 12);

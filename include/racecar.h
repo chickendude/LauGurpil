@@ -78,7 +78,7 @@ void handle_input(Racecar *car);
 
 void move_car(Race *race, Racecar *car);
 
-int update_standing(Race *race, Racecar *car);
+void update_standing(Race *race, Racecar *car);
 
 // Commands
 void accelerate(Racecar *car);

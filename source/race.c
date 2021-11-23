@@ -194,9 +194,7 @@ void update()
     {
         print_time(se_mem[29], 1, 1, race.frames);
         print_number(se_mem[29], 21, 1,
-                     race.cars[car_on_camera].current_standing);
-        print_number(se_mem[29], 21, 2,
-                     race.cars[car_on_camera].progress_index);
+                     race.cars[car_on_camera].current_standing + 1);
     }
 
     REG_BG0HOFS = race.camera.x;
