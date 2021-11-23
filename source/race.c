@@ -140,6 +140,8 @@ void input(StateStack *state_stack)
     {
         decelerate(race.car);
         decelerate(race.car);
+        if (key_hit(KEY_START) || key_hit(KEY_A))
+            show_stats_screen(state_stack);
     }
 
     // Handle AI input
@@ -160,17 +162,9 @@ void input(StateStack *state_stack)
     update_camera(&race.camera, &race.cars[car_on_camera]);
     update_laps();
 
-    // Check if final lap has been completed.
-    // We use > because laps start at 1, so if we want 3 laps, race.laps needs
-    // to be 4 (start of first lap = 1, second = 2, third = 3, and once third
-    // lap completes it will be 4)
-    if (race.car->current_lap > race.laps_total && key_hit(KEY_START))
-    {
-        show_stats_screen(state_stack);
-    }
-
 #ifdef DEBUG
     if (key_hit(KEY_START)) show_stats_screen(state_stack);
+    if (key_hit(KEY_SELECT)) pop_state(state_stack, RACE, &race);
 #endif
 
     // Set player so that they are aligned with the camera
@@ -178,10 +172,6 @@ void input(StateStack *state_stack)
                 (race.car->x >> 12) - 8 - race.camera.x,
                 (race.car->y >> 12) - 8 - race.camera.y);
 
-    if (key_hit(KEY_SELECT))
-    {
-        pop_state(state_stack, RACE, &race);
-    }
     if (key_hit(KEY_R))
     {
         car_on_camera = (car_on_camera + 1) % NUM_CARS;
