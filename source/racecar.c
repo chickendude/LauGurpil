@@ -130,36 +130,46 @@ void move_car(Race *race, Racecar *car)
 
 void update_standing(Race *race, Racecar *car)
 {
+    /*
+     * There are a series of progress markers scattered throughout the map.
+     * As a car goes through the track, its "progress_index" is updated.
+     * We can calculate a car's position by comparing its "current_lap" and
+     * "progress_index" values. If those are the same, then we can estimate
+     * how far they are from the next marker.
+     */
     int standing = 0;
     for (int i = 0; i < NUM_CARS_IN_RACE; i++)
     {
         Racecar *other_car = &race->cars[i];
         if (other_car == car) continue;
 
+        // Check if the cars are on different laps
         if (other_car->current_lap > car->current_lap) standing++;
-        else if (other_car->current_lap == car->current_lap)
-        {
-            if (other_car->progress_index > car->progress_index)
-            {
-                standing++;
-                continue;
-            } else if (other_car->progress_index == car->progress_index)
-            {
-                const Checkpoint *marker =
-                        &race->track->progress_markers[car->progress_index];
-                int other_dx = (other_car->x >> 12) - marker->x;
-                if (other_dx < 0) other_dx *= -1;
-                int other_dy = (other_car->y >> 12) - marker->y;
-                if (other_dy < 0) other_dy *= -1;
-                int other_distance = other_dx + other_dy;
-                int car_dx = (car->x >> 12) - marker->x;
-                if (car_dx < 0) car_dx *= -1;
-                int car_dy = (car->y >> 12) - marker->y;
-                if (car_dy < 0) car_dy *= -1;
-                int car_distance = car_dx + car_dy;
-                if (other_distance < car_distance) standing++;
-            }
-        }
+        if (other_car->current_lap != car->current_lap) continue;
+
+        // Check if progress marker indices are different
+        if (other_car->progress_index > car->progress_index) standing++;
+        if (other_car->progress_index != car->progress_index) continue;
+
+        const Checkpoint *marker =
+                &race->track->progress_markers[car->progress_index];
+
+        // Calculate distances from next marker
+        int other_dx = (other_car->x >> 12) - marker->x;
+        int other_dy = (other_car->y >> 12) - marker->y;
+        int car_dx = (car->x >> 12) - marker->x;
+        int car_dy = (car->y >> 12) - marker->y;
+
+        // Make sure all values are positive
+        if (other_dx < 0) other_dx *= -1;
+        if (other_dy < 0) other_dy *= -1;
+        if (car_dx < 0) car_dx *= -1;
+        if (car_dy < 0) car_dy *= -1;
+
+        // Calculate overall distance and check which car is further away
+        int other_distance = other_dx + other_dy;
+        int car_distance = car_dx + car_dy;
+        if (other_distance < car_distance) standing++;
     }
     car->current_standing = standing;
 }
