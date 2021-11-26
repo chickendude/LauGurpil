@@ -46,15 +46,17 @@ static void initialize(StateType prev_state, void *parameter)
     }
     print_text(se_mem[30], 11, 1, "RESULTS:\0");
     print_text(se_mem[30], 10, 5, "LAP TIMES:\0");
-    print_time(se_mem[30], 11, 3, race->frames);
+    int total_time = 0;
     for (int i = 0; i < race->laps_total; i++)
     {
         int frames = race->car->lap_times[i];
+        total_time += frames;
         if (i > 0) frames -= race->car->lap_times[i - 1];
         print_time(se_mem[30], 11, 7 + i, frames);
     }
+    print_time(se_mem[30], 11, 3, total_time);
 
-    print_text(se_mem[30], 6, 11, "AI LAPS IN FRAMES:");
+    print_text(se_mem[30], 11, 11, "AI LAPS:");
     for (int i = 0; i < NUM_AI_CARS; i++)
     {
         Racecar *car = &race->cars[i + 1];

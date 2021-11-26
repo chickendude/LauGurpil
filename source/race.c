@@ -190,7 +190,7 @@ void update()
     print_speed(se_mem[29], 10, 1, race.cars[car_on_camera].speed);
 
     // Update timer every other frame
-    if (race.frames & 2)
+    if (race.frames & 2 && race.cars[0].current_lap <= race.laps_total)
     {
         print_time(se_mem[29], 1, 1, race.frames);
         print_number(se_mem[29], 21, 1,
