@@ -138,6 +138,53 @@ void print_number(SCR_ENTRY *sbb, int x, int y, int number)
     number_txt[string_index] = '0' + ones;
     print_text(sbb, x, y, (char *) number_txt);
 }
+
+void create_textbox(int charblock_base, int screenblock_base, int start_x,
+                    int start_y, int w, int h)
+{
+    memset32(se_mem[screenblock_base], 0, 32 * 32 / 8);
+
+    // Top/bottom left/right
+    se_mem[screenblock_base][start_y * 32 + start_x] = 45 | SE_PALBANK(15);
+    se_mem[screenblock_base][start_y * 32 + w + start_x - 1] =
+            47 | SE_PALBANK(15);
+    se_mem[screenblock_base][(start_y + h - 1) * 32 + start_x] = 51 | SE_PALBANK(15);
+    se_mem[screenblock_base][(start_y + h - 1) * 32 + w + start_x - 1] =
+            53 | SE_PALBANK(15);
+    // Top row
+    for (int x = start_x + 1; x < start_x + w - 1; x++)
+    {
+        se_mem[screenblock_base][start_y * 32 + x] = 46 | SE_PALBANK(15);
+    }
+    // Bottom row
+    for (int x = start_x + 1; x < start_x + w - 1; x++)
+    {
+        se_mem[screenblock_base][(start_y + h - 1) * 32 + x] =
+                52 | SE_PALBANK(15);
+    }
+    // Middle edges
+    for (int y = start_y + 1; y < start_y + h - 1; y++)
+    {
+        se_mem[screenblock_base][y * 32 + start_x] = 48 | SE_PALBANK(15);
+        se_mem[screenblock_base][y * 32 + w + start_x - 1] =
+                50 | SE_PALBANK(15);
+    }
+    // Middle container
+    for (int x = start_x + 1; x < start_x + w - 1; x++)
+    {
+        for (int y = start_y + 1; y < start_y + h - 1; y++)
+        {
+            se_mem[screenblock_base][y * 32 + x] = 49 | SE_PALBANK(15);
+        }
+    }
+    REG_BLDCNT =
+            BLD_STD | BLD_TOP(BLD_BG2) | BLD_BOT(BLD_BG0 | BLD_BG1 | BLD_OBJ);
+    REG_BLDALPHA = BLD_EVA(10) | BLD_EVB(10);
+    REG_DISPCNT |= DCNT_BG2;
+    REG_BG2CNT =
+            BG_CBB(charblock_base) | BG_SBB(screenblock_base) | BG_PRIO(1) |
+            BG_REG_32x32 | BG_4BPP;
+}
 // -----------------------------------------------------------------------------
 // Private functions definitions
 // -----------------------------------------------------------------------------

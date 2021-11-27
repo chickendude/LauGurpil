@@ -13,9 +13,14 @@
 #include "cars.h"
 #include "lap_numbers.h"
 
+#define DEBUG
+
 static Race race;
 
 static unsigned int car_on_camera;
+
+// Used to make sure the stats box at the end of the race is only drawn once
+static bool statsbox_displayed;
 
 // -----------------------------------------------------------------------------
 // Private function declarations
@@ -68,12 +73,13 @@ static void initialize(StateType prev_state, void *parameter)
     RaceData *race_data = (RaceData *) parameter;
     race.track = race_data->track;
     race.frames = 0;
+    race.laps_total = 1;
+    race.countdown = 60 * 3;
+
     load_cars(&race, race_data->car_data);
     load_track(race_data->track, &race.camera);
     print_time(se_mem[29], 1, 1, 0);
-
-    race.laps_total = 1;
-    race.countdown = 60 * 3;
+    statsbox_displayed = false;
 
     // Car sprite/affine info
     for (int i = 0; i < NUM_CARS_IN_RACE; i++)
@@ -89,7 +95,7 @@ static void initialize(StateType prev_state, void *parameter)
         obj_set_attr(&race.obj_buffer[i],
                      ATTR0_SQUARE | ATTR0_4BPP | ATTR0_AFF | ATTR0_AFF_DBL_BIT,
                      ATTR1_SIZE_16x16 | ATTR1_AFF_ID(i),
-                     ATTR2_PRIO(1) |
+                     ATTR2_PRIO(2) |
                      ATTR2_PALBANK(race_data->car_data[i]->sprite_id) |
                      ATTR2_ID(race_data->car_data[i]->sprite_id * 4));
         obj_aff_identity((OBJ_AFFINE *) &race.obj_buffer[i * 4]);
@@ -120,6 +126,7 @@ static void initialize(StateType prev_state, void *parameter)
     REG_BG0VOFS = race.camera.y;
     REG_BG1VOFS = race.camera.y;
     oam_copy(oam_mem, race.obj_buffer, 128);
+    create_textbox(3, 28, 0, 0, 23, 3);
 }
 
 void input(StateStack *state_stack)
@@ -142,6 +149,14 @@ void input(StateStack *state_stack)
         decelerate(race.car);
         if (key_hit(KEY_START) || key_hit(KEY_A))
             show_stats_screen(state_stack);
+
+        if (race.car->speed < 1 << 12 && !statsbox_displayed)
+        {
+            statsbox_displayed = true;
+            create_textbox(3, 28,
+                           10, 4,
+                           10, 10);
+        }
     }
 
     // Handle AI input
@@ -164,7 +179,7 @@ void input(StateStack *state_stack)
 
 #ifdef DEBUG
     if (key_hit(KEY_START)) show_stats_screen(state_stack);
-    if (key_hit(KEY_SELECT)) pop_state(state_stack, RACE, &race);
+    if (key_hit(KEY_SELECT)) race.car->current_lap++;
 #endif
 
     // Set player so that they are aligned with the camera
@@ -189,13 +204,13 @@ void update()
     // Show current MPH
     print_speed(se_mem[29], 10, 1, race.cars[car_on_camera].speed);
 
-    // Update timer every other frame
-    if (race.frames & 2 && race.cars[0].current_lap <= race.laps_total)
+    // Update timer every other frame until car completes race
+    if (race.frames & 2 && race.car->current_lap <= race.laps_total)
     {
         print_time(se_mem[29], 1, 1, race.frames);
-        print_number(se_mem[29], 21, 1,
-                     race.cars[car_on_camera].current_standing + 1);
     }
+    print_number(se_mem[29], 21, 1,
+                 race.cars[car_on_camera].current_standing + 1);
 
     REG_BG0HOFS = race.camera.x;
     REG_BG1HOFS = race.camera.x;

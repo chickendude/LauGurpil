@@ -95,8 +95,8 @@ void load_track(const Track *track, Camera *camera)
 {
     // CBB = charblock base, where the tile sprites are stored. there are 4 CBB
     // SBB = screenblock base, where the tilemap is stored. there are 32 SBBs
-    REG_BG0CNT = BG_CBB(0) | BG_SBB(30) | BG_PRIO(1) | BG_REG_32x32 | BG_4BPP;
-    REG_BG1CNT = BG_CBB(1) | BG_SBB(31) | BG_PRIO(2) | BG_REG_32x32 | BG_4BPP;
+    REG_BG0CNT = BG_CBB(0) | BG_SBB(30) | BG_PRIO(2) | BG_REG_32x32 | BG_4BPP;
+    REG_BG1CNT = BG_CBB(1) | BG_SBB(31) | BG_PRIO(3) | BG_REG_32x32 | BG_4BPP;
     memcpy32(tile_mem, track_tilesTiles, track_tilesTilesLen / 4);
     memcpy32(&pal_bg_mem[2 * 16], track_tilesPal, 16);
 
