@@ -142,7 +142,7 @@ void print_number(SCR_ENTRY *sbb, int x, int y, int number)
 void create_textbox(int charblock_base, int screenblock_base, int start_x,
                     int start_y, int w, int h)
 {
-    memset32(se_mem[screenblock_base], 0, 32 * 32 / 8);
+    memset32(se_mem[screenblock_base], 0, 32 * 32 / 4);
 
     // Top/bottom left/right
     se_mem[screenblock_base][start_y * 32 + start_x] = 45 | SE_PALBANK(15);
