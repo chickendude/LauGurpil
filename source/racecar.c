@@ -7,13 +7,13 @@
 #include "race.h"
 #include "track.h"
 
-const RacecarData car1 = {0, 7, 7, 7};
-const RacecarData car2 = {1, 8, 6, 7};
-const RacecarData car3 = {2, 5, 8, 8};
-const RacecarData car4 = {3, 8, 8, 5};
-const RacecarData car5 = {4, 2, 10, 9};
-const RacecarData car6 = {5, 5, 7, 9};
-const RacecarData car7 = {6, 10, 2, 9};
+const RacecarData car1 = {0, 7, 7, 7, "GORRI   "};
+const RacecarData car2 = {1, 8, 6, 7, "ZURI    "};
+const RacecarData car3 = {2, 5, 8, 8, "ORLEGI  "};
+const RacecarData car4 = {3, 8, 8, 5, "HORI    "};
+const RacecarData car5 = {4, 2, 10, 9, "MOTO MAX"};
+const RacecarData car6 = {5, 5, 7, 9, "URDIN   "};
+const RacecarData car7 = {6, 10, 2, 9, "BASATI  "};
 
 const RacecarData *cars[NUM_CARS] = {&car1, &car2, &car3, &car4, &car5, &car6,
                                      &car7};
@@ -221,6 +221,7 @@ void load_car(Racecar *car, const RacecarData *car_data)
     car->max_speed = 0x3A00 + car_data->max_speed * 0x0100;
     car->turning_power = 0xC0 + car_data->turning_power * 0x05;
     car->acceleration_power = 0x15 + car_data->acceleration_power * 0x05;
+    car->name = car_data->name;
 
     // Load car defaults
     car->speed = 0;

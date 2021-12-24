@@ -20,9 +20,13 @@
 
 #define MAX_LAPS 10
 
+/** The max number of characters in the race car names. */
+#define MAX_NAME_CHARS 9
+
 #define NUM_CARS 7
 
 #define NUM_AI_CARS 4
+
 
 /** The number of AI cars + the player */
 #define NUM_CARS_IN_RACE (NUM_AI_CARS + 1)

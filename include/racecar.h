@@ -41,6 +41,8 @@ struct Racecar
 
     int finish_time;
 
+    const char *name;
+
     /**
      * In case the user (or some other car) goes backwards across the finish
      * line, we need to track that so they can't go back and forth to cheat.
@@ -72,6 +74,7 @@ struct RacecarData
     int sprite_id;
     int max_speed;
     int turning_power, acceleration_power;
+    const char name[MAX_NAME_CHARS];
 };
 
 void load_cars(Race *race, const RacecarData **car_data);

@@ -147,6 +147,7 @@ void update_stats()
         if (trn > i + 2) trn_txt[i] = '=';
         else if (trn == i + 2) trn_txt[i] = '>';
     }
+    print_text(se_mem[29], 12, 8, data->name);
     print_text(se_mem[29], 12, 11, spd_txt);
     print_text(se_mem[29], 12, 12, acc_txt);
     print_text(se_mem[29], 12, 13, trn_txt);
