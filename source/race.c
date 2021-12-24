@@ -24,7 +24,7 @@ static bool statsbox_displayed;
 
 #define TEXTBOX_SBB 28
 
-#define NUM_LAPS 3
+#define NUM_LAPS 1
 
 // -----------------------------------------------------------------------------
 // Private function declarations
@@ -294,7 +294,7 @@ void post_race()
     decelerate(race.car);
     decelerate(race.car);
 
-    if (race.frames > race.car->finish_time + 30) return;
+    if (race.frames < race.car->finish_time + 30) return;
 
     // Show/update the final race results dialog box
     if (!statsbox_displayed)

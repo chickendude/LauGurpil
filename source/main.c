@@ -3,6 +3,7 @@
 #include "title.h"
 
 // TODO: Add timeout when automatically finishing a race
+// TODO: Stop updating place marker when player has finished
 // TODO: Add final stop for cars that have finished all their laps
 // TODO: Add collisions between cars
 // TODO: Add counter to main update and add to a "global.c/h" file to use as a
