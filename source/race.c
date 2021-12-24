@@ -294,7 +294,7 @@ void post_race()
     decelerate(race.car);
     decelerate(race.car);
 
-    if (race.car->speed > 1 << 12) return;
+    if (race.frames > race.car->finish_time + 30) return;
 
     // Show/update the final race results dialog box
     if (!statsbox_displayed)
