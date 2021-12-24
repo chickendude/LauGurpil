@@ -40,6 +40,8 @@ void update_laps();
 
 void show_stats_screen(StateStack *state_stack);
 
+void post_race();
+
 // -----------------------------------------------------------------------------
 // Public variable definitions
 // -----------------------------------------------------------------------------
@@ -145,18 +147,9 @@ void input(StateStack *state_stack)
         handle_input(race.car);
     } else
     {
-        decelerate(race.car);
-        decelerate(race.car);
         if (key_hit(KEY_START) || key_hit(KEY_A))
             show_stats_screen(state_stack);
-
-        if (race.car->speed < 1 << 12 && !statsbox_displayed)
-        {
-            statsbox_displayed = true;
-            create_textbox(3, 28,
-                           10, 4,
-                           10, 10);
-        }
+        post_race();
     }
 
     // Handle AI input
@@ -205,9 +198,17 @@ void update()
     print_speed(se_mem[29], 10, 1, race.cars[car_on_camera].speed);
 
     // Update timer every other frame until car completes race
-    if (race.frames & 2 && race.car->current_lap <= race.laps_total)
+    if (race.frames & 2)// && race.car->current_lap <= race.laps_total)
     {
-        print_time(se_mem[29], 1, 1, race.frames);
+        bool all_finished = true;
+        for (int i = 0; i < NUM_CARS_IN_RACE; i++)
+        {
+            int total_time = calculate_total_time(&race.cars[i],
+                                                  race.laps_total);
+            all_finished = all_finished && total_time > 0;
+        }
+        if (!all_finished)
+            print_time(se_mem[29], 1, 1, race.frames);
     }
     print_number(se_mem[29], 21, 1,
                  race.cars[car_on_camera].current_standing + 1);
@@ -258,4 +259,31 @@ void show_stats_screen(StateStack *state_stack)
     pop_state(state_stack, RACE, NULL);
     // Load the race stats screen
     push_state(state_stack, &race_stats_state, RACE, &race);
+}
+
+// Player has completed the race
+void post_race()
+{
+    decelerate(race.car);
+    decelerate(race.car);
+
+    if (race.car->speed > 1 << 12) return;
+
+    // Show/update the final race results dialog box
+    if (!statsbox_displayed)
+    {
+        statsbox_displayed = true;
+        create_textbox(3, 28,
+                       10, 4,
+                       10, 2 + NUM_CARS_IN_RACE);
+    }
+
+    // Display all the car times
+    for (int i = 0; i < NUM_CARS_IN_RACE; i++)
+    {
+        int total_time = calculate_total_time(&race.cars[i],
+                                              race.laps_total);
+        if (total_time > 0)
+            print_time(se_mem[29], 11, 5 + i, total_time);
+    }
 }

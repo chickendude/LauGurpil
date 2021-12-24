@@ -174,6 +174,19 @@ void update_standing(Race *race, Racecar *car)
     car->current_standing = standing;
 }
 
+int calculate_total_time(Racecar *car, int num_laps)
+{
+    int total = 0;
+    for (int i = 0; i < num_laps; i++)
+    {
+        int cur_lap_time = car->lap_times[i];
+        if (cur_lap_time == 0) return -1;
+
+        total += cur_lap_time;
+    }
+    return total;
+}
+
 // -----------------------------------------------------------------------------
 // Private functions definitions
 // -----------------------------------------------------------------------------

@@ -179,7 +179,7 @@ void create_textbox(int charblock_base, int screenblock_base, int start_x,
     }
     REG_BLDCNT =
             BLD_STD | BLD_TOP(BLD_BG2) | BLD_BOT(BLD_BG0 | BLD_BG1 | BLD_OBJ);
-    REG_BLDALPHA = BLD_EVA(10) | BLD_EVB(10);
+    REG_BLDALPHA = BLD_EVA(12) | BLD_EVB(10);
     REG_DISPCNT |= DCNT_BG2;
     REG_BG2CNT =
             BG_CBB(charblock_base) | BG_SBB(screenblock_base) | BG_PRIO(1) |

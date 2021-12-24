@@ -80,6 +80,15 @@ void move_car(Race *race, Racecar *car);
 
 void update_standing(Race *race, Racecar *car);
 
+/**
+ * Calculates the total lap time based on the number of laps.
+ *
+ * @param car Car whose lap times should be calculated.
+ * @param num_laps Number of laps in the race.
+ * @return Total lap time or -1 if not all laps have been completed.
+ */
+int calculate_total_time(Racecar *car, int num_laps);
+
 // Commands
 void accelerate(Racecar *car);
 
