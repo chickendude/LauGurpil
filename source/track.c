@@ -193,7 +193,8 @@ bool is_tile_in_map(int x, int y, const Track *track)
     return !(x < 0 || y < 0 || x >= track->width || y >= track->height);
 }
 
-void check_car_crossed_finish_line(Race *race, Racecar *car) {
+void check_car_crossed_finish_line(Race *race, Racecar *car)
+{
     // -1 = behind finish line, 0 = on finish line, 1 = past finish line
     int finish_status = is_car_in_finish_line(car, race->track);
 
@@ -208,8 +209,11 @@ void check_car_crossed_finish_line(Race *race, Racecar *car) {
             {
                 car->lap_times[car->current_lap - 1] = race->frames;
             }
-            if (car->current_lap == race->laps_total) {
+            // Save finish time and add to ranking list if car has finished
+            if (car->current_lap == race->laps_total)
+            {
                 car->finish_time = race->frames;
+                race->ranking[race->num_cars_finished++] = car;
             }
             car->current_lap++;
             car->progress_index = 0;

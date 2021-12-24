@@ -15,6 +15,10 @@ struct Race
 
     // Array containing all the cars in the race, player + AI cars.
     Racecar cars[NUM_CARS_IN_RACE];
+
+    // Array containing pointers to cars in order of finish time.
+    Racecar *ranking[NUM_CARS_IN_RACE];
+
     Camera camera;
     Camera prev_camera;
 
@@ -26,6 +30,9 @@ struct Race
 
     // Number of frames remaining before the race starts.
     int countdown;
+
+    // Number of cars finished.
+    int num_cars_finished;
 
     // Current track being raced on.
     const Track *track;

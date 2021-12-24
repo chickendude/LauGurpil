@@ -77,6 +77,7 @@ static void initialize(StateType prev_state, void *parameter)
     race.frames = 0;
     race.laps_total = 1;
     race.countdown = 60 * 3;
+    race.num_cars_finished = 0;
 
     load_cars(&race, race_data->car_data);
     load_track(race_data->track, &race.camera);
@@ -259,7 +260,7 @@ void show_stats_screen(StateStack *state_stack)
     push_state(state_stack, &race_stats_state, RACE, &race);
 }
 
-// Player has completed the race
+/** Player has completed the race */
 void post_race()
 {
     decelerate(race.car);
@@ -272,14 +273,21 @@ void post_race()
     {
         statsbox_displayed = true;
         create_textbox(3, 28,
-                       10, 4,
-                       10, 2 + NUM_CARS_IN_RACE);
+                       8, 4,
+                       12, 2 + NUM_CARS_IN_RACE);
+    }
+
+    // Sort finish times
+    for (int i = 0; i < NUM_CARS_IN_RACE; i++)
+    {
+
     }
 
     // Display all the car times
-    for (int i = 0; i < NUM_CARS_IN_RACE; i++)
+    for (int i = 0; i < race.num_cars_finished; i++)
     {
-        int total_time = race.cars[i].finish_time;
+        print_number(se_mem[29], 9, 5 + i, i + 1);
+        int total_time = race.ranking[i]->finish_time;
         if (total_time > 0)
             print_time(se_mem[29], 11, 5 + i, total_time);
     }
