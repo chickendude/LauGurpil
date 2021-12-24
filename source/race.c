@@ -273,8 +273,8 @@ void post_race()
     {
         statsbox_displayed = true;
         create_textbox(3, 28,
-                       8, 4,
-                       12, 2 + NUM_CARS_IN_RACE);
+                       3, 4,
+                       24, 2 + NUM_CARS_IN_RACE);
     }
 
     // Sort finish times
@@ -286,9 +286,9 @@ void post_race()
     // Display all the car times
     for (int i = 0; i < race.num_cars_finished; i++)
     {
-        print_number(se_mem[29], 9, 5 + i, i + 1);
-        int total_time = race.ranking[i]->finish_time;
-        if (total_time > 0)
-            print_time(se_mem[29], 11, 5 + i, total_time);
+        Racecar *car = race.ranking[i];
+        print_number(se_mem[29], 4, 5 + i, i + 1);
+        print_text(se_mem[29], 6, 5 + i, car->name);
+        print_time(se_mem[29], 17, 5 + i, car->finish_time);
     }
 }
