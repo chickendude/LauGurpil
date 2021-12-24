@@ -246,8 +246,12 @@ void update_laps()
         check_car_crossed_finish_line(&race, &race.cars[i]);
     }
 
-    int lap = race.cars[car_on_camera].current_lap == 0 ? 32 :
-              race.cars[car_on_camera].current_lap * 4 + 28;
+    int current_lap = race.cars[car_on_camera].current_lap;
+    if (current_lap > race.laps_total)
+        current_lap = race.laps_total;
+
+    int lap = current_lap == 0 ? 32 :
+              current_lap * 4 + 28;
     race.obj_buffer[7].attr2 = ATTR2_PALBANK(7) | lap;
 }
 
