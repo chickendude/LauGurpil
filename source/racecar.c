@@ -174,19 +174,6 @@ void update_standing(Race *race, Racecar *car)
     car->current_standing = standing;
 }
 
-int calculate_total_time(Racecar *car, int num_laps)
-{
-    int total = 0;
-    for (int i = 0; i < num_laps; i++)
-    {
-        int cur_lap_time = car->lap_times[i];
-        if (cur_lap_time == 0) return -1;
-
-        total += cur_lap_time;
-    }
-    return total;
-}
-
 // -----------------------------------------------------------------------------
 // Private functions definitions
 // -----------------------------------------------------------------------------
@@ -240,6 +227,13 @@ void load_car(Racecar *car, const RacecarData *car_data)
     car->x = car->y = 0;
     car->finish_status = -1; // -1 = behind finish line
     car->oam->attr2 ^= ATTR2_PRIO(1);
+    
+    // Clear lap times
+    for (int i = 0; i < MAX_LAPS; i++)
+    {
+        car->lap_times[i] = 0;
+    }
+    car->finish_time = 0;
 
     // Set position and rotation
     obj_set_pos(car->oam, car->x - 32, car->y - 32);

@@ -194,6 +194,7 @@ bool is_tile_in_map(int x, int y, const Track *track)
 }
 
 void check_car_crossed_finish_line(Race *race, Racecar *car) {
+    // -1 = behind finish line, 0 = on finish line, 1 = past finish line
     int finish_status = is_car_in_finish_line(car, race->track);
 
     if (car->finish_status == -1 && finish_status == 0)
@@ -206,6 +207,9 @@ void check_car_crossed_finish_line(Race *race, Racecar *car) {
             if (car->current_lap > 0)
             {
                 car->lap_times[car->current_lap - 1] = race->frames;
+            }
+            if (car->current_lap == race->laps_total) {
+                car->finish_time = race->frames;
             }
             car->current_lap++;
             car->progress_index = 0;

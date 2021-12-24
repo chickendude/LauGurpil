@@ -39,6 +39,8 @@ struct Racecar
 
     int lap_times[MAX_LAPS];
 
+    int finish_time;
+
     /**
      * In case the user (or some other car) goes backwards across the finish
      * line, we need to track that so they can't go back and forth to cheat.
@@ -79,15 +81,6 @@ void handle_input(Racecar *car);
 void move_car(Race *race, Racecar *car);
 
 void update_standing(Race *race, Racecar *car);
-
-/**
- * Calculates the total lap time based on the number of laps.
- *
- * @param car Car whose lap times should be calculated.
- * @param num_laps Number of laps in the race.
- * @return Total lap time or -1 if not all laps have been completed.
- */
-int calculate_total_time(Racecar *car, int num_laps);
 
 // Commands
 void accelerate(Racecar *car);

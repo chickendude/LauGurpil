@@ -203,9 +203,7 @@ void update()
         bool all_finished = true;
         for (int i = 0; i < NUM_CARS_IN_RACE; i++)
         {
-            int total_time = calculate_total_time(&race.cars[i],
-                                                  race.laps_total);
-            all_finished = all_finished && total_time > 0;
+            all_finished = all_finished && race.cars[i].finish_time > 0;
         }
         if (!all_finished)
             print_time(se_mem[29], 1, 1, race.frames);
@@ -281,8 +279,7 @@ void post_race()
     // Display all the car times
     for (int i = 0; i < NUM_CARS_IN_RACE; i++)
     {
-        int total_time = calculate_total_time(&race.cars[i],
-                                              race.laps_total);
+        int total_time = race.cars[i].finish_time;
         if (total_time > 0)
             print_time(se_mem[29], 11, 5 + i, total_time);
     }
