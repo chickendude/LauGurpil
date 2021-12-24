@@ -142,7 +142,7 @@ void print_number(SCR_ENTRY *sbb, int x, int y, int number)
 void create_textbox(int charblock_base, int screenblock_base, int start_x,
                     int start_y, int w, int h)
 {
-    memset32(se_mem[screenblock_base], 0, 32 * 32 / 4);
+//    memset32(se_mem[screenblock_base], 0, 32 * 32 / 4);
 
     // Top/bottom left/right
     se_mem[screenblock_base][start_y * 32 + start_x] = 45 | SE_PALBANK(15);
@@ -184,6 +184,11 @@ void create_textbox(int charblock_base, int screenblock_base, int start_x,
     REG_BG2CNT =
             BG_CBB(charblock_base) | BG_SBB(screenblock_base) | BG_PRIO(1) |
             BG_REG_32x32 | BG_4BPP;
+}
+
+void clear_textboxes(int screenblock_base)
+{
+    memset32(se_mem[screenblock_base], 0, sizeof(SCREENBLOCK));
 }
 // -----------------------------------------------------------------------------
 // Private functions definitions

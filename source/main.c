@@ -2,12 +2,7 @@
 #include "state.h"
 #include "title.h"
 
-// TODO: Complete race (remaining AI cars) after player finishes
-//  - Show user's stats while race completes
-//  - Give each car a name
-//    + Show name in car selection screen as well
-//  - Probably want to do this very quickly in a for loop without waiting for
-//    VBlank (and perhaps set a timeout)
+// TODO: Add timeout when automatically finishing a race
 // TODO: Add final stop for cars that have finished all their laps
 // TODO: Add collisions between cars
 // TODO: Add counter to main update and add to a "global.c/h" file to use as a

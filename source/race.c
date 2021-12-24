@@ -22,6 +22,10 @@ static unsigned int car_on_camera;
 // Used to make sure the stats box at the end of the race is only drawn once
 static bool statsbox_displayed;
 
+#define TEXTBOX_SBB 28
+
+#define NUM_LAPS 3
+
 // -----------------------------------------------------------------------------
 // Private function declarations
 // -----------------------------------------------------------------------------
@@ -60,6 +64,7 @@ static void initialize(StateType prev_state, void *parameter)
     REG_DISPCNT = 0;
 
     oam_init(race.obj_buffer, 128);
+    clear_textboxes(TEXTBOX_SBB);
 
     // Load Car sprites
     memcpy32(tile_mem[4], carsTiles, carsTilesLen / 4);
@@ -75,7 +80,7 @@ static void initialize(StateType prev_state, void *parameter)
     RaceData *race_data = (RaceData *) parameter;
     race.track = race_data->track;
     race.frames = 0;
-    race.laps_total = 1;
+    race.laps_total = NUM_LAPS;
     race.countdown = 60 * 3;
     race.num_cars_finished = 0;
 
@@ -129,7 +134,7 @@ static void initialize(StateType prev_state, void *parameter)
     REG_BG0VOFS = race.camera.y;
     REG_BG1VOFS = race.camera.y;
     oam_copy(oam_mem, race.obj_buffer, 128);
-    create_textbox(3, 28, 0, 0, 23, 3);
+    create_textbox(3, TEXTBOX_SBB, 0, 0, 23, 3);
 }
 
 void input(StateStack *state_stack)
@@ -257,6 +262,25 @@ void update_laps()
 
 void show_stats_screen(StateStack *state_stack)
 {
+    // Show dialog while race is completing
+    create_textbox(3, TEXTBOX_SBB, 6, 17, 19, 3);
+    print_text(se_mem[29], 7, 18, "FINISHING RACE...");
+
+    // Finish race
+    while (race.num_cars_finished < NUM_CARS_IN_RACE)
+    {
+        race.frames++;
+        for (int i = 1; i < NUM_CARS_IN_RACE; i++)
+        {
+            // Only process cars that haven't finished yet
+            if (race.cars[i].finish_time > 0) continue;
+
+            move_ai_car(&race.cars[i], &race);
+            move_car(&race, &race.cars[i]);
+        }
+        update_laps();
+    }
+
     // Remove this state from stack so that when the stats screen returns
     // it goes straight to the previous screen
     pop_state(state_stack, RACE, NULL);
@@ -276,15 +300,9 @@ void post_race()
     if (!statsbox_displayed)
     {
         statsbox_displayed = true;
-        create_textbox(3, 28,
+        create_textbox(3, TEXTBOX_SBB,
                        3, 4,
                        24, 2 + NUM_CARS_IN_RACE);
-    }
-
-    // Sort finish times
-    for (int i = 0; i < NUM_CARS_IN_RACE; i++)
-    {
-
     }
 
     // Display all the car times

@@ -46,4 +46,6 @@ void create_textbox(int charblock_base,
                int w,
                int h);
 
+void clear_textboxes(int screenblock_base);
+
 #endif //LAUGURPIL_TEXT_H
