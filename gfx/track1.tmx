@@ -81,91 +81,109 @@
   <object id="1" gid="65" x="101.333" y="49.3333" width="16" height="16">
    <properties>
     <property name="speed" type="int" value="50"/>
+    <property name="vertical" type="bool" value="true"/>
    </properties>
   </object>
-  <object id="2" gid="65" x="35.3333" y="85.3333" width="16" height="16">
+  <object id="2" gid="65" x="59.3333" y="74.6666" width="16" height="16">
    <properties>
     <property name="speed" type="int" value="50"/>
+    <property name="vertical" type="bool" value="true"/>
    </properties>
   </object>
   <object id="3" gid="65" x="29.3333" y="150" width="16" height="16">
    <properties>
     <property name="speed" type="int" value="30"/>
+    <property name="vertical" type="bool" value="false"/>
    </properties>
   </object>
   <object id="4" gid="65" x="112.667" y="172.667" width="16" height="16">
    <properties>
     <property name="speed" type="int" value="70"/>
+    <property name="vertical" type="bool" value="true"/>
    </properties>
   </object>
   <object id="5" gid="65" x="158.667" y="144.667" width="16" height="16">
    <properties>
     <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="true"/>
    </properties>
   </object>
   <object id="6" gid="65" x="436" y="156" width="16" height="16">
    <properties>
     <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="true"/>
    </properties>
   </object>
   <object id="7" gid="65" x="538" y="265.333" width="16" height="16">
    <properties>
     <property name="speed" type="int" value="70"/>
+    <property name="vertical" type="bool" value="false"/>
    </properties>
   </object>
   <object id="8" gid="65" x="507.333" y="349.333" width="16" height="16">
    <properties>
     <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="false"/>
    </properties>
   </object>
   <object id="9" gid="65" x="338.667" y="384.667" width="16" height="16">
    <properties>
     <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="true"/>
    </properties>
   </object>
   <object id="10" gid="65" x="268.667" y="291.333" width="16" height="16">
    <properties>
     <property name="speed" type="int" value="50"/>
+    <property name="vertical" type="bool" value="false"/>
    </properties>
   </object>
   <object id="11" gid="65" x="139.333" y="286.667" width="16" height="16">
    <properties>
     <property name="speed" type="int" value="60"/>
+    <property name="vertical" type="bool" value="false"/>
    </properties>
   </object>
   <object id="12" gid="65" x="111.333" y="410" width="16" height="16">
    <properties>
     <property name="speed" type="int" value="80"/>
+    <property name="vertical" type="bool" value="false"/>
    </properties>
   </object>
   <object id="13" gid="65" x="184" y="484.667" width="16" height="16">
    <properties>
     <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="false"/>
    </properties>
   </object>
   <object id="14" gid="65" x="588.667" y="475.333" width="16" height="16">
    <properties>
     <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="false"/>
    </properties>
   </object>
   <object id="15" gid="65" x="722.667" y="345.333" width="16" height="16">
    <properties>
     <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="false"/>
    </properties>
   </object>
   <object id="16" gid="65" x="739.333" y="173.333" width="16" height="16">
    <properties>
     <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="false"/>
    </properties>
   </object>
   <object id="17" gid="65" x="718.667" y="59.3333" width="16" height="16">
    <properties>
     <property name="speed" type="int" value="40"/>
+    <property name="vertical" type="bool" value="false"/>
    </properties>
   </object>
   <object id="18" gid="65" x="294.667" y="32" width="16" height="16">
    <properties>
     <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="true"/>
    </properties>
   </object>
  </objectgroup>

@@ -1,4 +1,4 @@
-.idea/
+progress/.idea/
 build/
 cmake-build-debug/
 cmake_install.cmake
@@ -6,3 +6,5 @@ CMakeCache.txt
 Makefile
 CMakeFiles/
 progress_extractor
+checkpoint_extractor
+*.cbp

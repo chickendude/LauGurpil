@@ -4,3 +4,4 @@ project(progress_extractor C)
 set(CMAKE_C_STANDARD 99)
 
 add_executable(progress_extractor progress_extractor.c)
+add_executable(checkpoint_extractor ../checkpoints/checkpoint_extractor.c)
