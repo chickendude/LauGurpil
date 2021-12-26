@@ -177,6 +177,7 @@ void input(StateStack *state_stack)
     update_laps();
 
 #ifdef DEBUG
+    // both are currently broken
     if (key_hit(KEY_START)) show_stats_screen(state_stack);
     if (key_hit(KEY_SELECT)) race.car->current_lap++;
 #endif
@@ -204,7 +205,7 @@ void update()
     print_speed(se_mem[29], 10, 1, race.cars[car_on_camera].speed);
 
     // Update timer every other frame until car completes race
-    if (race.frames & 2)// && race.car->current_lap <= race.laps_total)
+    if (race.frames & 2)
     {
         bool all_finished = true;
         for (int i = 0; i < NUM_CARS_IN_RACE; i++)
@@ -260,6 +261,9 @@ void update_laps()
     race.obj_buffer[7].attr2 = ATTR2_PALBANK(7) | lap;
 }
 
+/**
+ * Transfer to the stats screen and complete the race if it hasn't finished yet.
+ */
 void show_stats_screen(StateStack *state_stack)
 {
     // Show dialog while race is completing
@@ -296,7 +300,7 @@ void post_race()
 
     if (race.frames < race.car->finish_time + 30) return;
 
-    // Show/update the final race results dialog box
+    // Create a dialog box to display the final race results
     if (!statsbox_displayed)
     {
         statsbox_displayed = true;

@@ -3,12 +3,13 @@
 #include "title.h"
 
 // TODO: Add timeout when automatically finishing a race
-// TODO: Stop updating place marker when player has finished
 // TODO: Add final stop for cars that have finished all their laps
 // TODO: Add collisions between cars
 // TODO: Add counter to main update and add to a "global.c/h" file to use as a
 //       random number. Use to calculate how accurately ai cars should follow
 //       the paths.
+// TODO: Look into why it AI cars seem to shake (perhaps camera race issue
+//       between player and AI cars)
 // PRE RACE -----------
 // TODO: Add locked state to cars to enable unlocking new vehicles
 

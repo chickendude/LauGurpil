@@ -39,7 +39,7 @@ void load_cars(Race *race, const RacecarData **car_data)
     for (int i = 0; i < NUM_CARS_IN_RACE; i++)
     {
         Racecar *car = &race->cars[i];
-        car->oam_affine = &obj_aff_mem[i];
+        car->oam_affine = &((OBJ_AFFINE*)race->obj_buffer)[i];
         car->oam = &race->obj_buffer[i];
         car->overall_standing = i;
         car->x = race->track->start_x << 16;
