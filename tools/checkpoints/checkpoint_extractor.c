@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 
 #define MAX_CHARACTERS_IN_LINE 1024
 #define MAX_CHECKPOINTS 100
@@ -21,7 +22,7 @@ int num_checkpoints = 0;
 /** Reads the TMX file into the [checkpoints] array */
 int read_tmx(char *filename);
 
-void write_file(char *filename, char *filename_upper);
+void write_file(char *filename, char *filename_upper, char *output_dir);
 
 int find_checkpoints(FILE *file);
 
@@ -46,7 +47,15 @@ int main(int argc, char **argv)
     char filename_upper[32];
     extract_filename(argv[1], filename, filename_upper);
 
-    if (read_tmx(argv[1])) write_file(filename, filename_upper);
+    char* output_dir;
+    if (argc > 2) {
+        output_dir = argv[2];
+    } else {
+        output_dir = malloc(sizeof("."));
+        output_dir = ".";
+    }
+
+    if (read_tmx(argv[1])) write_file(filename, filename_upper, output_dir);
     return 0;
 }
 
@@ -72,14 +81,17 @@ int read_tmx(char *filename)
     return 1;
 }
 
-void write_file(char *filename, char *filename_upper)
+void write_file(char *filename, char *filename_upper, char *output_dir)
 {
     // Create .h file
 
-    char output_h_filename[32];
-    strcpy(output_h_filename, filename);
-    strcat(output_h_filename, ".h");
-    FILE *file = fopen(output_h_filename, "w");
+    char output_filename[32];
+    sprintf(output_filename, "%s/%s.h", output_dir, filename);
+
+    if (output_dir[0] != '.' && stat(output_dir, NULL) == -1) {
+        mkdir(output_dir, 0700);
+    }
+    FILE *file = fopen(output_filename, "w");
 
     fprintf(file, "#define %s_CHECKPOINT_COUNT %d\n\n", filename_upper,
             num_checkpoints);
@@ -92,11 +104,9 @@ void write_file(char *filename, char *filename_upper)
 
     // Create .c file
 
-    char output_c_filename[32];
-    strcpy(output_c_filename, filename);
-    strcat(output_c_filename, ".c");
+    sprintf(output_filename, "%s/%s.c", output_dir, filename);
 
-    file = fopen(output_c_filename, "w");
+    file = fopen(output_filename, "w");
 
     fprintf(file, "const Checkpoint %s_checkpoint_markers[] = {\n", filename);
 
