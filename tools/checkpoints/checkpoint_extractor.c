@@ -16,7 +16,6 @@ typedef struct Checkpoint
 Checkpoint checkpoints[MAX_CHECKPOINTS];
 int num_checkpoints = 0;
 
-
 // Function definitions
 
 /** Reads the TMX file into the [checkpoints] array */
@@ -75,9 +74,13 @@ int read_tmx(char *filename)
 
 void write_file(char *filename, char *filename_upper)
 {
-    FILE *file = fopen("output.c", "w");
+    // Create .h file
 
-    // TODO: Don't use hardcoded name
+    char output_h_filename[32];
+    strcpy(output_h_filename, filename);
+    strcat(output_h_filename, ".h");
+    FILE *file = fopen(output_h_filename, "w");
+
     fprintf(file, "#define %s_CHECKPOINT_COUNT %d\n\n", filename_upper,
             num_checkpoints);
 
@@ -85,6 +88,16 @@ void write_file(char *filename, char *filename_upper)
     fprintf(file,
             "extern const Checkpoint %s_checkpoint_markers[%s_CHECKPOINT_COUNT];\n",
             filename, filename_upper);
+    fclose(file);
+
+    // Create .c file
+
+    char output_c_filename[32];
+    strcpy(output_c_filename, filename);
+    strcat(output_c_filename, ".c");
+
+    file = fopen(output_c_filename, "w");
+
     fprintf(file, "const Checkpoint %s_checkpoint_markers[] = {\n", filename);
 
     for (int i = 0; i < num_checkpoints; i++)
@@ -174,7 +187,7 @@ void extract_filename(const char *filename, char *output, char *output_upper)
 
 int extract_number(char *number_str)
 {
-    while(*number_str < '0' || *number_str > '9') number_str++;
+    while (*number_str < '0' || *number_str > '9') number_str++;
 
     char *ch = strchr(number_str, '"');
     if (ch != NULL)
