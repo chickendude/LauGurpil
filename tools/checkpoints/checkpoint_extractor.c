@@ -6,13 +6,14 @@
 #define MAX_CHARACTERS_IN_LINE 1024
 #define MAX_CHECKPOINTS 100
 
-typedef struct Progress
+typedef struct Checkpoint
 {
     int x, y;
+    int speed;
     int is_vertical;
-} Progress;
+} Checkpoint;
 
-Progress checkpoints[MAX_CHECKPOINTS];
+Checkpoint checkpoints[MAX_CHECKPOINTS];
 int num_checkpoints = 0;
 
 
@@ -90,11 +91,13 @@ void write_file(char *filename, char *filename_upper)
     {
         int x = checkpoints[i].x;
         int y = checkpoints[i].y;
+        int speed = checkpoints[i].speed;
         char *is_vertical = checkpoints[i].is_vertical ? "VERT" : "HORZ";
 
-        fprintf(file, "\t{%d, %d, 0, %s},\n", x, y, is_vertical);
+        fprintf(file, "\t{%d, %d, %d, %s},\n", x, y, speed, is_vertical);
     }
-    fprintf(file, "};");
+    fseek(file, -2, SEEK_END);
+    fprintf(file, "\n};");
 }
 
 /**
@@ -134,6 +137,14 @@ void extract_checkpoints(FILE *file)
         }
 
         // Extract is_vertical value
+        char *speed_str = strstr(line, "speed");
+        if (speed_str != NULL)
+        {
+            int speed = extract_number(speed_str);
+            checkpoints[num_checkpoints].speed = speed;
+        }
+
+        // Extract is_vertical value
         char *is_vertical_str = strstr(line, "vertical");
         if (is_vertical_str != NULL)
         {
@@ -163,7 +174,7 @@ void extract_filename(const char *filename, char *output, char *output_upper)
 
 int extract_number(char *number_str)
 {
-    number_str += 3;
+    while(*number_str < '0' || *number_str > '9') number_str++;
 
     char *ch = strchr(number_str, '"');
     if (ch != NULL)
