@@ -81,7 +81,7 @@ static void initialize(StateType prev_state, void *parameter)
     race.track = race_data->track;
     race.frames = 0;
     race.laps_total = NUM_LAPS;
-    race.countdown = 60 * 3;
+    race.countdown = 10 * 3;
     race.num_cars_finished = 0;
 
     load_cars(&race, race_data->car_data);
@@ -157,6 +157,10 @@ void input(StateStack *state_stack)
             show_stats_screen(state_stack);
         post_race();
     }
+
+#ifdef DEBUG
+    if (race.cars[car_on_camera].current_lap > race.laps_total) post_race();
+#endif
 
     // Handle AI input
     for (int i = 1; i < NUM_CARS_IN_RACE; i++)
@@ -298,7 +302,7 @@ void post_race()
     decelerate(race.car);
     decelerate(race.car);
 
-    if (race.frames < race.car->finish_time + 30) return;
+    if (race.frames < race.cars[car_on_camera].finish_time + 30) return;
 
     // Create a dialog box to display the final race results
     if (!statsbox_displayed)

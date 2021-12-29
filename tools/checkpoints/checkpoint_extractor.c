@@ -47,10 +47,12 @@ int main(int argc, char **argv)
     char filename_upper[32];
     extract_filename(argv[1], filename, filename_upper);
 
-    char* output_dir;
-    if (argc > 2) {
+    char *output_dir;
+    if (argc > 2)
+    {
         output_dir = argv[2];
-    } else {
+    } else
+    {
         output_dir = malloc(sizeof("."));
         output_dir = ".";
     }
@@ -85,18 +87,20 @@ void write_file(char *filename, char *filename_upper, char *output_dir)
 {
     // Create .h file
 
-    char output_filename[32];
-    sprintf(output_filename, "%s/%s.h", output_dir, filename);
+    char output_filename[64];
+    sprintf(output_filename, "%s/%s_ai_checkpoints.h", output_dir, filename);
 
-    if (output_dir[0] != '.' && stat(output_dir, NULL) == -1) {
+    if (output_dir[0] != '.' && stat(output_dir, NULL) == -1)
+    {
         mkdir(output_dir, 0700);
     }
     FILE *file = fopen(output_filename, "w");
 
-    fprintf(file, "#define %s_CHECKPOINT_COUNT %d\n\n", filename_upper,
+    fprintf(file,
+            "#define %s_CHECKPOINT_COUNT %d\n\n#include \"checkpoint.h\"\n\n",
+            filename_upper,
             num_checkpoints);
 
-    // TODO: Put this line in .h file
     fprintf(file,
             "extern const Checkpoint %s_checkpoint_markers[%s_CHECKPOINT_COUNT];\n",
             filename, filename_upper);
@@ -104,11 +108,14 @@ void write_file(char *filename, char *filename_upper, char *output_dir)
 
     // Create .c file
 
-    sprintf(output_filename, "%s/%s.c", output_dir, filename);
+    sprintf(output_filename, "%s/%s_ai_checkpoints.c", output_dir, filename);
 
     file = fopen(output_filename, "w");
 
-    fprintf(file, "const Checkpoint %s_checkpoint_markers[] = {\n", filename);
+    fprintf(file,
+            "#include \"%s_ai_checkpoints.h\"\n\n"
+            "const Checkpoint %s_checkpoint_markers[] = {\n",
+            filename, filename);
 
     for (int i = 0; i < num_checkpoints; i++)
     {
@@ -154,7 +161,7 @@ void extract_checkpoints(FILE *file)
         if (x_str != NULL && y_str != NULL)
         {
             int x = extract_number(x_str);
-            int y = extract_number(y_str);
+            int y = extract_number(y_str) - 16; // Tiled uses bottom edge for y
             checkpoints[num_checkpoints].x = x;
             checkpoints[num_checkpoints].y = y;
         }

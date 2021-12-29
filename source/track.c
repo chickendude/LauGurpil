@@ -1,9 +1,9 @@
 #include <tonc.h>
 #include "track.h"
-#include "checkpoint.h"
 #include "constants.h"
 #include "race.h"
 #include "racecar.h"
+#include "track_ai_checkpoints.h"
 // sprite data
 #include "ground_tiles.h"
 #include "track_tiles.h"
@@ -18,8 +18,8 @@ const Track track_1 = {
         18, 1,
         0x4000,
         track1Width, track1Height,
-        T1_CHECKPOINT_COUNT,
-        t1_checkpoints,
+        TRACK1_CHECKPOINT_COUNT,
+        track1_checkpoint_markers,
         T1_PROGRESS_COUNT,
         t1_progress_markers,
         16, -30,
@@ -32,8 +32,8 @@ const Track track_2 = {
         7, 24,
         0x8000,
         track2Width, track2Height,
-        T1_CHECKPOINT_COUNT,
-        t1_checkpoints,
+        TRACK2_CHECKPOINT_COUNT,
+        track2_checkpoint_markers,
         T1_PROGRESS_COUNT,
         t1_progress_markers,
         -30, 25,
@@ -46,8 +46,8 @@ const Track track_3 = {
         28, 12,
         0xC000,
         track3Width, track3Height,
-        T1_CHECKPOINT_COUNT,
-        t1_checkpoints,
+        TRACK1_CHECKPOINT_COUNT,
+        track1_checkpoint_markers,
         T1_PROGRESS_COUNT,
         t1_progress_markers,
         31, 9,
@@ -60,8 +60,8 @@ const Track track_4 = {
         82, 50,
         0x0000,
         track4Width, track4Height,
-        T1_CHECKPOINT_COUNT,
-        t1_checkpoints,
+        TRACK1_CHECKPOINT_COUNT,
+        track1_checkpoint_markers,
         T1_PROGRESS_COUNT,
         t1_progress_markers,
         79, 49,
