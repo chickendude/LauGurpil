@@ -34,8 +34,8 @@ const Track track_2 = {
         track2Width, track2Height,
         TRACK2_CHECKPOINT_COUNT,
         track2_checkpoint_markers,
-        T1_PROGRESS_COUNT,
-        t1_progress_markers,
+        T2_PROGRESS_COUNT,
+        t2_progress_markers,
         -30, 25,
         15, 25,
         track2_tilemap
