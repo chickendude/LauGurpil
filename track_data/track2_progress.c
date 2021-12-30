@@ -1,4 +1,4 @@
-#include "track1_progress.h"
+#include "track2_progress.h"
 #include "checkpoint.h"
 
 const Checkpoint t2_progress_markers[] = {

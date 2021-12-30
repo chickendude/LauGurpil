@@ -11,6 +11,7 @@ cd ..
 # Extract checkpoints from tmx files
 tools/checkpoints/checkpoint_extractor gfx/track1.tmx track_data
 tools/checkpoints/checkpoint_extractor gfx/track2.tmx track_data
+tools/checkpoints/checkpoint_extractor gfx/track3.tmx track_data
 
 make
 
