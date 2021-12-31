@@ -5,8 +5,6 @@
 // TODO: Add timeout when automatically finishing a race
 // TODO: Add final stop for cars that have finished all their laps
 // TODO: Add collisions between cars
-// TODO: When checkpoint speed == 200, set to car's max value (useful for
-//       randomizing data/setting up difficulty)
 // TODO: Add counter to main update and add to a "global.c/h" file to use as a
 //       random number. Use to calculate how accurately ai cars should follow
 //       the paths.
