@@ -13,7 +13,7 @@
 #include "cars.h"
 #include "lap_numbers.h"
 
-#define DEBUG
+//#define DEBUG
 
 static Race race;
 
@@ -23,6 +23,8 @@ static unsigned int car_on_camera;
 static bool statsbox_displayed;
 
 #define TEXTBOX_SBB 28
+
+#define INITIAL_COUNTDOWN 60 * 3
 
 // -----------------------------------------------------------------------------
 // Private function declarations
@@ -79,7 +81,7 @@ static void initialize(StateType prev_state, void *parameter)
     race.track = race_data->track;
     race.frames = 0;
     race.laps_total = NUM_LAPS;
-    race.countdown = 10 * 3;
+    race.countdown = INITIAL_COUNTDOWN;
     race.num_cars_finished = 0;
 
     load_cars(&race, race_data->car_data);
@@ -315,8 +317,10 @@ void post_race()
     for (int i = 0; i < race.num_cars_finished; i++)
     {
         Racecar *car = race.ranking[i];
-        print_number(se_mem[29], 4, 5 + i, i + 1);
-        print_text(se_mem[29], 6, 5 + i, car->name);
-        print_time(se_mem[29], 17, 5 + i, car->finish_time);
+        int palette = 15;
+        if (car == race.car) palette = 0;
+        print_number_pal(se_mem[29], 4, 5 + i, i + 1, palette);
+        print_text_pal(se_mem[29], 6, 5 + i, car->name, palette);
+        print_time_pal(se_mem[29], 17, 5 + i, car->finish_time, palette);
     }
 }

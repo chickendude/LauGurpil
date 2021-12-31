@@ -16,11 +16,26 @@ void prepare_text(int charblock_base, int screenblock_base);
 
 void print_text(SCR_ENTRY *sbb, int x, int y, const char *text);
 
+/**
+ * Prints text to the screen using the provided palette.
+ *
+ * @param sbb Screenblock base where the tilemap should be stored.
+ * @param x X coordinate
+ * @param y Y coordinate
+ * @param text Pointer to the text to display.
+ * @param palette Palette id to use for the text.
+ */
+void print_text_pal(SCR_ENTRY *sbb, int x, int y, const char *text, int palette);
+
 void print_time(SCR_ENTRY *sbb, int x, int y, int frames);
+
+void print_time_pal(SCR_ENTRY *sbb, int x, int y, int frames, int palette);
 
 void print_speed(SCR_ENTRY *sbb, int x, int y, int speed);
 
 void print_number(SCR_ENTRY *sbb, int x, int y, int number);
+
+void print_number_pal(SCR_ENTRY *sbb, int x, int y, int number, int palette);
 
 /**
  * Draws a textbox onto the screen.

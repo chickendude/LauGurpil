@@ -31,6 +31,11 @@ void prepare_text(int charblock_base, int screenblock_base)
 
 void print_text(SCR_ENTRY *sbb, int x, int y, const char *text)
 {
+    print_text_pal(sbb, x, y, text, 15);
+}
+
+void print_text_pal(SCR_ENTRY *sbb, int x, int y, const char *text, int palette)
+{
     unsigned char ch;
     unsigned char converted;
     while ((ch = *(text++)) != 0)
@@ -44,7 +49,7 @@ void print_text(SCR_ENTRY *sbb, int x, int y, const char *text)
         else if (ch == '=') converted = 43;
         else if (ch == '>') converted = 44;
         else converted = 0;
-        sbb[y * 32 + x++] = converted | SE_PALBANK(15);
+        sbb[y * 32 + x++] = converted | SE_PALBANK(palette);
     }
 }
 
@@ -77,7 +82,11 @@ void print_speed(SCR_ENTRY *sbb, int x, int y, int speed)
 
 void print_time(SCR_ENTRY *sbb, int x, int y, int frames)
 {
+    print_time_pal(sbb, x, y, frames, 15);
+}
 
+void print_time_pal(SCR_ENTRY *sbb, int x, int y, int frames, int palette)
+{
     unsigned char time[] = "00:00;00\0";
     int minutes = frames / (60 * 60);
     int seconds = (frames - minutes * 3600) / 60;
@@ -91,10 +100,14 @@ void print_time(SCR_ENTRY *sbb, int x, int y, int frames)
     time[4] += seconds % 10;
     time[6] += millis / 10;
     time[7] += millis % 10;
-    print_text(sbb, x, y, (char *) time);
+    print_text_pal(sbb, x, y, (char *) time, palette);
 }
 
-void print_number(SCR_ENTRY *sbb, int x, int y, int number)
+void print_number(SCR_ENTRY *sbb, int x, int y, int number) {
+    print_number_pal(sbb, x, y, number, 15);
+}
+
+void print_number_pal(SCR_ENTRY *sbb, int x, int y, int number, int palette)
 {
     int orig_num = number;
     unsigned char number_txt[] = "     \0";
@@ -136,7 +149,7 @@ void print_number(SCR_ENTRY *sbb, int x, int y, int number)
         string_index++;
     }
     number_txt[string_index] = '0' + ones;
-    print_text(sbb, x, y, (char *) number_txt);
+    print_text_pal(sbb, x, y, (char *) number_txt, palette);
 }
 
 void create_textbox(int charblock_base, int screenblock_base, int start_x,
@@ -148,7 +161,8 @@ void create_textbox(int charblock_base, int screenblock_base, int start_x,
     se_mem[screenblock_base][start_y * 32 + start_x] = 45 | SE_PALBANK(15);
     se_mem[screenblock_base][start_y * 32 + w + start_x - 1] =
             47 | SE_PALBANK(15);
-    se_mem[screenblock_base][(start_y + h - 1) * 32 + start_x] = 51 | SE_PALBANK(15);
+    se_mem[screenblock_base][(start_y + h - 1) * 32 + start_x] =
+            51 | SE_PALBANK(15);
     se_mem[screenblock_base][(start_y + h - 1) * 32 + w + start_x - 1] =
             53 | SE_PALBANK(15);
     // Top row
