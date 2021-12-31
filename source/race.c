@@ -24,7 +24,7 @@ static bool statsbox_displayed;
 
 #define TEXTBOX_SBB 28
 
-#define NUM_LAPS 1
+#define NUM_LAPS 3
 
 // -----------------------------------------------------------------------------
 // Private function declarations

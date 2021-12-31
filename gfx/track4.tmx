@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="90" height="96" tilewidth="16" tileheight="16" infinite="0" nextlayerid="34" nextobjectid="1">
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="90" height="96" tilewidth="16" tileheight="16" infinite="0" nextlayerid="36" nextobjectid="62">
  <tileset firstgid="1" source="ground_tiles.tsx"/>
  <tileset firstgid="9" source="track_tiles.tsx"/>
  <layer id="1" name="Ground" width="90" height="96">
@@ -202,4 +202,353 @@
 9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,55,61,23,23,23,23,23,23,23,23,63,54,9,9,9,9,9,9,9,9,9
 </data>
  </layer>
+ <objectgroup id="34" name="checkpoints">
+  <object id="2" type="a" gid="73" x="1303.5" y="702.5" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="3" type="b" gid="73" x="1334" y="490" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="4" type="c" gid="73" x="1355" y="373" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="5" type="d" gid="73" x="1360.67" y="236.333" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="6" type="e" gid="73" x="1279.5" y="112" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="7" type="f" gid="73" x="1139.83" y="77.8333" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="8" type="g" gid="73" x="703" y="72.5" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="9" type="h" gid="73" x="280" y="52" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="10" type="i" gid="73" x="184" y="151" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="70"/>
+    <property name="vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="11" type="j" gid="73" x="256" y="209.5" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="12" type="k" gid="73" x="715.5" y="202" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="13" type="l" gid="73" x="1004" y="209.5" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="14" type="m" gid="73" x="1140.5" y="311.5" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="80"/>
+    <property name="vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="15" type="n" gid="73" x="1155.5" y="624" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="16" type="o" gid="73" x="1153" y="878" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="17" type="p" gid="73" x="1075" y="999.5" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="18" type="q" gid="73" x="960.5" y="1050" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="19" type="r" gid="73" x="756.5" y="1046.5" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="20" type="s" gid="73" x="635" y="1089" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="21" type="t" gid="73" x="527" y="1089" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="22" type="u" gid="73" x="414.5" y="990" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="70"/>
+    <property name="vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="23" type="v" gid="73" x="441" y="721" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="24" type="w" gid="73" x="528.5" y="649" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="70"/>
+    <property name="vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="25" type="x" gid="73" x="639" y="698.5" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="26" type="y" gid="73" x="743" y="765" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="70"/>
+    <property name="vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="27" type="z" gid="73" x="920.5" y="672.5" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="28" type="aa" gid="73" x="937.5" y="600" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="29" type="ab" gid="73" x="836.5" y="482" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="30" type="ac" gid="73" x="640.5" y="351" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="31" type="ad" gid="73" x="383" y="371" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="32" type="ae" gid="73" x="241.5" y="498.5" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="33" type="af" gid="73" x="164.5" y="748" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="34" type="ag" gid="73" x="156" y="916" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="35" type="ah" gid="73" x="191" y="1111" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="36" type="ai" gid="73" x="209.5" y="1250.5" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="37" type="aj" gid="73" x="334" y="1436.5" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="38" type="ak" gid="73" x="570.5" y="1438" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="39" type="al" gid="73" x="726" y="1287.5" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="40" type="am" gid="73" x="987.5" y="1303" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="90"/>
+    <property name="vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="41" type="an" gid="73" x="1078" y="1368.5" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="42" type="ao" gid="73" x="1245.5" y="1383" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="43" type="ap" gid="73" x="1356.5" y="1267" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="44" type="aq" gid="73" x="1355.5" y="1124.5" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="45" type="ar" gid="73" x="1322.5" y="973.5" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="46" type="as" gid="73" x="1304" y="826.5" width="16" height="16">
+   <properties>
+    <property name="speed" type="int" value="200"/>
+    <property name="vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="35" name="progress" opacity="0.32">
+  <object id="47" gid="32" x="1308" y="502.667" width="16" height="16">
+   <properties>
+    <property name="is_vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="48" gid="32" x="1262.67" y="102.667" width="16" height="16">
+   <properties>
+    <property name="is_vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="49" gid="32" x="224.667" y="64.6667" width="16" height="16">
+   <properties>
+    <property name="is_vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="50" gid="32" x="256.667" y="192.667" width="16" height="16">
+   <properties>
+    <property name="is_vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="51" gid="32" x="1050.67" y="228" width="16" height="16">
+   <properties>
+    <property name="is_vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="52" gid="32" x="1144" y="897.333" width="16" height="16">
+   <properties>
+    <property name="is_vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="53" gid="32" x="545.333" y="1088" width="16" height="16">
+   <properties>
+    <property name="is_vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="54" gid="32" x="590.667" y="640" width="16" height="16">
+   <properties>
+    <property name="is_vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="55" gid="32" x="964" y="632" width="16" height="16">
+   <properties>
+    <property name="is_vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="56" gid="32" x="417.333" y="383.333" width="16" height="16">
+   <properties>
+    <property name="is_vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="57" gid="32" x="218.667" y="1268" width="16" height="16">
+   <properties>
+    <property name="is_vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+  <object id="58" gid="32" x="564" y="1460" width="16" height="16">
+   <properties>
+    <property name="is_vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="59" gid="32" x="860" y="1217.33" width="16" height="16">
+   <properties>
+    <property name="is_vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="60" gid="32" x="1185.33" y="1392.67" width="16" height="16">
+   <properties>
+    <property name="is_vertical" type="bool" value="true"/>
+   </properties>
+  </object>
+  <object id="61" gid="32" x="1302.67" y="842.667" width="16" height="16">
+   <properties>
+    <property name="is_vertical" type="bool" value="false"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>
