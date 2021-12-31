@@ -21,6 +21,9 @@ struct Racecar
     // .12 fixed point
     int speed;
 
+    // How well the AI should perform
+    int skill;
+
     // 0 = in finish line, -1 = behind, 1 = in front
     int finish_status;
 

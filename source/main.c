@@ -4,7 +4,6 @@
 
 // TODO: Add timeout when automatically finishing a race
 // TODO: Add final stop for cars that have finished all their laps
-// TODO: Change pixel color for player's car in final results
 // TODO: Add collisions between cars
 // TODO: When checkpoint speed == 200, set to car's max value (useful for
 //       randomizing data/setting up difficulty)

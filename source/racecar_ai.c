@@ -69,7 +69,14 @@ void move_ai_car(Racecar *ai_car, Race *race)
         turn(ai_car, -1);
     }
 
-    if (ai_car->speed >> 7 < checkpoint->speed)
+    // Limit checkpoint speed to car's max speed
+    int checkpoint_speed =
+            checkpoint->speed >= 200 ? ai_car->max_speed : checkpoint->speed;
+    if (ai_car->skill < MAX_AI_SKILL)
+        checkpoint_speed -=
+                (checkpoint_speed + ((MAX_AI_SKILL - ai_car->skill) << 4)) >> 3;
+
+    if (ai_car->speed >> 7 < checkpoint_speed)
         accelerate(ai_car);
     else
         brake(ai_car);

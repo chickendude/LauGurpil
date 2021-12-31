@@ -23,6 +23,9 @@
 /** The max number of characters in the race car names. */
 #define MAX_NAME_CHARS 9
 
+/** The max skill value for AI cars */
+#define MAX_AI_SKILL 10
+
 #define NUM_AI_CARS 4
 
 #define NUM_CARS 7

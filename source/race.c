@@ -13,7 +13,7 @@
 #include "cars.h"
 #include "lap_numbers.h"
 
-//#define DEBUG
+#define DEBUG
 
 static Race race;
 
@@ -112,6 +112,7 @@ static void initialize(StateType prev_state, void *parameter)
     // Load AI cars
     for (int i = 1; i < NUM_CARS_IN_RACE; i++)
     {
+        race.cars[i].skill = MAX_AI_SKILL - (i - 1) * 2;
         load_ai_car(&race.cars[i], &race);
     }
 
