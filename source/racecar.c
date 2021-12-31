@@ -26,7 +26,7 @@ void check_terrain(Racecar *car, const Track *track);
 
 void load_car(Racecar *car, const RacecarData *car_data);
 
-void move_and_check_collisions(Racecar *car, const Track *track);
+void move_and_check_collisions(Racecar *car, Race *race);
 
 void slow_down(Racecar *car);
 
@@ -39,7 +39,7 @@ void load_cars(Race *race, const RacecarData **car_data)
     for (int i = 0; i < NUM_CARS_IN_RACE; i++)
     {
         Racecar *car = &race->cars[i];
-        car->oam_affine = &((OBJ_AFFINE*)race->obj_buffer)[i];
+        car->oam_affine = &((OBJ_AFFINE *) race->obj_buffer)[i];
         car->oam = &race->obj_buffer[i];
         car->overall_standing = i;
         car->x = race->track->start_x << 16;
@@ -117,7 +117,7 @@ void move_car(Race *race, Racecar *car)
 
     if (race->countdown == 0)
     {
-        move_and_check_collisions(car, race->track);
+        move_and_check_collisions(car, race);
         car->x += (-car->speed * car->slide_x) >> 12;
         car->y += (-car->speed * car->slide_y) >> 12;
     }
@@ -228,7 +228,7 @@ void load_car(Racecar *car, const RacecarData *car_data)
     car->x = car->y = 0;
     car->finish_status = -1; // -1 = behind finish line
     car->oam->attr2 ^= ATTR2_PRIO(1);
-    
+
     // Clear lap times
     for (int i = 0; i < MAX_LAPS; i++)
     {
@@ -241,10 +241,19 @@ void load_car(Racecar *car, const RacecarData *car_data)
     obj_aff_rotate((OBJ_AFFINE *) car->oam, car->angle);
 }
 
-void move_and_check_collisions(Racecar *car, const Track *track)
+void bump_car(Racecar *car, Racecar *bumped_car)
+{
+    int dx = lu_sin(car->angle);
+    int dy = lu_cos(car->angle);
+    bumped_car->x -= (dx * 0x1000) >> 12;
+    bumped_car->y -= (dy * 0x1000) >> 12;
+}
+
+void move_and_check_collisions(Racecar *car, Race *race)
 {
     // TODO: Don't wrap if off edges of map (currently it will check map tiles
     //  that are off the edge of the map, should set out-of-bounds tiles to 0)
+    const Track *track = race->track;
     const unsigned char *map = track->tilemap;
 
     // Calculate velocity
@@ -258,6 +267,39 @@ void move_and_check_collisions(Racecar *car, const Track *track)
     if ((car->x - x_off) >> 16 >= track->width - 1 ||
         (car->y - y_off) >> 16 >= track->height - 1)
         return;
+
+
+
+
+
+
+    for (int i = 0; i < NUM_CARS_IN_RACE; i++)
+    {
+        Racecar *other_car = &race->cars[i];
+        if (car == other_car) continue;
+
+        int car_x = car->x + (1 << 12 * car->slide_x);
+        int car_y = car->y + (1 << 12 * car->slide_y);
+        int diff_x = (car->x >> 12) - (other_car->x >> 12);
+        if (diff_x < 0) diff_x *= -1;
+        diff_x += 8;
+
+        int diff_y = (car->y >> 12) - (other_car->y >> 12);
+        if (diff_y < 0) diff_y *= -1;
+        diff_y += 8;
+
+        if (diff_x < 16 && diff_y < 16)
+        {
+            car->speed >>= 1;
+            bump_car(car, other_car);
+        }
+    }
+
+
+
+
+
+
 
     // Convert car coordinates into pixels from the .12 fixed point values
     int x = (car->speed * car->slide_x) >> 12;
