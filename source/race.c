@@ -194,11 +194,13 @@ void input(StateStack *state_stack)
 
     if (key_hit(KEY_R))
     {
-        car_on_camera = (car_on_camera + 1) % NUM_CARS;
+        car_on_camera = (car_on_camera + 1) % NUM_CARS_IN_RACE;
     }
     if (key_hit(KEY_L))
     {
-        car_on_camera = (car_on_camera - 1) % NUM_CARS;
+        car_on_camera--;
+        if (car_on_camera > NUM_CARS_IN_RACE)
+            car_on_camera = NUM_CARS_IN_RACE - 1;
     }
 }
 
