@@ -30,6 +30,16 @@ void move_and_check_collisions(Racecar *car, Race *race);
 
 void slow_down(Racecar *car);
 
+/**
+ * Calculates the approximate distance between two points, given the (positive)
+ * difference between them.
+ *
+ * @param dx The (absolute) difference between x1 and x2.
+ * @param dy The (absolute) difference between y1 and y2.
+ * @return The approximate difference between the two points.
+ */
+int distance_between(int dx, int dy);
+
 // -----------------------------------------------------------------------------
 // Public function definitions
 // -----------------------------------------------------------------------------
@@ -241,12 +251,21 @@ void load_car(Racecar *car, const RacecarData *car_data)
     obj_aff_rotate((OBJ_AFFINE *) car->oam, car->angle);
 }
 
-void bump_car(Racecar *car, Racecar *bumped_car)
+int distance_between(int dx, int dy)
 {
-    int dx = lu_sin(car->angle);
-    int dy = lu_cos(car->angle);
-    bumped_car->x -= (dx * 0x1000) >> 12;
-    bumped_car->y -= (dy * 0x1000) >> 12;
+    if (dx < dy)
+    {
+        int dx_copy = dx;
+        dx = dy;
+        dy = dx_copy;
+    }
+
+    // If dy == 0, then the hypotenuse and dx are the same length
+    if (dy == 0) return dx;
+
+    // Formula found here: https://stackoverflow.com/a/26607206
+    int constant = 0b011011011001; // 0.428 in .12 fixed point
+    return dx + ((constant * dy * dy / dx) >> 12);
 }
 
 void move_and_check_collisions(Racecar *car, Race *race)
@@ -268,38 +287,33 @@ void move_and_check_collisions(Racecar *car, Race *race)
         (car->y - y_off) >> 16 >= track->height - 1)
         return;
 
-
-
-
-
-
     for (int i = 0; i < NUM_CARS_IN_RACE; i++)
     {
         Racecar *other_car = &race->cars[i];
         if (car == other_car) continue;
 
-        int car_x = car->x + (1 << 12 * car->slide_x);
-        int car_y = car->y + (1 << 12 * car->slide_y);
         int diff_x = (car->x >> 12) - (other_car->x >> 12);
         if (diff_x < 0) diff_x *= -1;
-        diff_x += 8;
 
         int diff_y = (car->y >> 12) - (other_car->y >> 12);
         if (diff_y < 0) diff_y *= -1;
-        diff_y += 8;
 
-        if (diff_x < 16 && diff_y < 16)
-        {
-            car->speed >>= 1;
-            bump_car(car, other_car);
+        // Pythagorean Theorem:
+        // - (x1 - x2)^2 + (y1 - y2)^2 < (r1 + r2)^2
+        // - r1/r2 are the radii of each car: 8 pixels
+        // - If the hypotenuse (the distance between the two cars) is less than
+        // the length of the two radii, then they have collided.
+        bool is_collision = (diff_x * diff_x + diff_y * diff_y < 16 * 16);
+
+        if (is_collision) {
+            int dist = distance_between(diff_x, diff_y);
+            int overlap = (dist - 16) / 2;
+            car->x -= overlap * (car->x - other_car->x) / dist;
+            car->y -= overlap * (car->y - other_car->y) / dist;
+            other_car->x += overlap * (car->x - other_car->x) / dist;
+            other_car->y += overlap * (car->y - other_car->y) / dist;
         }
     }
-
-
-
-
-
-
 
     // Convert car coordinates into pixels from the .12 fixed point values
     int x = (car->speed * car->slide_x) >> 12;
