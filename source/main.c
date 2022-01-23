@@ -1,20 +1,20 @@
+#include <tonc.h>
+#include <maxmod.h>
 #include "race.h"
 #include "state.h"
 #include "title.h"
 
+#include "soundbank.h"
+#include "soundbank_bin.h"
+
 // TODO: Add timeout when automatically finishing a race
 // TODO: Add final stop for cars that have finished all their laps
-// TODO: Add collisions between cars
-// TODO: Add counter to main update and add to a "global.c/h" file to use as a
-//       random number. Use to calculate how accurately ai cars should follow
-//       the paths.
 // TODO: Look into why it AI cars seem to shake (perhaps camera race issue
 //       between player and AI cars)
 // PRE RACE -----------
 // TODO: Add locked state to cars to enable unlocking new vehicles
 
 
-// 5, 5
 //------------------------------------------------------------------------------
 // Program entry point
 //------------------------------------------------------------------------------
@@ -29,12 +29,24 @@ int main(void)
 
     cur_state->initialize(NONE, NULL);
 
+    // Set up interrupts for maxmod
+    irq_init(isr_master);
+    irq_add(II_VBLANK, mmVBlank);
+    irq_enable(II_VBLANK);
+
+
+    // initialize maxmod
+    mmInitDefault((mm_addr) soundbank_bin, 4);
+    mmSetModuleVolume(500);
+    mmStart(MOD_CHIPTUNES, MM_PLAY_LOOP);
+
     int i = 0;
     while (i >= 0)
     {
         cur_state = state_stack.states[state_stack.index];
 
         vid_vsync();
+        mmFrame();
         cur_state->update();
 
         key_poll();

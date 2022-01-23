@@ -25,10 +25,10 @@ include $(DEVKITARM)/gba_rules
 TARGET		:= $(notdir $(CURDIR))
 BUILD		:= build
 SOURCES		:= source track_data
-INCLUDES	:= include gfx track_data
+INCLUDES	:= include gfx track_data music
 DATA		:=
 GRAPHICS	:= gfx
-MUSIC		:=
+MUSIC		:= music
 
 #---------------------------------------------------------------------------------
 # options for code generation
