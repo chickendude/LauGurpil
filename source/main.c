@@ -45,8 +45,8 @@ int main(void)
     {
         cur_state = state_stack.states[state_stack.index];
 
-        vid_vsync();
         mmFrame();
+        vid_vsync();
         cur_state->update();
 
         key_poll();
