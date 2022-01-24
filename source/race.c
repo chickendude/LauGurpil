@@ -1,3 +1,4 @@
+#include <maxmod.h>
 #include <tonc.h>
 
 #include "race.h"
@@ -12,6 +13,8 @@
 // Sprites
 #include "cars.h"
 #include "lap_numbers.h"
+// Sound
+#include "soundbank.h"
 
 #define DEBUG
 
@@ -238,7 +241,9 @@ void update()
 
 void show_countdown(int *countdown)
 {
+    if (*countdown % 60 == 0) mmEffect(SFX_BEEP);
     (*countdown)--;
+    if (*countdown == 0) mmEffect(SFX_BEEP_END);
     int sprite_id = SPRITE(8 + *countdown / 60);
     obj_set_attr(&race.obj_buffer[127],
                  ATTR0_4BPP | ATTR0_SQUARE | ATTR0_Y(SCREEN_HEIGHT / 2 - 8),

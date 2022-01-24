@@ -36,8 +36,8 @@ int main(void)
 
 
     // initialize maxmod
-    mmInitDefault((mm_addr) soundbank_bin, 4);
-    mmSetModuleVolume(500);
+    mmInitDefault((mm_addr) soundbank_bin, 5);
+    mmSetModuleVolume(400);
     mmStart(MOD_CHIPTUNES, MM_PLAY_LOOP);
 
     int i = 0;
